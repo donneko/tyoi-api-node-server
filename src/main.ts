@@ -33,7 +33,12 @@ const server = new Server<RequestNameList>({
     ]
 });
 
-server.startServer();
+server.startServer({
+    exposeLan:true,
+    showQrCode: false,
+    port:3000
+});
+
 server.onAPI("GET:/a",(data)=>{
     return data;
 })

@@ -2,6 +2,8 @@ import express from "express";
 import http from "node:http";
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
+import { getLanIp } from "../util/getLanIp.js";
+import qrcode from "qrcode-terminal";
 
 type RequestData = {
     query  : unknown,
@@ -12,7 +14,11 @@ type RequestData = {
 type RequestEventMap<L extends string> = {
     [N in L]: RequestData;
 }
-
+type StartServerOptions = {
+    port?: number;
+    exposeLan?: boolean;
+    showQrCode?:boolean;
+};
 type inputConfigData = {
     baseUrl:string;
     publicDirname:string;
@@ -100,6 +106,10 @@ export class Server<RequestNameList extends string>
 
         // 静的ファイル配信
         this.#appServer.use(express.static(this.#publicDirectoryPath));
+
+        this.#appServer.use((req, res) => {
+            res.status(404).send("Not Found");
+        });
     }
 
     // サーバーAPI処理
@@ -137,12 +147,38 @@ export class Server<RequestNameList extends string>
         }
     };
 
-    // サーバーの起動
-    startServer(){
-        const port = this.#serverPort;
+    /**
+     * サーバーの起動する。
+     * @param options サーバー起動時の便利なオプションを設定できます
+     * @returns http.serverを返します
+     * @example
+     * server.startServer({
+            exposeLan:true,
+            showQrCode: false,
+            port:3000
+        });
+     */
+    startServer(options?:StartServerOptions){
 
-        this.#httpServer = this.#appServer.listen(port, () => {
-            console.log(`Server: http://localhost:${port}`);
+        if(options?.port)this.#serverPort = options?.port;
+        const port = this.#serverPort;
+        const host = options?.exposeLan ? "0.0.0.0" : "127.0.0.1";
+        const ip = getLanIp();
+
+        this.#httpServer = this.#appServer.listen(port,host, () => {
+            console.log(`Local: http://localhost:${port}`);
+
+            if(host === "0.0.0.0"){
+                const networkUrl = `http://${ip}:${port}`;
+                console.log(`Network: http://${networkUrl}`);
+
+                // QRcode生成
+                if(options?.showQrCode){
+                    qrcode.generate(networkUrl, {
+                        small: true
+                    });
+                }
+            }
         });
 
         return this.#httpServer;
