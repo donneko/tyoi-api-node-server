@@ -33,13 +33,22 @@ export class Server<RequestNameList extends string>
      * @param baseUrl ベースのファイルURL
      * @param publicDirname public内で公開するディレクトリ名
      * @param port 公開ポート
+     * @param middlewares 追加するミドルウェア
      * @example
-     * new Server(import.meta.url,"main",3000);
+     * new Server(import.meta.url,"main",3000,[
+     *      middlewares("dev")
+     * ]);
      */
-    constructor(baseUrl:string,publicDirname:string,port:number){
+    constructor(
+        baseUrl:string,
+        publicDirname:string,
+        port:number,
+        middlewares:express.RequestHandler[] = []
+    ){
         this.#init({baseUrl,publicDirname,port})
-        this.#initServer();
+        this.#initServer(middlewares);
     }
+
     // サーバー作成前の設定
     #init(data:inputConfigData){
         const {baseUrl,publicDirname,port} = data;
@@ -49,8 +58,12 @@ export class Server<RequestNameList extends string>
     }
 
     // サーバー作成
-    #initServer(){
+    #initServer(middlewares:express.RequestHandler[]){
 
+        // ミドルウェアと追加する。
+        for(const middleware of middlewares){
+            this.#appServer.use(middleware);
+        }
         // JSONを受け取れるようにする
         this.#appServer.use(express.json());
 
@@ -84,7 +97,11 @@ export class Server<RequestNameList extends string>
             headers: req.headers
             });
 
-            res.json(result);
+            res.json({
+                ok: true,
+                data: result
+            });
+
         } catch (error) {
             res.status(500).json({
                 ok: false,
@@ -118,6 +135,7 @@ export class Server<RequestNameList extends string>
                     return;
                 }
 
+                this.#httpServer = null;
                 resolve();
             });
 
