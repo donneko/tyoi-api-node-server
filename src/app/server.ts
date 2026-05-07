@@ -1,4 +1,5 @@
 import express from "express";
+import http from "node:http";
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 
@@ -8,10 +9,9 @@ type RequestData = {
     params : unknown,
     headers: unknown
 }
-type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
-type RequestEventMap = {
-    [N in RequestNameList]: RequestData;
+type RequestEventMap<L extends string> = {
+    [N in L]: RequestData;
 }
 
 
@@ -20,11 +20,13 @@ type inputConfigData = {
     publicDirname:string;
     port:number;
 }
-export class Server {
+export class Server<RequestNameList extends string>
+{
     #appServer = express();
     #publicDirectoryPath!:string;
     #serverPort!:number;
-    #serverAPIs = new ApiRegistry<RequestEventMap>();
+    #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
+    #httpServer: http.Server | null = null;
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -68,7 +70,9 @@ export class Server {
 
             if (!this.#serverAPIs.has(key)) {
                 res.status(404).json({
-                    error: "API NOT FOUND"
+                    ok: false,
+                    code: "API_NOT_FOUND",
+                    message: "API not found"
                 });
                 return;
             }
@@ -83,7 +87,9 @@ export class Server {
             res.json(result);
         } catch (error) {
             res.status(500).json({
-                error: "API ERROR"
+                ok: false,
+                code: "API_INTERNAL_ERROR",
+                message: "Internal server error"
             });
         }
     };
@@ -92,25 +98,46 @@ export class Server {
     startServer(){
         const port = this.#serverPort;
 
-        return this.#appServer.listen(port, () => {
+        this.#httpServer = this.#appServer.listen(port, () => {
             console.log(`Server: http://localhost:${port}`);
+        });
+
+        return this.#httpServer;
+    }
+    stopServer(){
+        return new Promise<void>((resolve,reject)=>{
+            if(!this.#httpServer){
+                resolve();
+                return;
+            }
+
+            this.#httpServer?.close((error)=>{
+
+                if(error){
+                    reject(error);
+                    return;
+                }
+
+                resolve();
+            });
+
         });
     }
 
     // API登録
-    onAPI<Key extends keyof RequestEventMap>(type:Key,fn:ApiRegistryHandler<RequestEventMap[Key]>){
+    onAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key,fn:ApiRegistryHandler<RequestEventMap<RequestNameList>[Key]>){
         this.#serverAPIs.on(type,fn);
     }
     // API一度のみ起動
-    onceAPI<Key extends keyof RequestEventMap>(type:Key,fn:ApiRegistryHandler<RequestEventMap[Key]>){
+    onceAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key,fn:ApiRegistryHandler<RequestEventMap<RequestNameList>[Key]>){
         this.#serverAPIs.once(type,fn);
     }
     // API消去
-    offAPI<Key extends keyof RequestEventMap>(type:Key){
+    offAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key){
         this.#serverAPIs.off(type);
     }
     // APIが存在するか？
-    hasAPI<Key extends keyof RequestEventMap>(type:Key){
+    hasAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key){
         return this.#serverAPIs.has(type);
     }
         // TODO 他の制御用関数を作成する。
