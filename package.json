@@ -1,0 +1,12 @@
+{
+  "name": "tyoi-api-server",
+  "version": "0.1.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
