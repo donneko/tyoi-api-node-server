@@ -8,5 +8,9 @@
   "type": "module",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "minimist": "^1.2.8"
+  }
 }
