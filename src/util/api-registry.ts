@@ -68,7 +68,7 @@ export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
      * @example
      * registry.emit("foo",arg);
      */
-    async emit<Key extends keyof ApiRegistryMap>(type:Key,arg:ApiRegistryMap[Key]){
+    async emit<Key extends keyof ApiRegistryMap>(type:Key,arg:ApiRegistryMap[Key]):Promise<unknown>{
         const fn = this.#EVENT_DATA_STORE.get(type);
 
         if(!fn)return;
@@ -79,6 +79,7 @@ export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
             )(arg);
         } catch (error) {
             console.error(`[EventBus emit error] ${String(type)}`, error);
+            throw error;
         }
     }
 }

@@ -9,17 +9,23 @@ type RequestData = {
     params : unknown,
     headers: unknown
 }
-
 type RequestEventMap<L extends string> = {
     [N in L]: RequestData;
 }
-
 
 type inputConfigData = {
     baseUrl:string;
     publicDirname:string;
     port:number;
 }
+type ServerOptions = {
+    baseUrl: string;
+    publicDirname: string;
+    apiPrefix?: string;
+    port?: number;
+    middlewares?: express.RequestHandler[];
+};
+
 export class Server<RequestNameList extends string>
 {
     #appServer = express();
@@ -35,18 +41,38 @@ export class Server<RequestNameList extends string>
      * @param port 公開ポート
      * @param middlewares 追加するミドルウェア
      * @example
-     * new Server(import.meta.url,"main",3000,[
-     *      middlewares("dev")
-     * ]);
+     *  import { Server } from "./app/server.js";
+     *  import morgan from "morgan";
+     *
+     *  type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
+     *
+     *  const server = new Server<RequestNameList>({
+     *      baseUrl:import.meta.url,
+     *      publicDirname:"main",
+     *      apiPrefix:"/api",
+     *      port:3000,
+     *      middlewares:[
+     *          morgan("dev")
+     *      ]
+     *  });
+     *
+     *  server.startServer();
+     *  server.onAPI("GET:/a",(data)=>{
+     *      return data;
+     *  })
      */
-    constructor(
-        baseUrl:string,
-        publicDirname:string,
-        port:number,
-        middlewares:express.RequestHandler[] = []
-    ){
+    constructor(options:ServerOptions){
+
+        const {
+            baseUrl,
+            publicDirname = "main",
+            apiPrefix = "/api",
+            port = 3000,
+            middlewares = []
+        } = options;
+
         this.#init({baseUrl,publicDirname,port})
-        this.#initServer(middlewares);
+        this.#initServer(middlewares,apiPrefix);
     }
 
     // サーバー作成前の設定
@@ -58,7 +84,7 @@ export class Server<RequestNameList extends string>
     }
 
     // サーバー作成
-    #initServer(middlewares:express.RequestHandler[]){
+    #initServer(middlewares:express.RequestHandler[],apiPrefix:string){
 
         // ミドルウェアと追加する。
         for(const middleware of middlewares){
@@ -68,7 +94,7 @@ export class Server<RequestNameList extends string>
         this.#appServer.use(express.json());
 
         // API
-        this.#appServer.use("/api", (req, res) => {
+        this.#appServer.use(apiPrefix, (req, res) => {
             this.#apiProcess(req, res);
         });
 
