@@ -1,4 +1,5 @@
-export type ApiRegistryHandler<Type> = (arg:Type) => void;
+export type ApiRegistryHandler<Type, Result = unknown> =
+    (arg: Type) => Result | Promise<Result>;
 export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
 
     #EVENT_DATA_STORE = new Map<
@@ -48,7 +49,9 @@ export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
      * console.log(registry.has("foo"));
      */
     has(type: string): type is Extract<keyof ApiRegistryMap, string> {
-        return this.#EVENT_DATA_STORE.has(type);
+        return this.#EVENT_DATA_STORE.has(
+            type as Extract<keyof ApiRegistryMap, string>
+        );
     }
 
     /**
