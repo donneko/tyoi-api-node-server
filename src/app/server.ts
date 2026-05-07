@@ -111,7 +111,7 @@ export class Server {
     }
     // APIが存在するか？
     hasAPI<Key extends keyof RequestEventMap>(type:Key){
-        this.#serverAPIs.has(type);
+        return this.#serverAPIs.has(type);
     }
         // TODO 他の制御用関数を作成する。
 }
