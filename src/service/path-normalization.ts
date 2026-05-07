@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
  * pathNormalization(import.meta.url,"main");
  * @returns baseUrl + "public" + publicDirname;
  */
-export function pathNormalization(baseUrl,publicDirname){
+export function pathNormalization(baseUrl:string,publicDirname:string):string{
     const filename = fileURLToPath(baseUrl);
     const dirname  = path.dirname(filename);
 

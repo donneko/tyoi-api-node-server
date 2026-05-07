@@ -1,10 +1,14 @@
 import express from "express";
 import { pathNormalization } from "../service/path-normalization.js";
-
+type inputConfigData = {
+    baseUrl:string;
+    publicDirname:string;
+    port:number;
+}
 export class Server {
     #appServer = express();
-    #publicDirectoryPath;
-    #serverPort;
+    #publicDirectoryPath!:string;
+    #serverPort!:number;
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -14,12 +18,12 @@ export class Server {
      * @example
      * new Server(import.meta.url,"main",3000);
      */
-    constructor(baseUrl,publicDirname,port){
+    constructor(baseUrl:string,publicDirname:string,port:number){
         this.#init({baseUrl,publicDirname,port})
         this.#initServer();
     }
     // サーバー作成前の設定
-    #init(data){
+    #init(data:inputConfigData){
         const {baseUrl,publicDirname,port} = data;
 
         this.#publicDirectoryPath = pathNormalization(baseUrl,publicDirname);
