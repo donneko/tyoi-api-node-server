@@ -106,12 +106,12 @@ export class Server {
         this.#serverAPIs.once(type,fn);
     }
     // API消去
-    offAPI<Key extends keyof RequestEventMap>(type:Key,fn:ApiRegistryHandler<RequestEventMap[Key]>){
+    offAPI<Key extends keyof RequestEventMap>(type:Key){
         this.#serverAPIs.off(type);
     }
     // APIが存在するか？
-    hasAPI<Key extends keyof RequestEventMap>(type:Key,fn:ApiRegistryHandler<RequestEventMap[Key]>){
-        this.#serverAPIs.off(type);
+    hasAPI<Key extends keyof RequestEventMap>(type:Key){
+        this.#serverAPIs.has(type);
     }
         // TODO 他の制御用関数を作成する。
 }

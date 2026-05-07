@@ -68,13 +68,15 @@ export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
      * @example
      * registry.emit("foo",arg);
      */
-    emit<Key extends keyof ApiRegistryMap>(type:Key,arg:ApiRegistryMap[Key]){
+    async emit<Key extends keyof ApiRegistryMap>(type:Key,arg:ApiRegistryMap[Key]){
         const fn = this.#EVENT_DATA_STORE.get(type);
 
         if(!fn)return;
 
         try {
-            return (fn as ApiRegistryHandler<ApiRegistryMap[Key]>)(arg);
+            return await (
+                fn as ApiRegistryHandler<ApiRegistryMap[Key]>
+            )(arg);
         } catch (error) {
             console.error(`[EventBus emit error] ${String(type)}`, error);
         }
