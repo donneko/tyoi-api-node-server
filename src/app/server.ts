@@ -274,19 +274,15 @@ export class Server<RequestNameList extends string>
         return this.#serverAPIs.emit(type,data);
     }
     // サーバー起動中か？
-    isRunning(){
+    isRunning():boolean{
         return this.#httpServer !== null;
     }
     // サーバーポート取得
-    getPort(){
+    getPort():number{
         return this.#serverPort;
     }
-    // Expressアプリ取得
-    getApp(){
-        return this.#appServer;
-    }
     // HTTPサーバー取得
-    getHttpServer(){
+    getHttpServer():http.Server | null{
         return this.#httpServer;
     }
 }
