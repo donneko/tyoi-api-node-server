@@ -4,9 +4,9 @@ import qrcode from "qrcode-terminal";
 
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
-import { getLanIp } from "../util/getLanIp.js";
+import { getLanIp } from "../util/get-lan-ip.js";
 import { logger } from "../util/logger.js";
-import { findAvailablePort } from "../service/findAvailablePort.js";
+import { findAvailablePort } from "../service/find-available-port.js";
 import TYOI_CONFIG from "../config/tyoi.config.js"
 import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 
@@ -70,7 +70,7 @@ export class Server<RequestNameList extends string>
     #serverPort!:number;
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #httpServer: http.Server | null = null;
-    #SERVER_CONFIG:ServerDefaultOption = {...TYOI_DEFAULT_CONFIG,...TYOI_CONFIG};
+    #SERVER_DEFAULT_CONFIG:ServerDefaultOption = {...TYOI_DEFAULT_CONFIG,...TYOI_CONFIG};
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -107,7 +107,7 @@ export class Server<RequestNameList extends string>
             apiPrefix = "/api",
             port = 3000,
             middlewares = []
-        } = {...this.#SERVER_CONFIG,...options};
+        } = {...this.#SERVER_DEFAULT_CONFIG,...options};
 
         this.#init({baseUrl,publicDirname,port})
         this.#initServer(middlewares,apiPrefix);
@@ -191,8 +191,9 @@ export class Server<RequestNameList extends string>
         });
      */
     async startServer(options?:StartServerOptions){
+        console.log(options);
 
-        const startServerOptions = {...this.#SERVER_CONFIG,options};
+        const startServerOptions = {...this.#SERVER_DEFAULT_CONFIG,...options};
 
         // ホスト設定
         const host = startServerOptions.exposeLan ? "0.0.0.0" : "127.0.0.1";
