@@ -1,10 +1,10 @@
 {
   "name": "tyoi-api-server",
   "version": "0.4.3",
-  "main": "main.js",
+  "main": "./dist/main.js",
   "scripts": {
     "test": "npx tsx ./src/main.ts",
-    "build": "npx tsc",
+    "build": "tsc && cp -R src/public dist/public",
     "start": "node ./dist/main.js"
   },
   "type": "module",
