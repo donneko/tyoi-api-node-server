@@ -229,11 +229,11 @@ export class Server<RequestNameList extends string>
 
     // API登録
     onAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key,fn:ApiRegistryHandler<RequestEventMap<RequestNameList>[Key]>){
-        this.#serverAPIs.on(type,fn);
+        return this.#serverAPIs.on(type,fn);
     }
     // API一度のみ起動
     onceAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key,fn:ApiRegistryHandler<RequestEventMap<RequestNameList>[Key]>){
-        this.#serverAPIs.once(type,fn);
+        return this.#serverAPIs.once(type,fn);
     }
     // API消去
     offAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key){

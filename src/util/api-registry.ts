@@ -38,7 +38,7 @@ export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
             this.off(type);
             fn(arg);
         };
-        this.on(type,func);
+        return this.on(type,func);
     }
 
     /**
