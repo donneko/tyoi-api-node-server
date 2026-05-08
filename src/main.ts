@@ -20,14 +20,10 @@ async function tyoiServer(argv:string[]):Promise<void>{
             const config = await import("./config/tyoi.dev.config.js");
             const server = new Server<RequestNameList>({
                 ...config.default,
-                ...{args},
+                ...args,
                 ...{baseUrl:import.meta.url}
             });
-            await server.startServer({
-                exposeLan:true,
-                showQrCode: true,
-                port:3000
-            });
+            await server.startServer();
 
             server.onAPI("GET:/a",(data)=>{
                 return data;
