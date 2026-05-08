@@ -8,10 +8,9 @@ import slowDown from "express-slow-down";
 
 type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
-// const config = await import("./config/tyoi.config.js");
-// config.default;
+const config = await import("./config/tyoi.config.js");
 
-const server = new Server<RequestNameList>({
+const server = new Server<RequestNameList>({...config.default,...{
     baseUrl:import.meta.url,
     publicDirname:"main",
     apiPrefix:"/api",
@@ -34,7 +33,7 @@ const server = new Server<RequestNameList>({
 
         hpp()
     ]
-});
+}});
 
 await server.startServer({
     exposeLan:true,

@@ -11,4 +11,6 @@ export default defineConfig<ServerDefaultConfig>({
 
     exposeLan: false,
     showQrCode: false,
+
+    openBrowser: false,
 });

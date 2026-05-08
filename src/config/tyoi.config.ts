@@ -9,4 +9,6 @@ export default defineConfig<ServerUserConfig>({
 
     exposeLan: false,
     showQrCode: false,
+
+    openBrowser: true,
 });

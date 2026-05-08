@@ -1,5 +1,6 @@
 import express from "express";
 import http from "node:http";
+import open from "open";
 
 import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 import { pathNormalization } from "../service/path-normalization.js";
@@ -8,6 +9,7 @@ import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/find-available-port.js";
 import type { ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
 import { serverStartSummary } from "../service/server-start-summary.js";
+import { openBrowser } from "../service/open-browser.js";
 
 
 type RequestData = {
@@ -32,14 +34,8 @@ type ServerOptions = ServerUserConfig & {
     baseUrl: string;
 }
 
-type ServerConfig = {
+type ServerConfig = ServerDefaultConfig & {
     baseUrl: string;
-    publicDirname: string;
-    apiPrefix: string;
-    port: number;
-    middlewares: express.RequestHandler[];
-    exposeLan: boolean,
-    showQrCode: boolean,
 }
 
 export class Server<RequestNameList extends string>
@@ -237,6 +233,15 @@ export class Server<RequestNameList extends string>
                 apiPrefix:startServerOptions.apiPrefix,
                 isShowQrCode:startServerOptions.showQrCode,
             });
+
+            // ブラウザオープン
+            if(startServerOptions.openBrowser){
+                await openBrowser({
+                    host,
+                    port:listeningPort,
+                    target:startServerOptions.openBrowser
+                });
+            }
 
             return httpServer;
 
