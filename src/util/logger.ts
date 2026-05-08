@@ -3,7 +3,7 @@ import pc from "picocolors";
 export const logger = {
     info(message: string) {
         console.log(
-            `${this._createInfo(message)}`
+            `${logger._createInfo(message)}`
         );
     },
     _createInfo(message: string):string{
@@ -12,7 +12,7 @@ export const logger = {
 
     warn(message: string) {
         console.log(
-            `${this._createWarn(message)}`
+            `${logger._createWarn(message)}`
         );
     },
     _createWarn(message: string):string{
@@ -21,7 +21,7 @@ export const logger = {
 
     error(message: string) {
         console.log(
-            `${this._createError(message)}`
+            `${logger._createError(message)}`
         );
     },
     _createError(message: string):string{
@@ -30,7 +30,7 @@ export const logger = {
 
     success(message: string) {
         console.log(
-            `${this._createSuccess(message)}`
+            `${logger._createSuccess(message)}`
         );
     },
     _createSuccess(message: string):string{
@@ -39,7 +39,7 @@ export const logger = {
 
     system(message: string) {
         console.log(
-            `${this._createSystem(message)}`
+            `${logger._createSystem(message)}`
         );
     },
     _createSystem(message: string):string{
