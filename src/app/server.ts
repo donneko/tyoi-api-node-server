@@ -1,11 +1,14 @@
 import express from "express";
 import http from "node:http";
+import qrcode from "qrcode-terminal";
+
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 import { getLanIp } from "../util/getLanIp.js";
-import qrcode from "qrcode-terminal";
 import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/findAvailablePort.js";
+import TYOI_CONFIG from "../config/tyoi.config.js"
+import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 
 type RequestData = {
     query  : unknown,
@@ -33,6 +36,32 @@ type ServerOptions = {
     port?: number;
     middlewares?: express.RequestHandler[];
 };
+export type ServerConfig = {
+    baseUrl?: string;
+    publicDirname?: string;
+    apiPrefix?: string;
+    port?: number;
+    middlewares?: express.RequestHandler[];
+    exposeLan?: boolean,
+    showQrCode?: boolean,
+};
+export type ServerDefaultConfig = {
+    publicDirname: string;
+    apiPrefix: string;
+    port: number;
+    middlewares: express.RequestHandler[];
+    exposeLan: boolean,
+    showQrCode: boolean,
+};
+type ServerDefaultOption = {
+    baseUrl?: string;
+    publicDirname: string;
+    apiPrefix: string;
+    port: number;
+    middlewares: express.RequestHandler[];
+    exposeLan: boolean,
+    showQrCode: boolean,
+};
 
 export class Server<RequestNameList extends string>
 {
@@ -41,6 +70,7 @@ export class Server<RequestNameList extends string>
     #serverPort!:number;
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #httpServer: http.Server | null = null;
+    #SERVER_CONFIG:ServerDefaultOption = {...TYOI_DEFAULT_CONFIG,...TYOI_CONFIG};
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -77,7 +107,7 @@ export class Server<RequestNameList extends string>
             apiPrefix = "/api",
             port = 3000,
             middlewares = []
-        } = options;
+        } = {...this.#SERVER_CONFIG,...options};
 
         this.#init({baseUrl,publicDirname,port})
         this.#initServer(middlewares,apiPrefix);
@@ -162,11 +192,15 @@ export class Server<RequestNameList extends string>
      */
     async startServer(options?:StartServerOptions){
 
+        const startServerOptions = {...this.#SERVER_CONFIG,options};
+
         // ホスト設定
-        const host = options?.exposeLan ? "0.0.0.0" : "127.0.0.1";
+        const host = startServerOptions.exposeLan ? "0.0.0.0" : "127.0.0.1";
 
         // ポート設定
+        // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
         if(options?.port)this.#serverPort = options?.port;
+
         this.#serverPort = await findAvailablePort(this.#serverPort,host);
         const port = this.#serverPort;
 
@@ -184,7 +218,7 @@ export class Server<RequestNameList extends string>
                 logger.info(`Network: http://${networkUrl}`);
 
                 // QRcode生成
-                if(options?.showQrCode){
+                if(startServerOptions.showQrCode){
                     logger.info(`Network URL QRcode`);
                     qrcode.generate(networkUrl, {
                         small: true
@@ -234,5 +268,24 @@ export class Server<RequestNameList extends string>
     hasAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key){
         return this.#serverAPIs.has(type);
     }
-        // TODO 他の制御用関数を作成する。
+    // API手動実行
+    emitAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key,data:RequestEventMap<RequestNameList>[Key]){
+        return this.#serverAPIs.emit(type,data);
+    }
+    // サーバー起動中か？
+    isRunning(){
+        return this.#httpServer !== null;
+    }
+    // サーバーポート取得
+    getPort(){
+        return this.#serverPort;
+    }
+    // Expressアプリ取得
+    getApp(){
+        return this.#appServer;
+    }
+    // HTTPサーバー取得
+    getHttpServer(){
+        return this.#httpServer;
+    }
 }

@@ -1,0 +1,14 @@
+import { defineConfig } from "../app/config-server.js";
+import type { ServerDefaultConfig } from "../app/server.js";
+
+export default defineConfig<ServerDefaultConfig>({
+    port: 3000,
+
+    publicDirname: "main",
+    apiPrefix: "/api",
+
+    middlewares:[],
+
+    exposeLan: false,
+    showQrCode: false,
+});
