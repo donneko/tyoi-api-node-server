@@ -23,6 +23,8 @@ type StartServerOptions = {
     port?: number;
     exposeLan?: boolean;
     showQrCode?:boolean;
+    autoPort?:boolean;
+    openBrowser?:boolean;
 };
 type initConfigData = {
     baseUrl:string;
