@@ -182,11 +182,8 @@ export class Server<RequestNameList extends string>
             // ポート設定
             // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
             if(options?.port)this.#serverPort = options?.port;
-
             this.#serverPort = await findAvailablePort(this.#serverPort,host);
             const port = this.#serverPort;
-
-
 
             // サーバー起動処理
             this.#httpServer = this.#appServer.listen(port,host);
