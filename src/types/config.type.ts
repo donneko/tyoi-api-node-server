@@ -14,6 +14,7 @@ export type ServerUserConfig = {
     exposeLan?: boolean;
     showQrCode?: boolean;
     openBrowser?:BrowserOpenConfig;
+    autoPort?:boolean;
 };
 
 export type ServerDefaultConfig = {
@@ -24,4 +25,5 @@ export type ServerDefaultConfig = {
     exposeLan: boolean;
     showQrCode: boolean;
     openBrowser:BrowserOpenConfig;
+    autoPort:boolean;
 };

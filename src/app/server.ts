@@ -226,7 +226,11 @@ export class Server<RequestNameList extends string>
             // ポート設定
             // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
             if(options?.port !== undefined)this.#serverPort = options.port;
-            this.#serverPort = await findAvailablePort(this.#serverPort,host);
+            this.#serverPort = await findAvailablePort({
+                startPort:this.#serverPort,
+                host,
+                isAutoPort:startServerOptions.autoPort,
+            });
             const port = this.#serverPort;
 
             // サーバー起動処理
@@ -277,21 +281,25 @@ export class Server<RequestNameList extends string>
 
         return new Promise<void>((resolve,reject)=>{
             try {
+                logger.info("終了処理中を開始しました...");
 
                 const timeout = setTimeout(() => {
                     this.#httpServer?.closeAllConnections();
-                    logger.warn("タイムアウトして終了しました。");
-                    resolve();
+                    logger.warn("タイムアウトしました。");
                 }, 10000);
 
-                this.#httpServer?.close();
+                this.#httpServer?.close((error)=>{
+
+                    if(error)throw error;
+
+                    clearTimeout(timeout);
+                    this.#isStopServer = false;
+                    this.#httpServer = null;
+                    logger.info("サーバー終了しました。");
+                    resolve();
+                });
                 this.#httpServer?.closeIdleConnections();
 
-                clearTimeout(timeout);
-                this.#isStopServer = false;
-                this.#httpServer = null;
-                logger.info("正常にサーバー終了しました。");
-                resolve();
             } catch (error) {
                 reject(error);
                 logger.error("サーバー終了中にエラーが発生しました");

@@ -3,6 +3,7 @@ import type { ServerUserConfig } from "../types/config.type.js";
 
 export default defineConfig<ServerUserConfig>({
     port: 3000,
+    autoPort:true,
 
     publicDirname: "main",
     apiPrefix: "/api",

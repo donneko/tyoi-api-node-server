@@ -3,6 +3,7 @@ import type { ServerDefaultConfig } from "../types/config.type.js";
 
 export default defineConfig<ServerDefaultConfig>({
     port: 3000,
+    autoPort:false,
 
     publicDirname: "main",
     apiPrefix: "/api",

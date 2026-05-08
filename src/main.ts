@@ -1,6 +1,5 @@
 import minimist from "minimist"
 import { Server } from "./app/server.js";
-import { logger } from "./util/logger.js";
 
 async function tyoiServer(argv:string[]):Promise<void>{
     const args = minimist(argv,{
@@ -17,22 +16,34 @@ async function tyoiServer(argv:string[]):Promise<void>{
 
     switch(args._[0]){
         case "dev":
-            const config = await import("./config/tyoi.dev.config.js");
-            const server = new Server<RequestNameList>({
-                ...config.default,
-                ...args,
-                ...{baseUrl:import.meta.url}
-            });
-            await server.startServer();
+            ( async () => {
+                // サーバー作成
+                const config = await import("./config/tyoi.dev.config.js");
+                const server = new Server<RequestNameList>({
+                    ...config.default,
+                    ...args,
+                    ...{baseUrl:import.meta.url}
+                });
 
-            server.onAPI("GET:/a",(data)=>{
-                return data;
-            });
+                // サーバー起動
+                await server.startServer();
+            })();
 
         break;
         default:
-            logger.bar();
-            logger.warn("コマンドが存在しませんでした。");
+            ( async () => {
+                // サーバー作成
+                const config = await import("./config/tyoi.config.js");
+                const server = new Server<RequestNameList>({
+                    ...config.default,
+                    ...args,
+                    ...{baseUrl:import.meta.url}
+                });
+
+                // サーバー起動
+                await server.startServer();
+            })();
+        break;
     }
 }
 

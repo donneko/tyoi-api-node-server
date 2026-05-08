@@ -10,6 +10,7 @@ import slowDown from "express-slow-down";
 
 export default defineConfig<ServerUserConfig>({
     port: 3000,
+    autoPort:true,
 
     publicDirname:"main",
     apiPrefix:"/api",
