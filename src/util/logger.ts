@@ -30,4 +30,9 @@ export const logger = {
             `${pc.gray("[SYSTEM]")} ${message}`
         );
     },
+
+    bar() {
+        const width = process.stdout.columns ?? 10;
+        console.log("─".repeat(width));
+    }
 };

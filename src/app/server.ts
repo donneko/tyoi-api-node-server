@@ -1,6 +1,5 @@
 import express from "express";
 import http from "node:http";
-import qrcode from "qrcode-terminal";
 
 import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 import { pathNormalization } from "../service/path-normalization.js";
@@ -9,6 +8,7 @@ import { getLanIp } from "../util/get-lan-ip.js";
 import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/find-available-port.js";
 import type { ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
+import { serverStartSummary } from "../service/server-start-summary.js";
 
 
 type RequestData = {
@@ -174,43 +174,39 @@ export class Server<RequestNameList extends string>
         });
      */
     async startServer(options?:StartServerOptions){
+        try {
+            const startServerOptions = {...this.#serverConfig,...options};
 
-        const startServerOptions = {...this.#serverConfig,...options};
+            // ホスト設定
+            const host = startServerOptions.exposeLan ? "0.0.0.0" : "127.0.0.1";
 
-        // ホスト設定
-        const host = startServerOptions.exposeLan ? "0.0.0.0" : "127.0.0.1";
+            // ポート設定
+            // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
+            if(options?.port)this.#serverPort = options?.port;
 
-        // ポート設定
-        // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
-        if(options?.port)this.#serverPort = options?.port;
+            this.#serverPort = await findAvailablePort(this.#serverPort,host);
+            const port = this.#serverPort;
 
-        this.#serverPort = await findAvailablePort(this.#serverPort,host);
-        const port = this.#serverPort;
 
-        logger.info("サーバーは起動しました...");
-        logger.info(`Port: ${port}`);
 
-        // サーバー起動処理
-        this.#httpServer = this.#appServer.listen(port,host, () => {
-            logger.info(`Local: http://localhost:${port}`);
+            // サーバー起動処理
+            this.#httpServer = this.#appServer.listen(port,host);
 
-            // LANに公開するなら...
-            if(host === "0.0.0.0"){
-                const ip = getLanIp();
-                const networkUrl = `http://${ip}:${port}`;
-                logger.info(`Network: ${networkUrl}`);
+            // スタートログ
+            serverStartSummary({
+                host,
+                port,
+                publicPath:this.#serverConfig.publicDirname,
+                apiPrefix:this.#serverConfig.apiPrefix,
+                isShowQrCode:this.#serverConfig.showQrCode,
+            });
 
-                // QRcode生成
-                if(startServerOptions.showQrCode){
-                    logger.info(`Network URL QRcode`);
-                    qrcode.generate(networkUrl, {
-                        small: true
-                    });
-                }
-            }
-        });
+            return this.#httpServer;
 
-        return this.#httpServer;
+        } catch (error) {
+            logger.error("サーバー起動中にエラーが発生しました。");
+        }
+
     }
     stopServer(){
         return new Promise<void>((resolve,reject)=>{
