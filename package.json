@@ -3,14 +3,16 @@
   "version": "0.4.3",
   "main": "./dist/main.js",
   "scripts": {
-    "test": "npx tsx ./src/main.ts",
-    "build": "tsc && cp -R src/public dist/public",
+    "dev": "tsx ./src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck",
+    "build": "tsc && rm -rf dist/public && cp -R src/public dist/public",
     "start": "node ./dist/main.js"
   },
   "type": "module",
   "author": "",
   "license": "MIT",
-  "description": "",
+  "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",

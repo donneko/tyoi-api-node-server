@@ -13,7 +13,9 @@ export async function findAvailablePort(startPort: number,host:string) {
             `代わりにポート[${port + 1}]を使用してもいいですか？`
         ));
 
-        if(!isAllow)break;
+        if(!isAllow){
+            throw new Error(`指定されたポート[${port}]は使用中です。起動を中止しました。`);
+        }
 
         port++
         logger.info(`ポート[${port}]を使用します`);

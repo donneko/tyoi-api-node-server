@@ -36,7 +36,7 @@ export class ApiRegistry<ApiRegistryMap extends Record<string,unknown>>{
     once<Key extends keyof ApiRegistryMap>(type:Key,fn:ApiRegistryHandler<ApiRegistryMap[Key]>){
         const func:ApiRegistryHandler<ApiRegistryMap[Key]> = (arg) =>{
             this.off(type);
-            fn(arg);
+            return fn(arg);
         };
         return this.on(type,func);
     }

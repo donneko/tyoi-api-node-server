@@ -13,7 +13,6 @@ import { serverStartSummary } from "../service/server-start-summary.js";
 type RequestData = {
     query  : unknown,
     body   : unknown,
-    params : unknown,
     headers: unknown
 }
 type RequestEventMap<L extends string> = {
@@ -141,10 +140,9 @@ export class Server<RequestNameList extends string>
             }
 
             const result = await this.#serverAPIs.emit(key, {
-            query: req.query,
-            body: req.body,
-            params: req.params,
-            headers: req.headers
+                query: req.query,
+                body: req.body,
+                headers: req.headers
             });
 
             res.json({
@@ -181,26 +179,53 @@ export class Server<RequestNameList extends string>
 
             // ポート設定
             // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
-            if(options?.port)this.#serverPort = options?.port;
+            if(options?.port !== undefined)this.#serverPort = options.port;
             this.#serverPort = await findAvailablePort(this.#serverPort,host);
             const port = this.#serverPort;
 
             // サーバー起動処理
-            this.#httpServer = this.#appServer.listen(port,host);
+            const httpServer = await new Promise<http.Server>((resolve,reject)=>{
+                const server = this.#appServer.listen(port,host);
+
+                const onError = (error: Error) => {
+                    server.off("listening",onListening);
+                    this.#httpServer = null;
+                    reject(error);
+                };
+
+                const onListening = () => {
+                    server.off("error",onError);
+                    resolve(server);
+                };
+
+                server.once("error",onError);
+                server.once("listening",onListening);
+
+                this.#httpServer = server;
+            });
+            const address = httpServer.address();
+            const listeningPort = typeof address === "object" && address !== null
+                ? address.port
+                : port;
+            this.#serverPort = listeningPort;
 
             // スタートログ
             serverStartSummary({
                 host,
-                port,
+                port:listeningPort,
                 publicPath:startServerOptions.publicDirname,
                 apiPrefix:startServerOptions.apiPrefix,
                 isShowQrCode:startServerOptions.showQrCode,
             });
 
-            return this.#httpServer;
+            return httpServer;
 
         } catch (error) {
             logger.error("サーバー起動中にエラーが発生しました。");
+            if(error instanceof Error){
+                logger.error(error.message);
+            }
+            throw error;
         }
 
     }
