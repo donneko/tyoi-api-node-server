@@ -9,7 +9,7 @@
   },
   "type": "module",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "cors": "^2.8.6",

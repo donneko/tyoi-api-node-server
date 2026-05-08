@@ -216,7 +216,7 @@ export class Server<RequestNameList extends string>
             if(host === "0.0.0.0"){
                 const ip = getLanIp();
                 const networkUrl = `http://${ip}:${port}`;
-                logger.info(`Network: http://${networkUrl}`);
+                logger.info(`Network: ${networkUrl}`);
 
                 // QRcode生成
                 if(startServerOptions.showQrCode){
