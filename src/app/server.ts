@@ -285,29 +285,40 @@ export class Server<RequestNameList extends string>
         this.#isStopServer = true;
 
         return new Promise<void>((resolve,reject)=>{
+            let settled = false;
+            const finish = () => {
+                if (settled) return;
+                settled = true;
+
+                clearTimeout(timeout);
+                this.#isStopServer = false;
+                this.#httpServer = null;
+            };
+
             logger.info("終了処理中を開始しました...");
 
             const timeout = setTimeout(() => {
+                if (settled) return;
+
                 this.#httpServer?.closeAllConnections();
                 logger.warn("タイムアウトしました。");
 
-                this.#isStopServer = false;
-                this.#httpServer = null;
+                finish();
                 resolve();
             }, 10000);
 
             this.#httpServer?.close((error)=>{
-                clearTimeout(timeout);
-                this.#isStopServer = false;
-                this.#httpServer = null;
+                if (settled) return;
 
                 if(error){
                     logger.error("サーバー終了中にエラーが発生しました");
+                    finish();
                     reject(error);
                     return;
                 };
 
-                logger.info("サーバー終了しました。");
+                logger.success("サーバー終了しました。");
+                finish();
                 resolve();
             });
             this.#httpServer?.closeIdleConnections();
