@@ -182,7 +182,11 @@ export class Server<RequestNameList extends string>
         return httpServer;
     }
 
+    #isShuttingDown:boolean = false;
     async #shutdownServer(){
+        if(this.#isShuttingDown) return;
+        this.#isShuttingDown = true;
+
         logger.bar();
         logger.warn("サーバーをシャットダウン中...");
 
@@ -193,6 +197,7 @@ export class Server<RequestNameList extends string>
         process.exit(0);
     }
 
+    #isStartServer:boolean = false;
     /**
      * サーバーの起動する。
      * @param options サーバー起動時の便利なオプションを設定できます
@@ -206,6 +211,13 @@ export class Server<RequestNameList extends string>
      */
     async startServer(options?:StartServerOptions){
         try {
+            if(this.#httpServer){
+                logger.warn("すでにサーバーは起動しています。");
+                return;
+            }
+            if(this.#isStartServer) return;
+            this.#isStartServer = true;
+
             const startServerOptions = {...this.#serverConfig,...options};
 
             // ホスト設定
@@ -243,9 +255,12 @@ export class Server<RequestNameList extends string>
                 });
             }
 
+            this.#isStartServer = false;
             return httpServer;
 
         } catch (error) {
+            this.#isStartServer = false;
+
             logger.error("サーバー起動中にエラーが発生しました。");
             if(error instanceof Error){
                 logger.error(error.message);
@@ -254,26 +269,27 @@ export class Server<RequestNameList extends string>
         }
 
     }
+    #isStopServer:boolean = false;
     async stopServer():Promise<void>{
+        if(!this.#httpServer) return;
+        if(this.#isStopServer) return;
+        this.#isStopServer = true;
+
         return new Promise<void>((resolve,reject)=>{
-            if(!this.#httpServer){
-                resolve();
-                return;
-            }
+            try {
+                this.#httpServer?.close();
+                this.#httpServer?.closeIdleConnections();
 
-            this.#httpServer?.close((error)=>{
-
-                if(error){
-                    reject(error);
-                    logger.error("サーバー終了中にエラーが発生しました");
-                    return;
-                }
-
+                this.#isStopServer = false;
                 this.#httpServer = null;
                 logger.info("正常にサーバー終了しました。");
                 resolve();
-            });
-
+            } catch (error) {
+                reject(error);
+                logger.error("サーバー終了中にエラーが発生しました");
+                this.#isStopServer = false;
+                throw error;
+            }
         });
     }
 
