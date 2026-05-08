@@ -33,9 +33,9 @@ const server = new Server<RequestNameList>({
     ]
 });
 
-server.startServer({
+await server.startServer({
     exposeLan:true,
-    showQrCode: false,
+    showQrCode: true,
     port:3000
 });
 

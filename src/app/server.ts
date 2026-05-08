@@ -4,6 +4,8 @@ import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 import { getLanIp } from "../util/getLanIp.js";
 import qrcode from "qrcode-terminal";
+import { logger } from "../util/logger.js";
+import { findAvailablePort } from "../service/findAvailablePort.js";
 
 type RequestData = {
     query  : unknown,
@@ -152,28 +154,38 @@ export class Server<RequestNameList extends string>
      * @param options サーバー起動時の便利なオプションを設定できます
      * @returns http.serverを返します
      * @example
-     * server.startServer({
+     * await server.startServer({
             exposeLan:true,
             showQrCode: false,
             port:3000
         });
      */
-    startServer(options?:StartServerOptions){
+    async startServer(options?:StartServerOptions){
 
-        if(options?.port)this.#serverPort = options?.port;
-        const port = this.#serverPort;
+        // ホスト設定
         const host = options?.exposeLan ? "0.0.0.0" : "127.0.0.1";
-        const ip = getLanIp();
 
+        // ポート設定
+        if(options?.port)this.#serverPort = options?.port;
+        this.#serverPort = await findAvailablePort(this.#serverPort,host);
+        const port = this.#serverPort;
+
+        logger.info("サーバーは起動しました...");
+        logger.info(`Port: ${port}`);
+
+        // サーバー起動処理
         this.#httpServer = this.#appServer.listen(port,host, () => {
-            console.log(`Local: http://localhost:${port}`);
+            logger.info(`Local: http://localhost:${port}`);
 
+            // LANに公開するなら...
             if(host === "0.0.0.0"){
+                const ip = getLanIp();
                 const networkUrl = `http://${ip}:${port}`;
-                console.log(`Network: http://${networkUrl}`);
+                logger.info(`Network: http://${networkUrl}`);
 
                 // QRcode生成
                 if(options?.showQrCode){
+                    logger.info(`Network URL QRcode`);
                     qrcode.generate(networkUrl, {
                         small: true
                     });
@@ -194,10 +206,12 @@ export class Server<RequestNameList extends string>
 
                 if(error){
                     reject(error);
+                    logger.error("サーバー終了中にエラーが発生しました");
                     return;
                 }
 
                 this.#httpServer = null;
+                logger.info("正常にサーバー終了しました。");
                 resolve();
             });
 
