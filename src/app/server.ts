@@ -191,7 +191,6 @@ export class Server<RequestNameList extends string>
         });
      */
     async startServer(options?:StartServerOptions){
-        console.log(options);
 
         const startServerOptions = {...this.#SERVER_DEFAULT_CONFIG,...options};
 
