@@ -300,8 +300,9 @@ export class Server<RequestNameList extends string>
                 this.#httpServer = null;
 
                 if(error){
-                    reject(error);
                     logger.error("サーバー終了中にエラーが発生しました");
+                    reject(error);
+                    return;
                 };
 
                 logger.info("サーバー終了しました。");
