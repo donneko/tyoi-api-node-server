@@ -1,46 +1,44 @@
+import minimist from "minimist"
 import { Server } from "./app/server.js";
-import morgan from "morgan";
-import helmet from "helmet";
-import cors from "cors";
-import rateLimit from "express-rate-limit";
-import hpp from "hpp";
-import slowDown from "express-slow-down";
+import { logger } from "./util/logger.js";
 
-type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
+async function tyoiServer(argv:string[]):Promise<void>{
+    const args = minimist(argv,{
+        alias: {
+            p: "port",
+            o: "open"
+        },
 
-const config = await import("./config/tyoi.config.js");
+        boolean: [
+            "open"
+        ]
+    });
+    type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
-const server = new Server<RequestNameList>({...config.default,...{
-    baseUrl:import.meta.url,
-    publicDirname:"main",
-    apiPrefix:"/api",
-    port:3000,
-    middlewares:[
-        helmet(),
-        cors(),
-        morgan("dev"),
+    switch(args._[0]){
+        case "dev":
+            const config = await import("./config/tyoi.dev.config.js");
+            const server = new Server<RequestNameList>({
+                ...config.default,
+                ...{args},
+                ...{baseUrl:import.meta.url}
+            });
+            await server.startServer({
+                exposeLan:true,
+                showQrCode: true,
+                port:3000
+            });
 
-        rateLimit({
-            windowMs: 60 * 1000,
-            max: 100
-        }),
+            server.onAPI("GET:/a",(data)=>{
+                return data;
+            });
 
-        slowDown({
-            windowMs: 60 * 1000,
-            delayAfter: 5,
-            delayMs: () => 500
-        }),
+        break;
+        default:
+            logger.bar();
+            logger.warn("コマンドが存在しませんでした。");
+    }
+}
 
-        hpp()
-    ]
-}});
+tyoiServer(process.argv.slice(2));
 
-await server.startServer({
-    exposeLan:true,
-    showQrCode: true,
-    port:3000
-});
-
-server.onAPI("GET:/a",(data)=>{
-    return data;
-})
