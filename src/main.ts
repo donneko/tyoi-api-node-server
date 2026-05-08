@@ -8,6 +8,8 @@ import slowDown from "express-slow-down";
 
 type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
+// const config = await import("./config/tyoi.config.js");
+// config.default;
 const server = new Server<RequestNameList>({
     baseUrl:import.meta.url,
     publicDirname:"main",

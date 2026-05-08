@@ -7,7 +7,6 @@ import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 import { getLanIp } from "../util/get-lan-ip.js";
 import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/find-available-port.js";
-import TYOI_CONFIG from "../config/tyoi.config.js"
 import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 
 type RequestData = {
@@ -36,7 +35,7 @@ type ServerOptions = {
     port?: number;
     middlewares?: express.RequestHandler[];
 };
-export type ServerConfig = {
+export type ServerUserConfig = {
     baseUrl?: string;
     publicDirname?: string;
     apiPrefix?: string;
@@ -53,15 +52,15 @@ export type ServerDefaultConfig = {
     exposeLan: boolean,
     showQrCode: boolean,
 };
-type ServerDefaultOption = {
-    baseUrl?: string;
+type ServerConfig = {
+    baseUrl: string;
     publicDirname: string;
     apiPrefix: string;
     port: number;
     middlewares: express.RequestHandler[];
     exposeLan: boolean,
     showQrCode: boolean,
-};
+}
 
 export class Server<RequestNameList extends string>
 {
@@ -70,7 +69,8 @@ export class Server<RequestNameList extends string>
     #serverPort!:number;
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #httpServer: http.Server | null = null;
-    #SERVER_DEFAULT_CONFIG:ServerDefaultOption = {...TYOI_DEFAULT_CONFIG,...TYOI_CONFIG};
+    #SERVER_DEFAULT_CONFIG:ServerDefaultConfig = TYOI_DEFAULT_CONFIG;
+    #serverConfig!:ServerConfig;
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -101,13 +101,14 @@ export class Server<RequestNameList extends string>
      */
     constructor(options:ServerOptions){
 
+        this.#serverConfig = {...this.#SERVER_DEFAULT_CONFIG,...options};
         const {
             baseUrl,
             publicDirname = "main",
             apiPrefix = "/api",
             port = 3000,
             middlewares = []
-        } = {...this.#SERVER_DEFAULT_CONFIG,...options};
+        } = this.#serverConfig;
 
         this.#init({baseUrl,publicDirname,port})
         this.#initServer(middlewares,apiPrefix);
@@ -192,7 +193,7 @@ export class Server<RequestNameList extends string>
      */
     async startServer(options?:StartServerOptions){
 
-        const startServerOptions = {...this.#SERVER_DEFAULT_CONFIG,...options};
+        const startServerOptions = {...this.#serverConfig,...options};
 
         // ホスト設定
         const host = startServerOptions.exposeLan ? "0.0.0.0" : "127.0.0.1";
