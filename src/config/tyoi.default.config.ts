@@ -14,4 +14,6 @@ export default defineConfig<ServerDefaultConfig>({
     showQrCode: false,
 
     openBrowser: false,
+
+    signalShutdownHandling: true,
 });

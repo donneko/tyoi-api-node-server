@@ -15,6 +15,7 @@ export type ServerUserConfig = {
     showQrCode?: boolean;
     openBrowser?:BrowserOpenConfig;
     autoPort?:boolean;
+    signalShutdownHandling?:boolean
 };
 
 export type ServerDefaultConfig = {
@@ -26,4 +27,5 @@ export type ServerDefaultConfig = {
     showQrCode: boolean;
     openBrowser:BrowserOpenConfig;
     autoPort:boolean;
+    signalShutdownHandling:boolean;
 };

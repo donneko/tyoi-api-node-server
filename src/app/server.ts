@@ -77,31 +77,35 @@ export class Server<RequestNameList extends string>
     constructor(options:ServerOptions){
 
         this.#serverConfig = {...this.#SERVER_DEFAULT_CONFIG,...options};
-        const {
-            baseUrl,
-            publicDirname = "main",
-            apiPrefix = "/api",
-            port = 3000,
-            middlewares = []
-        } = this.#serverConfig;
 
-        this.#init({baseUrl,publicDirname,port})
-        this.#initServer(middlewares,apiPrefix);
+        this.#init();
+        this.#initServer();
     }
 
     // サーバー作成前の設定
-    #init(data:initConfigData){
-        const {baseUrl,publicDirname,port} = data;
+    #init(){
+        const {
+            baseUrl,
+            publicDirname,
+            port,
+            signalShutdownHandling
+        } = this.#serverConfig;
 
         this.#publicDirectoryPath = pathNormalization(baseUrl,publicDirname);
         this.#serverPort = port;
 
-        process.on("SIGINT" , async ()=>{ await this.#shutdownServer() });
-        process.on("SIGTERM", async ()=>{ await this.#shutdownServer() });
+        if(signalShutdownHandling){
+            process.on("SIGINT" , async ()=>{ await this.#shutdownServer() });
+            process.on("SIGTERM", async ()=>{ await this.#shutdownServer() });
+        }
     }
 
     // サーバー作成
-    #initServer(middlewares:express.RequestHandler[],apiPrefix:string){
+    #initServer(){
+        const {
+            middlewares,
+            apiPrefix
+        } = this.#serverConfig;
 
         // ミドルウェアと追加する。
         for(const middleware of middlewares){
