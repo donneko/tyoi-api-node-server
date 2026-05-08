@@ -277,9 +277,17 @@ export class Server<RequestNameList extends string>
 
         return new Promise<void>((resolve,reject)=>{
             try {
+
+                const timeout = setTimeout(() => {
+                    this.#httpServer?.closeAllConnections();
+                    logger.warn("タイムアウトして終了しました。");
+                    resolve();
+                }, 10000);
+
                 this.#httpServer?.close();
                 this.#httpServer?.closeIdleConnections();
 
+                clearTimeout(timeout);
                 this.#isStopServer = false;
                 this.#httpServer = null;
                 logger.info("正常にサーバー終了しました。");
