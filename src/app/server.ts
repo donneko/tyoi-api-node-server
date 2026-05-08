@@ -159,6 +159,31 @@ export class Server<RequestNameList extends string>
         }
     };
 
+    async #createHttpServer(port:number,host:string):Promise<http.Server>{
+        const httpServer = await new Promise<http.Server>((resolve,reject)=>{
+            const server = this.#appServer.listen(port,host);
+
+            const onError = (error: Error) => {
+                server.off("listening",onListening);
+                this.#httpServer = null;
+                reject(error);
+            };
+
+            const onListening = () => {
+                server.off("error",onError);
+                resolve(server);
+            };
+
+            server.once("error",onError);
+            server.once("listening",onListening);
+
+            this.#httpServer = server;
+        });
+
+        return httpServer;
+    }
+
+
     /**
      * サーバーの起動する。
      * @param options サーバー起動時の便利なオプションを設定できます
@@ -184,25 +209,7 @@ export class Server<RequestNameList extends string>
             const port = this.#serverPort;
 
             // サーバー起動処理
-            const httpServer = await new Promise<http.Server>((resolve,reject)=>{
-                const server = this.#appServer.listen(port,host);
-
-                const onError = (error: Error) => {
-                    server.off("listening",onListening);
-                    this.#httpServer = null;
-                    reject(error);
-                };
-
-                const onListening = () => {
-                    server.off("error",onError);
-                    resolve(server);
-                };
-
-                server.once("error",onError);
-                server.once("listening",onListening);
-
-                this.#httpServer = server;
-            });
+            const httpServer = await this.#createHttpServer(port,host);
             const address = httpServer.address();
             const listeningPort = typeof address === "object" && address !== null
                 ? address.port
@@ -229,7 +236,7 @@ export class Server<RequestNameList extends string>
         }
 
     }
-    stopServer(){
+    async stopServer():Promise<void>{
         return new Promise<void>((resolve,reject)=>{
             if(!this.#httpServer){
                 resolve();
