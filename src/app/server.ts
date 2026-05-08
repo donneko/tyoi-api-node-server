@@ -2,12 +2,14 @@ import express from "express";
 import http from "node:http";
 import qrcode from "qrcode-terminal";
 
+import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 import { getLanIp } from "../util/get-lan-ip.js";
 import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/find-available-port.js";
-import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
+import type { ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
+
 
 type RequestData = {
     query  : unknown,
@@ -23,35 +25,15 @@ type StartServerOptions = {
     exposeLan?: boolean;
     showQrCode?:boolean;
 };
-type inputConfigData = {
+type initConfigData = {
     baseUrl:string;
     publicDirname:string;
     port:number;
 }
-type ServerOptions = {
+type ServerOptions = ServerUserConfig & {
     baseUrl: string;
-    publicDirname: string;
-    apiPrefix?: string;
-    port?: number;
-    middlewares?: express.RequestHandler[];
-};
-export type ServerUserConfig = {
-    baseUrl?: string;
-    publicDirname?: string;
-    apiPrefix?: string;
-    port?: number;
-    middlewares?: express.RequestHandler[];
-    exposeLan?: boolean,
-    showQrCode?: boolean,
-};
-export type ServerDefaultConfig = {
-    publicDirname: string;
-    apiPrefix: string;
-    port: number;
-    middlewares: express.RequestHandler[];
-    exposeLan: boolean,
-    showQrCode: boolean,
-};
+}
+
 type ServerConfig = {
     baseUrl: string;
     publicDirname: string;
@@ -115,7 +97,7 @@ export class Server<RequestNameList extends string>
     }
 
     // サーバー作成前の設定
-    #init(data:inputConfigData){
+    #init(data:initConfigData){
         const {baseUrl,publicDirname,port} = data;
 
         this.#publicDirectoryPath = pathNormalization(baseUrl,publicDirname);
