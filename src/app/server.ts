@@ -6,7 +6,7 @@ import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/find-available-port.js";
-import type { ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
+import type { BrowserOpenConfig,ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
 import { serverStartSummary } from "../service/server-start-summary.js";
 import { openBrowser } from "../service/open-browser.js";
 
@@ -24,7 +24,7 @@ type StartServerOptions = {
     exposeLan?: boolean;
     showQrCode?:boolean;
     autoPort?:boolean;
-    openBrowser?:boolean;
+    openBrowser?:BrowserOpenConfig;
 };
 type initConfigData = {
     baseUrl:string;

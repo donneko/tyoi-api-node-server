@@ -15,7 +15,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
     });
     type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
-    switch(args._[0]){
+    switch(args._[0] ?? ""){
         case "":
             await ( async () => {
                 // サーバー作成
