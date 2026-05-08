@@ -4,7 +4,6 @@ import http from "node:http";
 import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
-import { getLanIp } from "../util/get-lan-ip.js";
 import { logger } from "../util/logger.js";
 import { findAvailablePort } from "../service/find-available-port.js";
 import type { ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
