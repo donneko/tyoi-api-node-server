@@ -16,7 +16,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
 
     switch(args._[0]){
         case "dev":
-            ( async () => {
+            await ( async () => {
                 // サーバー作成
                 const config = await import("./config/tyoi.dev.config.js");
                 const server = new Server<RequestNameList>({
@@ -31,7 +31,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
 
         break;
         default:
-            ( async () => {
+            await ( async () => {
                 // サーバー作成
                 const config = await import("./config/tyoi.config.js");
                 const server = new Server<RequestNameList>({

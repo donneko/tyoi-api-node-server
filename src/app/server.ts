@@ -1,6 +1,5 @@
 import express from "express";
 import http from "node:http";
-import open from "open";
 
 import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 import { pathNormalization } from "../service/path-normalization.js";
@@ -280,32 +279,31 @@ export class Server<RequestNameList extends string>
         this.#isStopServer = true;
 
         return new Promise<void>((resolve,reject)=>{
-            try {
-                logger.info("終了処理中を開始しました...");
+            logger.info("終了処理中を開始しました...");
 
-                const timeout = setTimeout(() => {
-                    this.#httpServer?.closeAllConnections();
-                    logger.warn("タイムアウトしました。");
-                }, 10000);
+            const timeout = setTimeout(() => {
+                this.#httpServer?.closeAllConnections();
+                logger.warn("タイムアウトしました。");
 
-                this.#httpServer?.close((error)=>{
-
-                    if(error)throw error;
-
-                    clearTimeout(timeout);
-                    this.#isStopServer = false;
-                    this.#httpServer = null;
-                    logger.info("サーバー終了しました。");
-                    resolve();
-                });
-                this.#httpServer?.closeIdleConnections();
-
-            } catch (error) {
-                reject(error);
-                logger.error("サーバー終了中にエラーが発生しました");
                 this.#isStopServer = false;
-                throw error;
-            }
+                this.#httpServer = null;
+                resolve();
+            }, 10000);
+
+            this.#httpServer?.close((error)=>{
+                clearTimeout(timeout);
+                this.#isStopServer = false;
+                this.#httpServer = null;
+
+                if(error){
+                    reject(error);
+                    logger.error("サーバー終了中にエラーが発生しました");
+                };
+
+                logger.info("サーバー終了しました。");
+                resolve();
+            });
+            this.#httpServer?.closeIdleConnections();
         });
     }
 
