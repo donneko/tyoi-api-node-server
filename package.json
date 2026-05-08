@@ -3,8 +3,8 @@
   "version": "0.4.6",
   "main": "./dist/main.js",
   "scripts": {
-    "tyoi dev": "npm run dev",
-    "tyoi": "npm run dev",
+    "tyoi dev": "tsx ./src/main.ts dev",
+    "tyoi": "tsx ./src/main.ts",
     "dev": "tsx ./src/main.ts",
     "typecheck": "tsc --noEmit",
     "test": "npm run typecheck",
