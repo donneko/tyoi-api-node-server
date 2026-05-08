@@ -100,6 +100,9 @@ export class Server<RequestNameList extends string>
 
         this.#publicDirectoryPath = pathNormalization(baseUrl,publicDirname);
         this.#serverPort = port;
+
+        process.on("SIGINT" , async ()=>{ await this.#shutdownServer() });
+        process.on("SIGTERM", async ()=>{ await this.#shutdownServer() });
     }
 
     // サーバー作成
@@ -183,6 +186,16 @@ export class Server<RequestNameList extends string>
         return httpServer;
     }
 
+    async #shutdownServer(){
+        logger.bar();
+        logger.warn("サーバーをシャットダウン中...");
+
+        await this.stopServer();
+
+        logger.success("サーバーをシャットダウンしました。");
+
+        process.exit(0);
+    }
 
     /**
      * サーバーの起動する。
