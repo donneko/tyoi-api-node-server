@@ -37,7 +37,7 @@ const server = new Server<RequestNameList>({
 });
 
 await server.startServer({
-    exposeLan:true,
+    // exposeLan:true,
     showQrCode: true,
     port:3000
 });

@@ -38,7 +38,7 @@ export function serverStartSummary(summaryData:SummaryData):void{
     logger.info(`API: ${apiPrefix}`);
 
     // QRcode生成
-    if(isShowQrCode){
+    if(isShowQrCode && isLAN){
         logger.bar();
         logger.info(`Network URL QRcode`);
         qrcode.generate(networkUrl, {
