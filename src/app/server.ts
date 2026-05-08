@@ -192,9 +192,9 @@ export class Server<RequestNameList extends string>
             serverStartSummary({
                 host,
                 port,
-                publicPath:this.#serverConfig.publicDirname,
-                apiPrefix:this.#serverConfig.apiPrefix,
-                isShowQrCode:this.#serverConfig.showQrCode,
+                publicPath:startServerOptions.publicDirname,
+                apiPrefix:startServerOptions.apiPrefix,
+                isShowQrCode:startServerOptions.showQrCode,
             });
 
             return this.#httpServer;
