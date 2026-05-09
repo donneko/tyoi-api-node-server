@@ -13,22 +13,23 @@ type PathContexts = {
     targetPath:string;
 }
 
-function emitErrorMessage(message:string):Error{
+function throwError(message:string):never{
     logger.error(message);
-    return new Error(message);
+    throw new Error(message);
 }
 
 function getProjectName(mainContextData:MainContextData):string{
+    logger.bar();
     logger.info("プロジェクト名を検証中です...");
 
     const projectName = mainContextData.commandArgs[1];
 
     if(!projectName){
-        throw emitErrorMessage(`プロジェクト名を引数に入れてください。`);
+        throwError(`プロジェクト名を引数に入れてください。`);
     }
 
     if (!/^[a-zA-Z0-9-_]+$/.test(projectName)) {
-        throw emitErrorMessage("プロジェクト名に使える文字は英数字・-・_ のみです。");
+        throwError("プロジェクト名に使える文字は英数字・-・_ のみです。");
     }
 
 
@@ -93,7 +94,7 @@ export default function serverInit(mainContextData:MainContextData){
     logger.bar();
     logger.info(`ディレクトリーの重複を検証中...`)
     if(isTargetPathExists(targetPath)){
-        throw emitErrorMessage(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
+        throwError(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
     }
     logger.success("ディレクトリーの重複を検証に成功しました。");
 
@@ -104,4 +105,6 @@ export default function serverInit(mainContextData:MainContextData){
 
     logger.bar();
     logger.success(`サーバーのテンプレートを作成に成功しました。`);
+    logger.bar();
+
 }
