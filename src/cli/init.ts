@@ -20,7 +20,7 @@ function throwError(message:string):never{
 
 function getProjectName(mainContextData:MainContextData):string{
     logger.bar();
-    logger.info("プロジェクト名を検証中です...");
+    logger.process("プロジェクト名を検証中です...");
 
     const projectName = mainContextData.commandArgs[1];
 
@@ -83,7 +83,7 @@ function copyTemplate(pathContexts:PathContexts){
 export default function serverInit(mainContextData:MainContextData){
 
     logger.bar();
-    logger.info("サーバーのテンプレートを作成しています...");
+    logger.process("サーバーのテンプレートを作成しています...");
     const projectName = getProjectName(mainContextData);
 
     const pathContexts =
@@ -98,19 +98,19 @@ export default function serverInit(mainContextData:MainContextData){
     } = pathContexts;
 
     logger.bar();
-    logger.info(`ディレクトリーの重複を検証中...`)
+    logger.process(`ディレクトリーの重複を検証中...`)
     if(isTargetPathExists(targetPath)){
         throwError(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
     }
     logger.success("ディレクトリーの重複チェックに成功しました。");
 
     logger.bar();
-    logger.info(`テンプレートの存在を検証中...`)
+    logger.process(`テンプレートの存在を検証中...`)
     validateTemplatePath(templatePath);
     logger.success("テンプレートの存在チェックに成功しました。");
 
     logger.bar();
-    logger.info(`プロジェクトを作成中です...`)
+    logger.process(`プロジェクトを作成中です...`)
     copyTemplate(pathContexts);
     logger.success(`プロジェクトの作成に成功しました。: ${projectName}`);
 
