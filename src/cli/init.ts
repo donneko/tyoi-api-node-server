@@ -33,7 +33,7 @@ function getProjectName(mainContextData:MainContextData):string{
     }
 
 
-    logger.success("プロジェクト名を検証中に成功しました。");
+    logger.success("プロジェクト名の検証に成功しました。");
     return projectName;
 }
 
@@ -96,7 +96,7 @@ export default function serverInit(mainContextData:MainContextData){
     if(isTargetPathExists(targetPath)){
         throwError(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
     }
-    logger.success("ディレクトリーの重複を検証に成功しました。");
+    logger.success("ディレクトリーの重複チェックに成功しました。");
 
     logger.bar();
     logger.info(`プロジェクトを作成中です...`)
