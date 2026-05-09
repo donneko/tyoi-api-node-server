@@ -3,10 +3,17 @@ import path from "node:path";
 import type { MainContextData } from "../main.js";
 import { logger } from "../util/logger.js";
 
+const templateTable = {
+    "basic":"./templates/basic",
+    "test":"./templates/test"
+} as const
+
+type TemplateValue = typeof templateTable[keyof typeof templateTable];
 
 type InitContextData = {
     dirname:string;
-    projectName:string
+    projectName:string;
+    templatePass:TemplateValue;
 }
 type PathContexts = {
     templatePath:string;
@@ -39,6 +46,16 @@ function loggerWrapper(loggerWrapper:LoggerWrapper):unknown{
     return funReturn;
 }
 
+function getTemplatePath(mainContextData:MainContextData):TemplateValue{
+    const templateName:string | undefined | keyof typeof templateTable = mainContextData.optionArgs?.template;
+
+    if(!templateName)return templateTable["basic"];
+    if(!Object.hasOwn(templateTable,templateName)) throwError(`コピー元のテンプレートが見つかりません`);
+
+    logger.info(`選択されたテンプレート[${templateName}]`);
+    return templateTable[(templateName as keyof typeof templateTable)];
+}
+
 function getProjectName(mainContextData:MainContextData):string{
     logger.bar();
     logger.process("プロジェクト名を検証中です...");
@@ -62,12 +79,13 @@ function getPaths(initContextData:InitContextData):PathContexts{
 
     const {
         dirname,
-        projectName
+        projectName,
+        templatePass
     } = initContextData;
 
     const templatePath = path.resolve(
         dirname,
-        "./templates/basic"
+        templatePass
     );
 
     const targetPath = path.resolve(
@@ -114,16 +132,27 @@ function replaceProjectName(pathContexts: PathContexts, projectName: string): vo
     );
 }
 
+function showNextSteps(projectName: string): void {
+    logger.bar();
+    logger.success("次のコマンドで起動できます。");
+    logger.info(`cd ${projectName}`);
+    logger.info("npm install");
+    logger.info("npm run dev");
+    logger.bar();
+}
+
 export default function serverInit(mainContextData:MainContextData){
 
     logger.bar();
     logger.process("サーバーのテンプレートを作成しています...");
     const projectName = getProjectName(mainContextData);
+    const templatePass = getTemplatePath(mainContextData);
 
     const pathContexts =
         getPaths({
             dirname:mainContextData.mainDirname,
-            projectName
+            projectName,
+            templatePass
         });
 
     const {
@@ -163,4 +192,5 @@ export default function serverInit(mainContextData:MainContextData){
     logger.success(`サーバーのテンプレートを作成に成功しました。`);
     logger.bar();
 
+    showNextSteps(projectName);
 }

@@ -21,6 +21,10 @@ async function tyoiServer(argv:string[]):Promise<void>{
 
         boolean: [
             "open"
+        ],
+
+        string: [
+            "template"
         ]
     });
 
