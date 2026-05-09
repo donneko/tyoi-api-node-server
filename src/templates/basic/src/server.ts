@@ -2,7 +2,7 @@ import { Server } from "../app/server.js";
 
 // サーバー作成
 const server = new Server({
-    root: import.meta.url,
+    baseDirname: import.meta.dirname,
     publicDirname: "../public/main",
     port: 3000
 });

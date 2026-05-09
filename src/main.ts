@@ -5,7 +5,6 @@ import init from "./cli/init.js";
 import help from "./cli/help.js";
 
 export type MainContextData = {
-    mainUrl:string;
     mainDirname:string;
     commandArgs:string[];
     optionArgs:minimist.ParsedArgs;
@@ -30,7 +29,6 @@ async function tyoiServer(argv:string[]):Promise<void>{
     });
 
     const mainContextData:MainContextData = {
-        mainUrl:import.meta.url,
         mainDirname:import.meta.dirname,
         commandArgs:args._,
         optionArgs:args,

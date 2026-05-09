@@ -1,28 +1,14 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 /**
- * 公開するpathを正常にする関数
- * @param baseUrl ベースURLのパッチもとになるURL
+ * 公開するpathにする関数
+ * @param baseDirname 基準になるディレクトリー
  * @param publicDirname 公開するディレクトリー
- * @throws Error
- * @example
- * pathNormalization(import.meta.url,"main");
- * @returns baseUrl + "public" + publicDirname;
  */
-export function pathNormalization(baseUrl:string,publicDirname:string):string{
-    const filename = fileURLToPath(baseUrl);
-    const dirname  = path.dirname(filename);
+export function pathNormalization(baseDirname:string,publicDirname:string):string{
 
-    const deliveryBasePath = path.resolve(dirname, "public");
-    const deliveryPath = path.resolve(deliveryBasePath, publicDirname);
-
-    if (
-        deliveryPath !== deliveryBasePath &&
-        !deliveryPath.startsWith(deliveryBasePath + path.sep)
-    ) {
-        throw new Error("Invalid publicDirname: outside public directory");
-    }
+    // 利用者が危ないパスにしても、このサーバーは開発用なので割り切ります。
+    const deliveryPath = path.resolve(baseDirname, publicDirname);
 
     return deliveryPath;
 }

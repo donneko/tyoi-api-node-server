@@ -27,16 +27,16 @@ type StartServerOptions = {
     openBrowser?:BrowserOpenConfig;
 };
 type initConfigData = {
-    root:string;
+    baseDirname:string;
     publicDirname:string;
     port:number;
 }
 type ServerOptions = ServerUserConfig & {
-    root: string;
+    baseDirname: string;
 }
 
 type ServerConfig = ServerDefaultConfig & {
-    root: string;
+    baseDirname: string;
 }
 
 export class Server<RequestNameList extends string>
@@ -51,7 +51,7 @@ export class Server<RequestNameList extends string>
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
-     * @param root ベースのファイルURL
+     * @param baseDirname ベースのファイルURL
      * @param publicDirname public内で公開するディレクトリ名
      * @param port 公開ポート
      * @param middlewares 追加するミドルウェア
@@ -62,8 +62,8 @@ export class Server<RequestNameList extends string>
      *  type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
      *
      *  const server = new Server<RequestNameList>({
-     *      root:import.meta.url,
-     *      publicDirname:"main",
+     *      baseDirname:import.meta.dirname,
+     *      publicDirname:"../public/main",
      *      apiPrefix:"/api",
      *      port:3000,
      *      middlewares:[
@@ -72,7 +72,7 @@ export class Server<RequestNameList extends string>
      *  });
      *
      *  server.startServer();
-     *  server.onAPI("GET:/a",(data)=>{
+     *  server.onAPI("GET:/test",(data)=>{
      *      return data;
      *  })
      */
@@ -87,13 +87,13 @@ export class Server<RequestNameList extends string>
     // サーバー作成前の設定
     #init(){
         const {
-            root,
+            baseDirname,
             publicDirname,
             port,
             signalShutdownHandling
         } = this.#serverConfig;
 
-        this.#publicDirectoryPath = pathNormalization(root,publicDirname);
+        this.#publicDirectoryPath = pathNormalization(baseDirname,publicDirname);
         this.#serverPort = port;
 
         if(signalShutdownHandling){
@@ -251,6 +251,7 @@ export class Server<RequestNameList extends string>
                 host,
                 port:listeningPort,
                 publicPath:startServerOptions.publicDirname,
+                publicFullPath:this.#publicDirectoryPath,
                 apiPrefix:startServerOptions.apiPrefix,
                 isShowQrCode:startServerOptions.showQrCode,
             });

@@ -12,7 +12,8 @@ export default defineConfig<ServerUserConfig>({
     port: 3000,
     autoPort:true,
 
-    publicDirname:"main",
+    // publicDirname:"main",
+    publicDirname:"../public/main",
     apiPrefix:"/api",
 
     middlewares:[
@@ -37,5 +38,5 @@ export default defineConfig<ServerUserConfig>({
     exposeLan: false,
     showQrCode: false,
 
-    openBrowser: true,
+    // openBrowser: true,
 });

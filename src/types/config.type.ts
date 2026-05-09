@@ -6,7 +6,7 @@ export type BrowserOpenConfig =
     | "network";
 
 export type ServerUserConfig = {
-    root?: string;
+    baseDirname?: string;
     publicDirname?: string;
     apiPrefix?: string;
     port?: number;

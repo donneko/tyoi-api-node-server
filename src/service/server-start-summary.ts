@@ -7,7 +7,8 @@ import { logger } from "../util/logger.js";
 type SummaryData = {
     host:string;
     port:number;
-    publicPath:string
+    publicPath:string;
+    publicFullPath:string;
     apiPrefix:string;
     isShowQrCode:boolean;
 }
@@ -18,6 +19,7 @@ export function serverStartSummary(summaryData:SummaryData):void{
         host,
         port,
         publicPath,
+        publicFullPath,
         apiPrefix,
         isShowQrCode,
     } = summaryData;
@@ -34,6 +36,7 @@ export function serverStartSummary(summaryData:SummaryData):void{
     logger.info(`Port: ${port}`);
     logger.info(`Local: http://localhost:${port}`);
     if(isLAN) logger.info(`Network :${networkUrl}`);
+    logger.info(`public full: ${publicFullPath}`);
     logger.info(`Public: ${publicPath}`);
     logger.info(`API: ${apiPrefix}`);
 
