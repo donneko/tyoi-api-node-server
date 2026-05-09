@@ -5,7 +5,7 @@ export default defineConfig<ServerDefaultConfig>({
     port: 3000,
     autoPort:false,
 
-    publicDirname: "main",
+    publicDirname:"../public/main",
     apiPrefix: "/api",
 
     middlewares:[],

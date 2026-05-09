@@ -5,7 +5,7 @@ export default defineConfig<ServerUserConfig>({
     port: 3000,
     autoPort:true,
 
-    publicDirname: "main",
+    publicDirname:"../public/main",
     apiPrefix: "/api",
 
     exposeLan: false,

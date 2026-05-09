@@ -5,9 +5,9 @@ type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
 export default async function runDevServer(mainContextData:MainContextData){
     // サーバー作成
-    const config = await import("../config/tyoi.dev.config.js");
+    const devConfig = await import("../config/tyoi.dev.config.js");
     const server = new Server<RequestNameList>({
-        ...config.default,
+        ...devConfig.default,
         ...mainContextData.optionArgs,
         ...{baseDirname:mainContextData.mainDirname}
     });
