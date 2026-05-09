@@ -12,10 +12,31 @@ type PathContexts = {
     templatePath:string;
     targetPath:string;
 }
+type LoggerWrapper = {
+    fun: () => unknown;
+    process:string;
+    success:string;
+}
 
 function throwError(message:string):never{
+    // ここでエラーを表示するのは仮です。
     logger.error(message);
     throw new Error(message);
+}
+
+function loggerWrapper(loggerWrapper:LoggerWrapper):unknown{
+
+    const {
+        fun,
+        process,
+        success
+    } = loggerWrapper;
+    logger.bar();
+    logger.process(process);
+    const funReturn = fun();
+    logger.success(success);
+
+    return funReturn;
 }
 
 function getProjectName(mainContextData:MainContextData):string{
@@ -28,8 +49,8 @@ function getProjectName(mainContextData:MainContextData):string{
         throwError(`プロジェクト名を引数に入れてください。`);
     }
 
-    if (!/^[a-zA-Z0-9-_]+$/.test(projectName)) {
-        throwError("プロジェクト名に使える文字は英数字・-・_ のみです。");
+    if (!/^[a-zA-Z0-9-]+$/.test(projectName)) {
+        throwError("プロジェクト名に使える文字は英数字・- のみです。");
     }
 
 
@@ -97,22 +118,27 @@ export default function serverInit(mainContextData:MainContextData){
         targetPath
     } = pathContexts;
 
-    logger.bar();
-    logger.process(`ディレクトリーの重複を検証中...`)
-    if(isTargetPathExists(targetPath)){
-        throwError(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
-    }
-    logger.success("ディレクトリーの重複チェックに成功しました。");
+    loggerWrapper({
+        process:`ディレクトリーの重複を検証中...`,
+        fun:() => {
+            if(isTargetPathExists(targetPath)){
+                throwError(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
+            }
+        },
+        success:`ディレクトリーの重複チェックに成功しました。`
+    });
 
-    logger.bar();
-    logger.process(`テンプレートの存在を検証中...`)
-    validateTemplatePath(templatePath);
-    logger.success("テンプレートの存在チェックに成功しました。");
+    loggerWrapper({
+        process:`テンプレートの存在を検証中...`,
+        fun:() => validateTemplatePath(templatePath),
+        success:`テンプレートの存在チェックに成功しました。`
+    });
 
-    logger.bar();
-    logger.process(`プロジェクトを作成中です...`)
-    copyTemplate(pathContexts);
-    logger.success(`プロジェクトの作成に成功しました。`);
+    loggerWrapper({
+        process:`プロジェクトを作成中です...`,
+        fun:() => copyTemplate(pathContexts),
+        success:`プロジェクトの作成に成功しました。`
+    });
 
     logger.bar();
     logger.success(`サーバーのテンプレートを作成に成功しました。`);
