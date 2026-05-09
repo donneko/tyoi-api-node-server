@@ -1,6 +1,7 @@
 import minimist from "minimist"
 import { logger } from "./util/logger.js";
 import dev from "./cli/dev.js";
+import init from "./cli/init.js";
 
 export type MainContextData = {
     mainUrl:string;
@@ -39,7 +40,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
             await dev(mainContextData);
         break;
         case "init":
-            await dev(mainContextData);
+            init(mainContextData);
         break;
         default:
             logger.bar();

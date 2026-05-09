@@ -32,7 +32,7 @@ function getPaths(initContextData:InitContextData):PathContexts{
 
     const templatePath = path.resolve(
         dirname,
-        "../templates/basic"
+        "./templates/basic"
     );
 
     const targetPath = path.resolve(
