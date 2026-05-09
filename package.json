@@ -1,7 +1,6 @@
 {
   "name": "tyoi-api-server",
   "version": "0.4.6",
-  "main": "./dist/main.js",
   "scripts": {
     "tyoi dev": "tsx ./src/main.ts dev",
     "tyoi": "tsx ./src/main.ts",
@@ -14,7 +13,10 @@
   "bin": {
   },
   "type": "module",
-  "author": "",
+  "exports":{
+    ".":"./src/index.ts"
+  },
+  "author": "donneko",
   "license": "MIT",
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
