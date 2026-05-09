@@ -5,7 +5,6 @@ import { logger } from "../util/logger.js";
 
 const templateTable = {
     "basic":"./templates/basic",
-    "test":"./templates/test"
 } as const
 
 type TemplateValue = typeof templateTable[keyof typeof templateTable];
