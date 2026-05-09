@@ -305,6 +305,9 @@ export class Server<RequestNameList extends string>
 
                 server?.closeAllConnections();
                 logger.warn("タイムアウトしました。");
+
+                finish();
+                resolve();
             }, 10000);
 
             server?.close((error)=>{
