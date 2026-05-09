@@ -1,3 +1,5 @@
+#!/usr/bin/env tsx
+
 import minimist from "minimist"
 import { logger } from "./util/logger.js";
 import dev from "./cli/dev.js";
