@@ -193,7 +193,7 @@ export class Server<RequestNameList extends string>
         this.#isShuttingDown = true;
 
         logger.bar();
-        logger.warn("サーバーをシャットダウン中...");
+        logger.process("サーバーをシャットダウン中...");
 
         await this.stopServer();
 
@@ -297,7 +297,7 @@ export class Server<RequestNameList extends string>
                 this.#httpServer = null;
             };
 
-            logger.info("終了処理中を開始しました...");
+            logger.process("終了処理中を開始しました...");
 
             const timeout = setTimeout(() => {
                 if (settled) return;
