@@ -63,6 +63,11 @@ function getPaths(initContextData:InitContextData):PathContexts{
 function isTargetPathExists(targetPath:string):boolean{
     return fs.existsSync(targetPath);
 }
+function validateTemplatePath(templatePath:string){
+    if (!fs.existsSync(templatePath)) {
+        throwError(`テンプレートが見つかりません: ${templatePath}`);
+    }
+}
 
 function copyTemplate(pathContexts:PathContexts){
     const {
@@ -88,6 +93,7 @@ export default function serverInit(mainContextData:MainContextData){
         });
 
     const {
+        templatePath,
         targetPath
     } = pathContexts;
 
@@ -97,6 +103,11 @@ export default function serverInit(mainContextData:MainContextData){
         throwError(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
     }
     logger.success("ディレクトリーの重複チェックに成功しました。");
+
+    logger.bar();
+    logger.info(`テンプレートの存在を検証中...`)
+    validateTemplatePath(templatePath);
+    logger.success("テンプレートの存在チェックに成功しました。");
 
     logger.bar();
     logger.info(`プロジェクトを作成中です...`)
