@@ -46,13 +46,22 @@ export const logger = {
         return `${pc.magentaBright("[PROCESS]")} ${message}`;
     },
 
+    message(message: string) {
+        console.log(
+            `${logger._createMessage(message)}`
+        );
+    },
+    _createMessage(message: string):string{
+        return `${pc.gray("[MESSAGE]")} ${message}`;
+    },
+
     system(message: string) {
         console.log(
             `${logger._createSystem(message)}`
         );
     },
     _createSystem(message: string):string{
-        return `${pc.gray("[SYSTEM]")} ${message}`;
+        return `${pc.magentaBright("[SYSTEM]")} ${message}`;
     },
 
     bar() {

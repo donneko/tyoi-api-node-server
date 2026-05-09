@@ -2,6 +2,7 @@ import minimist from "minimist"
 import { logger } from "./util/logger.js";
 import dev from "./cli/dev.js";
 import init from "./cli/init.js";
+import help from "./cli/help.js";
 
 export type MainContextData = {
     mainUrl:string;
@@ -35,8 +36,10 @@ async function tyoiServer(argv:string[]):Promise<void>{
         optionArgs:args,
     }
 
+    // TODO 後で別のプロジェクトで作成したコマンド実行する関数に変える。
+
     // 実行
-    switch(args._[0] ?? ""){
+    switch(args._[0]?.toLowerCase() ?? ""){
         case "":
             await dev(mainContextData);
         break;
@@ -45,6 +48,9 @@ async function tyoiServer(argv:string[]):Promise<void>{
         break;
         case "init":
             init(mainContextData);
+        break;
+        case "help":
+            help(mainContextData);
         break;
         default:
             logger.bar();
