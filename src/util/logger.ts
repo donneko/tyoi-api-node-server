@@ -37,6 +37,15 @@ export const logger = {
         return `${pc.green("[SUCCESS]")} ${message}`;
     },
 
+    process(message: string) {
+        console.log(
+            `${logger._createProcess(message)}`
+        );
+    },
+    _createProcess(message: string):string{
+        return `${pc.magentaBright("[PROCESS]")} ${message}`;
+    },
+
     system(message: string) {
         console.log(
             `${logger._createSystem(message)}`
