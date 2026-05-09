@@ -1,4 +1,4 @@
-import { Server } from "../app/server.js";
+import { Server } from "tyoi-api-server";
 
 // サーバー作成
 const server = new Server({
