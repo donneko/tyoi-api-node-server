@@ -101,6 +101,19 @@ function copyTemplate(pathContexts:PathContexts){
     });
 }
 
+function replaceProjectName(pathContexts: PathContexts, projectName: string): void {
+    const packageJsonPath = path.join(pathContexts.targetPath, "package.json");
+
+    if (!fs.existsSync(packageJsonPath)) throwError(`package.json が見つかりませんでした。`);
+
+    const text = fs.readFileSync(packageJsonPath, "utf-8");
+
+    fs.writeFileSync(
+        packageJsonPath,
+        text.replaceAll("__PROJECT_NAME__", projectName)
+    );
+}
+
 export default function serverInit(mainContextData:MainContextData){
 
     logger.bar();
@@ -138,6 +151,12 @@ export default function serverInit(mainContextData:MainContextData){
         process:`プロジェクトを作成中です...`,
         fun:() => copyTemplate(pathContexts),
         success:`プロジェクトの作成に成功しました。`
+    });
+
+    loggerWrapper({
+        process:`プロジェクトを編集中です...`,
+        fun:() => replaceProjectName(pathContexts,projectName),
+        success:`プロジェクトの編集に成功しました。`
     });
 
     logger.bar();
