@@ -281,11 +281,11 @@ export class Server<RequestNameList extends string>
     }
     #isStopServer:boolean = false;
     async stopServer():Promise<void>{
-        if(this.#isStopServer) return;
-        this.#isStopServer = true;
-
         const server = this.#httpServer;
         if (!server) return;
+
+        if(this.#isStopServer) return;
+        this.#isStopServer = true;
 
         return new Promise<void>((resolve,reject)=>{
             let settled = false;
