@@ -298,7 +298,7 @@ export class Server<RequestNameList extends string>
                 this.#httpServer = null;
             };
 
-            logger.process("終了処理中を開始しました...");
+            logger.process("終了処理を開始しました...");
 
             const timeout = setTimeout(() => {
                 if (settled) return;
