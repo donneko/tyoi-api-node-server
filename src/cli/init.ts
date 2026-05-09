@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { MainContextData } from "../main.js";
+import type { MainContextData } from "../main.js";
+import { logger } from "../util/logger.js";
 
 
 type InitContextData = {
@@ -12,19 +13,31 @@ type PathContexts = {
     targetPath:string;
 }
 
-function validationProjectName(mainContextData:MainContextData):string{
+function emitErrorMessage(message:string):Error{
+    logger.error(message);
+    return new Error(message);
+}
 
-    const initArgs = mainContextData.commandArgs.slice(1);
-    // プロジェクト名がない場合
-    if( !initArgs[0] || initArgs[0] === "" ){
-        console.log(`プロジェクト名を引数に入れてください。`);
-        process.exit(1);
+function getProjectName(mainContextData:MainContextData):string{
+    logger.info("プロジェクト名を検証中です...");
+
+    const projectName = mainContextData.commandArgs[1];
+
+    if(!projectName){
+        throw emitErrorMessage(`プロジェクト名を引数に入れてください。`);
     }
 
-    return initArgs[0];
+    if (!/^[a-zA-Z0-9-_]+$/.test(projectName)) {
+        throw emitErrorMessage("プロジェクト名に使える文字は英数字・-・_ のみです。");
+    }
+
+
+    logger.success("プロジェクト名を検証中に成功しました。");
+    return projectName;
 }
 
 function getPaths(initContextData:InitContextData):PathContexts{
+
     const {
         dirname,
         projectName
@@ -63,23 +76,32 @@ function copyTemplate(pathContexts:PathContexts){
 
 export default function serverInit(mainContextData:MainContextData){
 
-    const projectName = validationProjectName(mainContextData);
+    logger.bar();
+    logger.info("サーバーのテンプレートを作成しています...");
+    const projectName = getProjectName(mainContextData);
 
-    const pathContexts = getPaths({
-        dirname:mainContextData.mainDirname,
-        projectName
-    });
+    const pathContexts =
+        getPaths({
+            dirname:mainContextData.mainDirname,
+            projectName
+        });
 
     const {
         targetPath
     } = pathContexts;
 
+    logger.bar();
+    logger.info(`ディレクトリーの重複を検証中...`)
     if(isTargetPathExists(targetPath)){
-        console.log(`Already exists: ${projectName}`);
-        process.exit(1);
+        throw emitErrorMessage(`指定されたプロジェクトネームのディレクトリーはすでに存在しています。 : ${projectName}`);
     }
+    logger.success("ディレクトリーの重複を検証に成功しました。");
 
+    logger.bar();
+    logger.info(`プロジェクトを作成中です...`)
     copyTemplate(pathContexts);
+    logger.success(`プロジェクトの作成に成功しました。: ${projectName}`);
 
-    console.log(`完了: ${projectName}`);
+    logger.bar();
+    logger.success(`サーバーのテンプレートを作成に成功しました。`);
 }
