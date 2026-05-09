@@ -11,6 +11,9 @@
     "build": "tsc && rm -rf dist/public && cp -R src/public dist/public",
     "start": "node ./dist/main.js"
   },
+  "bin": {
+    "tyoi": "./src/cli/init.ts"
+  },
   "type": "module",
   "author": "",
   "license": "MIT",

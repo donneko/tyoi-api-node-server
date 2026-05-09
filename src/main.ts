@@ -1,8 +1,17 @@
 import minimist from "minimist"
-import { Server } from "./app/server.js";
 import { logger } from "./util/logger.js";
+import dev from "./cli/dev.js";
+
+export type MainContextData = {
+    mainUrl:string;
+    mainDirname:string;
+    commandArgs:string[];
+    optionArgs:minimist.ParsedArgs;
+}
 
 async function tyoiServer(argv:string[]):Promise<void>{
+
+    // コマンド解析
     const args = minimist(argv,{
         alias: {
             p: "port",
@@ -13,37 +22,24 @@ async function tyoiServer(argv:string[]):Promise<void>{
             "open"
         ]
     });
-    type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
+    const mainContextData:MainContextData = {
+        mainUrl:import.meta.url,
+        mainDirname:import.meta.dirname,
+        commandArgs:args._,
+        optionArgs:args,
+    }
+
+    // 実行
     switch(args._[0] ?? ""){
         case "":
-            await ( async () => {
-                // サーバー作成
-                const config = await import("./config/tyoi.config.js");
-                const server = new Server<RequestNameList>({
-                    ...config.default,
-                    ...args,
-                    ...{baseUrl:import.meta.url}
-                });
-
-                // サーバー起動
-                await server.startServer();
-            })();
+            await dev(mainContextData);
         break;
         case "dev":
-            await ( async () => {
-                // サーバー作成
-                const config = await import("./config/tyoi.dev.config.js");
-                const server = new Server<RequestNameList>({
-                    ...config.default,
-                    ...args,
-                    ...{baseUrl:import.meta.url}
-                });
-
-                // サーバー起動
-                await server.startServer();
-            })();
-
+            await dev(mainContextData);
+        break;
+        case "init":
+            await dev(mainContextData);
         break;
         default:
             logger.bar();
