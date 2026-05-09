@@ -202,7 +202,7 @@ export class Server<RequestNameList extends string>
         process.exit(0);
     }
 
-    #isStartServer:boolean = false;
+    #isStarting:boolean = false;
     /**
      * サーバーの起動する。
      * @param options サーバー起動時の便利なオプションを設定できます
@@ -220,8 +220,8 @@ export class Server<RequestNameList extends string>
                 logger.warn("すでにサーバーは起動しています。");
                 return;
             }
-            if(this.#isStartServer) return;
-            this.#isStartServer = true;
+            if(this.#isStarting) return;
+            this.#isStarting = true;
 
             const startServerOptions = {...this.#serverConfig,...options};
 
@@ -264,11 +264,11 @@ export class Server<RequestNameList extends string>
                 });
             }
 
-            this.#isStartServer = false;
+            this.#isStarting = false;
             return httpServer;
 
         } catch (error) {
-            this.#isStartServer = false;
+            this.#isStarting = false;
 
             logger.error("サーバー起動中にエラーが発生しました。");
             if(error instanceof Error){
@@ -280,9 +280,11 @@ export class Server<RequestNameList extends string>
     }
     #isStopServer:boolean = false;
     async stopServer():Promise<void>{
-        if(!this.#httpServer) return;
         if(this.#isStopServer) return;
         this.#isStopServer = true;
+
+        const server = this.#httpServer;
+        if (!server) return;
 
         return new Promise<void>((resolve,reject)=>{
             let settled = false;
@@ -300,14 +302,11 @@ export class Server<RequestNameList extends string>
             const timeout = setTimeout(() => {
                 if (settled) return;
 
-                this.#httpServer?.closeAllConnections();
+                server?.closeAllConnections();
                 logger.warn("タイムアウトしました。");
-
-                finish();
-                resolve();
             }, 10000);
 
-            this.#httpServer?.close((error)=>{
+            server?.close((error)=>{
                 if (settled) return;
 
                 if(error){
@@ -321,7 +320,7 @@ export class Server<RequestNameList extends string>
                 finish();
                 resolve();
             });
-            this.#httpServer?.closeIdleConnections();
+            server?.closeIdleConnections();
         });
     }
 
