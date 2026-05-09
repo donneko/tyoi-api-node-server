@@ -112,7 +112,7 @@ export default function serverInit(mainContextData:MainContextData){
     logger.bar();
     logger.process(`プロジェクトを作成中です...`)
     copyTemplate(pathContexts);
-    logger.success(`プロジェクトの作成に成功しました。: ${projectName}`);
+    logger.success(`プロジェクトの作成に成功しました。`);
 
     logger.bar();
     logger.success(`サーバーのテンプレートを作成に成功しました。`);
