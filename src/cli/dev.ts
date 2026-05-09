@@ -9,7 +9,7 @@ export default async function runDevServer(mainContextData:MainContextData){
     const server = new Server<RequestNameList>({
         ...config.default,
         ...mainContextData.optionArgs,
-        ...{baseUrl:mainContextData.mainUrl}
+        ...{root:mainContextData.mainUrl}
     });
 
     // サーバー起動

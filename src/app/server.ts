@@ -27,16 +27,16 @@ type StartServerOptions = {
     openBrowser?:BrowserOpenConfig;
 };
 type initConfigData = {
-    baseUrl:string;
+    root:string;
     publicDirname:string;
     port:number;
 }
 type ServerOptions = ServerUserConfig & {
-    baseUrl: string;
+    root: string;
 }
 
 type ServerConfig = ServerDefaultConfig & {
-    baseUrl: string;
+    root: string;
 }
 
 export class Server<RequestNameList extends string>
@@ -51,7 +51,7 @@ export class Server<RequestNameList extends string>
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
-     * @param baseUrl ベースのファイルURL
+     * @param root ベースのファイルURL
      * @param publicDirname public内で公開するディレクトリ名
      * @param port 公開ポート
      * @param middlewares 追加するミドルウェア
@@ -62,7 +62,7 @@ export class Server<RequestNameList extends string>
      *  type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
      *
      *  const server = new Server<RequestNameList>({
-     *      baseUrl:import.meta.url,
+     *      root:import.meta.url,
      *      publicDirname:"main",
      *      apiPrefix:"/api",
      *      port:3000,
@@ -87,13 +87,13 @@ export class Server<RequestNameList extends string>
     // サーバー作成前の設定
     #init(){
         const {
-            baseUrl,
+            root,
             publicDirname,
             port,
             signalShutdownHandling
         } = this.#serverConfig;
 
-        this.#publicDirectoryPath = pathNormalization(baseUrl,publicDirname);
+        this.#publicDirectoryPath = pathNormalization(root,publicDirname);
         this.#serverPort = port;
 
         if(signalShutdownHandling){
