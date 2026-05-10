@@ -7,11 +7,12 @@
     "dev": "tsx ./src/main.ts",
     "typecheck": "tsc --noEmit",
     "test": "npm run typecheck",
-    "build": "tsc && rm -rf dist/public && cp -R src/public dist/public",
+    "compile": "tsc && rm -rf dist/templates && cp -R src/templates dist/templates",
+    "build":"npm run test && npm run compile && npm pack --dry-run",
     "start": "node ./dist/main.js"
   },
   "bin": {
-    "tyoi": "./src/main.ts"
+    "tyoi": "./dist/main.js"
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -34,7 +35,7 @@
   ],
   "type": "module",
   "exports":{
-    ".":"./src/index.ts"
+    ".":"./dist/index.js"
   },
   "author": "donneko",
   "license": "MIT",

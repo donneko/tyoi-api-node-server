@@ -7,7 +7,7 @@
         "dev": "tsx src/server.ts"
     },
     "dependencies": {
-        "tyoi-api-server": "file:.."
+        "tyoi": "file:.."
     },
     "devDependencies": {
         "@types/node": "^22.0.0",
