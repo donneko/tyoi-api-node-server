@@ -1,6 +1,6 @@
 {
-  "name": "tyoi-api-server",
-  "version": "0.4.6",
+  "name": "tyoi",
+  "version": "0.0.1",
   "scripts": {
     "tyoi dev": "tsx ./src/main.ts dev",
     "tyoi": "tsx ./src/main.ts",
