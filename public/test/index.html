@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./src/style/init.css">
+    <link rel="stylesheet" href="./src/style/index.css">
+
+    <script src="./src/script/index.js" type="module" defer></script>
+</head>
+<body class="panel">
+    <header class="panel-header">
+        <section class="panel-header-section panel-header-title">
+            <span class="panel-header-title-icon">●</span>
+            <h1 class="panel-header-title-text">tyoi-api-server</h1>
+        </section>
+        <section class="panel-header-section panel-header-info">
+            <!-- <article class="panel-header-article panel-header-info-box">
+                <span class="panel-header-info-box-icon">●</span>
+                <p class="panel-header-info-box-text">Running</p>
+            </article>
+            <article class="panel-header-article panel-header-info-box">
+                <p class="panel-header-info-box-text">v0.1.0</p>
+            </article>
+            <article class="panel-header-article panel-header-info-box">
+                <p class="panel-header-info-box-text">22:53:03</p>
+            </article> -->
+        </section>
+    </header>
+    <main class="panel-main">
+        <section class="panel-main-section panel-main-overview">
+            <article class="panel-main-overview-article panel-main-overview-title">
+                <div class="panel-main-overview-title-box">
+                    <p class="panel-main-overview-title-text">tyoi-api-server</p>
+                    <p class="panel-main-overview-title-description">Small local API and static file server framework built.</p>
+                </div>
+                <!-- <div class="panel-main-overview-title-status">
+                    <span class="panel-main-overview-title-status-icon">●</span>
+                    <p class="panel-main-overview-title-status-text">Server is Running</p>
+                </div> -->
+            </article>
+            <article class="panel-main-overview-article panel-main-overview-info panel-main-overview-server-status">
+                <div class="panel-main-overview-info-header">
+                    <span class="panel-main-overview-info-header-icon"></span>
+                    <p class="panel-main-overview-info-header-title">Server Status</p>
+                </div>
+                <div class="panel-main-overview-info-box">
+                    <table class="panel-main-overview-info-table js-server-status-table">
+                        <tr><th>Status</th><td>Running</td></tr>
+                        <tr><th>Port</th><td>3000</td></tr>
+                        <tr><th>Public FullPath</th><td>/Users/name/Documents/saver/tyoi-api/public/main</td></tr>
+                        <tr><th>Public Path</th><td>../public/main</td></tr>
+                        <tr><th>API Prefix</th><td>/api</td></tr>
+                    </table>
+                </div>
+            </article>
+            <article class="panel-main-overview-article panel-main-overview-info panel-main-overview-urls">
+                <div class="panel-main-overview-info-header">
+                    <span class="panel-main-overview-info-header-icon"></span>
+                    <p class="panel-main-overview-info-header-title">URLs</p>
+                </div>
+                <div class="panel-main-overview-info-box">
+                    <table class="panel-main-overview-info-table js-urls-table">
+                        <tr><th>Local</th><td>http://localhost:3000</td></tr>
+                        <tr><th>Network</th><td>http://127.0.0.1:3000</td></tr>
+                        <tr><th>LAN Active</th><td>ON</td></tr>
+                        <tr><th>QR Code</th><td>img</td></tr>
+                    </table>
+                </div>
+            </article>
+            <article class="panel-main-overview-article panel-main-overview-info panel-main-overview-features">
+                <div class="panel-main-overview-info-header">
+                    <span class="panel-main-overview-info-header-icon"></span>
+                    <p class="panel-main-overview-info-header-title">Features</p>
+                </div>
+                <div class="panel-main-overview-info-box">
+                    <table class="panel-main-overview-info-table js-features-table">
+                        <tr><th>Port Auto Switch</th><td>ON</td></tr>
+                        <tr><th>Browser Auto Open</th><td>ON</td></tr>
+                        <tr><th>QR Code</th><td>ON</td></tr>
+                        <tr><th>LAN Access</th><td>ON</td></tr>
+                    </table>
+                </div>
+            </article>
+            <article class="panel-main-overview-article panel-main-overview-info panel-main-overview-route-links">
+                <div class="panel-main-overview-info-header">
+                    <span class="panel-main-overview-info-header-icon"></span>
+                    <p class="panel-main-overview-info-header-title">Route Lists</p>
+                </div>
+                <div class="panel-main-overview-info-box">
+                    <table class="panel-main-overview-info-table js-route-links-table">
+                        <tr><th>GET</th><td>/api/hello</td></tr>
+                        <tr><th>GET</th><td>/api/time</td></tr>
+                        <tr><th>POST</th><td>/api/user</td></tr>
+                    </table>
+                </div>
+            </article>
+        </section>
+        <section class="panel-main-section panel-main-logs">
+            <article class="panel-main-overview-article panel-main-overview-info panel-main-overview-logs">
+                <div class="panel-main-overview-info-header">
+                    <span class="panel-main-overview-info-header-icon"></span>
+                    <p class="panel-main-overview-info-header-title">Server Log</p>
+                </div>
+                <div class="panel-main-overview-info-box panel-main-logs-box">
+                    <p>20:20:20 [INFO] Server Start</p>
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
