@@ -13,6 +13,25 @@
   "bin": {
     "tyoi": "./src/main.ts"
   },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "public"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donneko/tyoi-api-node-server"
+  },
+  "keywords": [
+    "server",
+    "api",
+    "express",
+    "typescript",
+    "nodejs",
+    "static-server"
+  ],
   "type": "module",
   "exports":{
     ".":"./src/index.ts"

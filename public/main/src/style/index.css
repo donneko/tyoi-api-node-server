@@ -49,6 +49,7 @@ body{
 .main-section-header{
     display: flex;
     align-items: center;
+    gap: 0.3em;
 
     height: 2em;
     width: auto;
@@ -58,7 +59,9 @@ body{
     background-color: #5a668f40;
     border-bottom: #ebebeb4b 1px solid;
 }
-/* .main-section-header-icon{} */
+.main-section-header-icon{
+    font-size: 0.8em;
+}
 .main-section-header-title{
     font-size: 0.9em;
     font-weight: bold;
