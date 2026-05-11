@@ -4,11 +4,11 @@
   "scripts": {
     "tyoi dev": "tsx ./src/main.ts dev",
     "tyoi": "tsx ./src/main.ts",
-    "dev": "tsx ./src/main.ts",
-    "typecheck": "tsc --noEmit",
-    "test": "npm run typecheck",
+    "check": "tsc --noEmit",
     "compile": "tsc && rm -rf dist/templates && cp -R src/templates dist/templates",
-    "build":"npm run test && npm run compile && npm pack --dry-run",
+    "build":"npm run check && npm run compile && npm pack --dry-run",
+    "prepack": "npm run compile",
+    "prepublishOnly": "npm run check && npm run compile",
     "start": "node ./dist/main.js"
   },
   "bin": {
@@ -34,10 +34,11 @@
     "static-server"
   ],
   "type": "module",
+  "main":"./dist/index.js",
   "exports":{
     ".":"./dist/index.js"
   },
-  "author": "donneko",
+  "author": "丼猫",
   "license": "MIT",
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {

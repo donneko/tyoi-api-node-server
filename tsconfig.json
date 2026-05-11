@@ -38,7 +38,7 @@
         DX（開発体験）
     ========================= */
 
-    "sourceMap": true,
+    "sourceMap": false,
 
     "skipLibCheck": true,
 

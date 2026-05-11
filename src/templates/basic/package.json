@@ -1,13 +1,14 @@
 {
     "name": "__PROJECT_NAME__",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "tsx src/server.ts"
+        "build": "tsx src/server.ts",
+        "start": "node dist/server.js"
     },
     "dependencies": {
-        "tyoi": "file:.."
+        "tyoi": "^0.0.1"
     },
     "devDependencies": {
         "@types/node": "^22.0.0",
