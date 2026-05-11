@@ -9,7 +9,7 @@
         "start": "node dist/server.js"
     },
     "dependencies": {
-        "tyoi": "^0.0.1"
+        "@donneko/tyoi-server": "^0.0.1"
     },
     "devDependencies": {
         "@types/node": "^22.0.0",

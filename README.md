@@ -1,8 +1,8 @@
-# tyoi
+# tyoi-server
 
 TypeScript 向けの、小さな API と静的ファイル配信を素早く立てるためのローカル向けサーバーフレームワークです。
 
-tyoi は、API を少し試したい、HTML や画像を配信したい、同じ LAN 内のスマートフォンから手元の画面を確認したい、といった用途に向いています。
+tyoi-server は、API を少し試したい、HTML や画像を配信したい、同じ LAN 内のスマートフォンから手元の画面を確認したい、といった用途に向いています。
 
 > This project is experimental. APIs may change in future releases.
 
@@ -21,7 +21,7 @@ tyoi は、API を少し試したい、HTML や画像を配信したい、同じ
 ## Installation
 
 ```bash
-npm install tyoi
+npm install @donneko/tyoi-server
 ```
 
 CLI からプロジェクトを作成する場合は、次のように実行できます。
@@ -55,7 +55,7 @@ my-app/
 ## Basic Usage
 
 ```ts
-import { Server } from "tyoi";
+import { Server } from "@donneko/tyoi-server";
 
 const server = new Server({
     baseDirname: import.meta.dirname,
@@ -150,7 +150,7 @@ Express middleware を追加できます。
 
 ```ts
 import morgan from "morgan";
-import { Server } from "tyoi";
+import { Server } from "@donneko/tyoi-server";
 
 const server = new Server({
     baseDirname: import.meta.dirname,
