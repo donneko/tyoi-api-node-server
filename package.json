@@ -2,14 +2,12 @@
   "name": "tyoi",
   "version": "0.0.1",
   "scripts": {
-    "tyoi-dev": "tsx ./src/main.ts dev",
-    "tyoi": "tsx ./src/main.ts",
+    "dev": "tsx ./src/main.ts dev",
     "test": "tsc --noEmit",
-    "pack-check": "npm pack --dry-run",
     "compile": "tsc && rm -rf dist/templates && cp -R src/templates dist/templates",
-    "build":"npm run test && npm run compile",
-    "prepack": "npm run compile && npm run pack-check",
-    "prepublishOnly": "npm run test && npm run compile",
+    "build": "npm run test && npm run compile",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build",
     "start": "node ./dist/main.js"
   },
   "engines": {
@@ -27,14 +25,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/donneko/tyoi-api-node-server"
+    "url": "git+https://github.com/donneko/tyoi-api-node-server.git"
   },
   "keywords": [
     "server",
     "api",
     "express",
     "typescript",
-    "nodejs",
     "static-server"
   ],
   "type": "module",
