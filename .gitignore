@@ -6,3 +6,4 @@ dist
 __MACOSX
 .vscode
 a
+*.tgz
