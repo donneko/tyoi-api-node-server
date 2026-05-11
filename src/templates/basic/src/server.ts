@@ -1,4 +1,4 @@
-import { Server } from "tyoi";
+import { Server } from "@donneko/tyoi-server";
 
 // サーバー作成
 const server = new Server({

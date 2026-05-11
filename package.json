@@ -11,7 +11,7 @@
     "start": "node ./dist/main.js"
   },
   "engines": {
-    "node": ">=22.14"
+    "node": ">=20.14"
   },
   "bin": {
     "tyoi": "./dist/main.js"
