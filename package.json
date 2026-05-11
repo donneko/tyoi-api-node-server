@@ -4,11 +4,11 @@
   "scripts": {
     "tyoi dev": "tsx ./src/main.ts dev",
     "tyoi": "tsx ./src/main.ts",
-    "check": "tsc --noEmit",
+    "test": "tsc --noEmit",
     "compile": "tsc && rm -rf dist/templates && cp -R src/templates dist/templates",
-    "build":"npm run check && npm run compile && npm pack --dry-run",
+    "build":"npm run test && npm run compile && npm pack --dry-run",
     "prepack": "npm run compile",
-    "prepublishOnly": "npm run check && npm run compile",
+    "prepublishOnly": "npm run test && npm run compile",
     "start": "node ./dist/main.js"
   },
   "bin": {

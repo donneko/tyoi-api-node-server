@@ -4,6 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "dev":"tsc src/server.ts",
         "build": "tsx src/server.ts",
         "start": "node dist/server.js"
     },
