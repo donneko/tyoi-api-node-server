@@ -1,0 +1,135 @@
+body{
+    display: flex;
+    flex-direction: column;
+
+    width: 100dvw;
+    height: 100dvh;
+
+    box-sizing: border-box;
+    padding: 1em 1em;
+    gap: 1.5em;
+
+    background-color: #0e1220;
+    color: #ebebeb;
+}
+.header{
+    width: 100%;
+    height: 2.5em;
+
+    box-sizing: border-box;
+    padding: 0 1em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #5a668f10;
+    border: #ebebeb4b 1px solid;
+    border-radius: 5px;
+}
+/* .header-title{
+    font-size: 1em;
+} */
+/* .main{
+
+} */
+
+.main-section{
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+
+    margin-bottom: 1em;
+
+    border: #ebebeb4b 1px solid;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.main-section-header{
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+
+    height: 2em;
+    width: auto;
+
+    padding: 0 1em;
+
+    background-color: #5a668f40;
+    border-bottom: #ebebeb4b 1px solid;
+}
+.main-section-header-icon{
+    font-size: 0.8em;
+}
+.main-section-header-title{
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.main-section-main{
+    padding: 0.8em 1em;
+
+    width: 100%;
+    height: auto;
+}
+
+.main-hero{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background-color: #060b14;
+
+    gap: 1em;
+    padding: 1em 1.5em;
+    padding-bottom: 2em;
+    box-sizing: border-box;
+}
+.main-hero-title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5em;
+    box-sizing: border-box;
+}
+.main-hero-title-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5em;
+    box-sizing: border-box;
+}
+.main-hero-title-text{
+    font-size: 2em;
+    font-weight: bold;
+    background: linear-gradient(90deg, #372dff 0%, #ff8bff 70%);
+    background-clip: text;
+    color: transparent;
+}
+.main-hero-title-description{
+    width: 60%;
+    font-size: 1em;
+}
+.main-hero-status{
+    width: fit-content;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+
+    color: #55CA93;
+    background-color: #55CA9320;
+    border: #55CA9320 1px solid;
+
+    padding: 0.3em 0.6em;
+    border-radius: 5px;
+}
+.main-hero-status-icon{
+    font-size: 0.8em;
+}
+.main-hero-status-text{
+    font-size: 0.8em;
+}
+
+

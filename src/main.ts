@@ -18,11 +18,15 @@ async function tyoiServer(argv:string[]):Promise<void>{
     const args = minimist(argv,{
         alias: {
             p: "port",
-            o: "open"
+            o: "open",
+            v: "version",
+            h: "help",
         },
 
         boolean: [
-            "open"
+            "open",
+            "version",
+            "help"
         ],
 
         string: [
@@ -41,6 +45,15 @@ async function tyoiServer(argv:string[]):Promise<void>{
     // 実行
     switch(args._[0]?.toLowerCase() ?? ""){
         case "":
+
+            if(mainContextData.optionArgs?.version){
+                logger.system("v0.0.1")
+                break;
+            }
+            if(mainContextData.optionArgs?.help){
+                help(mainContextData);
+                break;
+            }
             await dev(mainContextData);
         break;
         case "dev":
@@ -55,6 +68,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
         default:
             logger.bar();
             logger.warn("未知のコマンドです");
+            logger.info("コマンドを探すには help を実行してみてください");
         break;
     }
 }

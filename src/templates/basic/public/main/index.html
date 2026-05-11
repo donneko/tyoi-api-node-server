@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>tyoi-api-server | デフォルトページ</title>
+    <link rel="stylesheet" href="./src/style/init.css">
+    <link rel="stylesheet" href="./src/style/index.css">
+
+    <link rel="icon" href="./src/icon/favicon.webp">
 </head>
 <body>
-    <h1>template</h1>
+    <header class="header">
+        <h1 class="header-title">tyoi-api-server</h1>
+    </header>
+    <main class="main">
+        <section class="main-section main-hero">
+            <div class="main-hero-title">
+                <p class="main-hero-title-text">tyoi-api-server</p>
+                <p class="main-hero-title-description">Small local API and static file server framework.</p>
+            </div>
+            <div class="main-hero-status">
+                <span class="main-hero-status-icon">●</span>
+                <p class="main-hero-status-text">Server is Running</p>
+            </div>
+        </section>
+        <section class="main-section main-info">
+            <div class="main-section-header">
+                <span class="main-section-header-icon">●</span>
+                <h2 class="main-section-header-title">Server Test Page</h2>
+            </div>
+            <div class="main-section-main">
+                <p>tyoi-api-server　が正常に起動し、このページを配信しています。</p>
+            </div>
+        </section>
+
+        <section class="main-section main-note">
+            <div class="main-section-header">
+                <span class="main-section-header-icon">!</span>
+                <h2 class="main-section-header-title">Note</h2>
+            </div>
+            <div class="main-section-main">
+                <p>このページは動作確認用です。<br>使用するときはこのディレクトリー内にデータを配置してください。</p>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
