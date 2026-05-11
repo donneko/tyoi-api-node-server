@@ -2,14 +2,18 @@
   "name": "tyoi",
   "version": "0.0.1",
   "scripts": {
-    "tyoi dev": "tsx ./src/main.ts dev",
+    "tyoi-dev": "tsx ./src/main.ts dev",
     "tyoi": "tsx ./src/main.ts",
     "test": "tsc --noEmit",
+    "pack-check": "npm pack --dry-run",
     "compile": "tsc && rm -rf dist/templates && cp -R src/templates dist/templates",
-    "build":"npm run test && npm run compile && npm pack --dry-run",
-    "prepack": "npm run compile",
+    "build":"npm run test && npm run compile",
+    "prepack": "npm run compile && npm run pack-check",
     "prepublishOnly": "npm run test && npm run compile",
     "start": "node ./dist/main.js"
+  },
+  "engines": {
+    "node": ">=22.14"
   },
   "bin": {
     "tyoi": "./dist/main.js"
