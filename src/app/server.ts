@@ -13,7 +13,7 @@ import { EventBus ,EventBusHandler} from "../util/event-bus.js";
 import { ServerLogger } from "../service/server-logger.js";
 import type { OutEventBusMap } from "../types/out.event-bus.type.js";
 import type { InnerEventBusMap } from "../types/inner.event-bus.type.js";
-
+import { ServicesRegister } from "../util/services-register.js";
 
 type RequestData = {
     query  : unknown,
@@ -43,6 +43,13 @@ type ServerConfig = ServerDefaultConfig & {
     baseDirname: string;
 }
 
+type ServerServicesRegister = {
+    logger: typeof logger;
+    innerEventBus:EventBus<InnerEventBusMap>;
+    outEventBus:EventBus<OutEventBusMap>;
+    serverLogger:ServerLogger
+}
+
 export class Server<RequestNameList extends string>
 {
     #appServer = express();
@@ -51,10 +58,16 @@ export class Server<RequestNameList extends string>
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #outEventBus = new EventBus<OutEventBusMap>();
     #innerEventBus = new EventBus<InnerEventBusMap>();
-    #serverLogger = new ServerLogger(this.#outEventBus);
+    #serverLogger = new ServerLogger(this.#innerEventBus);
     #httpServer: http.Server | null = null;
     #SERVER_DEFAULT_CONFIG:ServerDefaultConfig = TYOI_DEFAULT_CONFIG;
     #serverConfig!:ServerConfig;
+    #serverServicesRegister = new ServicesRegister<ServerServicesRegister>({
+        logger:logger,
+        innerEventBus:this.#innerEventBus,
+        outEventBus:this.#outEventBus,
+        serverLogger:this.#serverLogger,
+    });
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -206,7 +219,6 @@ export class Server<RequestNameList extends string>
 
         this.#serverLogger.logger("success","サーバーをシャットダウンしました。");
 
-        process.exit(0);
     }
 
     #isStarting:boolean = false;
@@ -230,6 +242,7 @@ export class Server<RequestNameList extends string>
             if(this.#isStarting) return;
             this.#isStarting = true;
 
+            this.#innerEventBus.emit("server/start:process",{});
             const startServerOptions = {...this.#serverConfig,...options};
 
             // ホスト設定
@@ -272,6 +285,7 @@ export class Server<RequestNameList extends string>
                 });
             }
 
+            this.#innerEventBus.emit("server/start:success",{});
             this.#isStarting = false;
             return httpServer;
 
@@ -279,9 +293,14 @@ export class Server<RequestNameList extends string>
             this.#isStarting = false;
 
             this.#serverLogger.logger("error","サーバー起動中にエラーが発生しました。");
+
             if(error instanceof Error){
-                logger.error(error.message);
+                this.#serverLogger.logger("error",error.message);
+                this.#innerEventBus.emit("server/start:error",{error});
+            }else{
+                this.#innerEventBus.emit("server/start:error",{});
             }
+
             throw error;
         }
 
@@ -305,12 +324,14 @@ export class Server<RequestNameList extends string>
                 this.#httpServer = null;
             };
             this.#serverLogger.logger("process","終了処理を開始しました...");
+            this.#innerEventBus.emit("server/stop:process",{});
 
             const timeout = setTimeout(() => {
                 if (settled) return;
 
                 server?.closeAllConnections();
                 this.#serverLogger.logger("warn","タイムアウトしました。");
+                this.#innerEventBus.emit("server/stop:timeout",{});
 
                 finish();
                 resolve();
@@ -321,12 +342,16 @@ export class Server<RequestNameList extends string>
 
                 if(error){
                     this.#serverLogger.logger("error","サーバー終了中にエラーが発生しました");
+                    this.#innerEventBus.emit("server/stop:error",{});
+
                     finish();
                     reject(error);
                     return;
                 };
 
                 this.#serverLogger.logger("success","サーバー終了しました。");
+                this.#innerEventBus.emit("server/stop:success",{});
+
                 finish();
                 resolve();
             });

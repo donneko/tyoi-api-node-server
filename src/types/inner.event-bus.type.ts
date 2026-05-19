@@ -1,6 +1,21 @@
 export type InnerEventBusMap = {
-    "log":{
+    "server/*:log":{
         message:string;
         type:string;
+    },
+    "server/start:error":{
+        error?:Error
+    },
+    "server/start:success":{
+    },
+    "server/start:process":{
+    },
+    "server/stop:error":{
+    },
+    "server/stop:timeout":{
+    },
+    "server/stop:success":{
+    },
+    "server/stop:process":{
     }
 }
