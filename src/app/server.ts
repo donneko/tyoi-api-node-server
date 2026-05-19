@@ -9,6 +9,10 @@ import { findAvailablePort } from "../service/find-available-port.js";
 import type { BrowserOpenConfig,ServerDefaultConfig,ServerUserConfig } from "../types/config.type.js"
 import { serverStartSummary } from "../service/server-start-summary.js";
 import { openBrowser } from "../service/open-browser.js";
+import { EventBus ,EventBusHandler} from "../util/event-bus.js";
+import { ServerLogger } from "../service/server-logger.js";
+import type { OutEventBusMap } from "../types/out.event-bus.type.js";
+import type { InnerEventBusMap } from "../types/inner.event-bus.type.js";
 
 
 type RequestData = {
@@ -45,6 +49,9 @@ export class Server<RequestNameList extends string>
     #publicDirectoryPath!:string;
     #serverPort!:number;
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
+    #outEventBus = new EventBus<OutEventBusMap>();
+    #innerEventBus = new EventBus<InnerEventBusMap>();
+    #serverLogger = new ServerLogger(this.#outEventBus);
     #httpServer: http.Server | null = null;
     #SERVER_DEFAULT_CONFIG:ServerDefaultConfig = TYOI_DEFAULT_CONFIG;
     #serverConfig!:ServerConfig;
@@ -193,11 +200,11 @@ export class Server<RequestNameList extends string>
         this.#isShuttingDown = true;
 
         logger.bar();
-        logger.process("サーバーをシャットダウン中...");
+        this.#serverLogger.logger("process","サーバーをシャットダウン中...");
 
         await this.stopServer();
 
-        logger.success("サーバーをシャットダウンしました。");
+        this.#serverLogger.logger("success","サーバーをシャットダウンしました。");
 
         process.exit(0);
     }
@@ -217,7 +224,7 @@ export class Server<RequestNameList extends string>
     async startServer(options?:StartServerOptions){
         try {
             if(this.#httpServer){
-                logger.warn("すでにサーバーは起動しています。");
+                this.#serverLogger.logger("warn","すでにサーバーは起動しています。");
                 return;
             }
             if(this.#isStarting) return;
@@ -271,7 +278,7 @@ export class Server<RequestNameList extends string>
         } catch (error) {
             this.#isStarting = false;
 
-            logger.error("サーバー起動中にエラーが発生しました。");
+            this.#serverLogger.logger("error","サーバー起動中にエラーが発生しました。");
             if(error instanceof Error){
                 logger.error(error.message);
             }
@@ -297,14 +304,13 @@ export class Server<RequestNameList extends string>
                 this.#isStopServer = false;
                 this.#httpServer = null;
             };
-
-            logger.process("終了処理を開始しました...");
+            this.#serverLogger.logger("process","終了処理を開始しました...");
 
             const timeout = setTimeout(() => {
                 if (settled) return;
 
                 server?.closeAllConnections();
-                logger.warn("タイムアウトしました。");
+                this.#serverLogger.logger("warn","タイムアウトしました。");
 
                 finish();
                 resolve();
@@ -314,18 +320,35 @@ export class Server<RequestNameList extends string>
                 if (settled) return;
 
                 if(error){
-                    logger.error("サーバー終了中にエラーが発生しました");
+                    this.#serverLogger.logger("error","サーバー終了中にエラーが発生しました");
                     finish();
                     reject(error);
                     return;
                 };
 
-                logger.success("サーバー終了しました。");
+                this.#serverLogger.logger("success","サーバー終了しました。");
                 finish();
                 resolve();
             });
             server?.closeIdleConnections();
         });
+    }
+
+    // Event登録
+    onEvent<Key extends keyof OutEventBusMap>(type:Key,fn:EventBusHandler<OutEventBusMap[Key]>){
+        return this.#outEventBus.on(type,fn);
+    }
+    // Event一度のみ起動
+    onceEvent<Key extends keyof OutEventBusMap>(type:Key,fn:EventBusHandler<OutEventBusMap[Key]>){
+        return this.#outEventBus.once(type,fn);
+    }
+    // Event消去
+    offEvent<Key extends keyof OutEventBusMap>(type:Key,fn:EventBusHandler<OutEventBusMap[Key]>){
+        this.#outEventBus.off(type,fn);
+    }
+    // Eventが存在するか？
+    hasEventt<Key extends keyof OutEventBusMap>(type:Key){
+        return this.#outEventBus.has(type);
     }
 
     // API登録

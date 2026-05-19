@@ -34,8 +34,8 @@ export default defineConfig<ServerUserConfig>({
         hpp()
     ],
 
-    exposeLan: false,
-    showQrCode: false,
+    exposeLan: true,
+    showQrCode: true,
 
-    // openBrowser: true,
+    openBrowser: false,
 });

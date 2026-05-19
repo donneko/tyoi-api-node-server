@@ -1,4 +1,5 @@
 import { Server } from "../src/index.js";
+import { getSerial } from "./serial.js";
 
 type ApiName = "GET:/a" | "POST:/a" | "GET:/b"
 
@@ -15,6 +16,23 @@ const server = new Server<ApiName>({
         showQrCode: true,
     }
 });
+const {
+    parser,
+    port
+} = getSerial();
+
+port.on("open", () => {
+    console.log("Arduino connected");
+    console.log("送信したい文字を入力してください");
+    setTimeout(() => {
+        port.write("hello\n");
+    }, 2000);
+});
+
+parser.on("data",(line)=>{
+    
+})
+port.write("aaa" + "\n");
 
 const messageData:string[] = [];
 server.onAPI("POST:/a",(data)=>{

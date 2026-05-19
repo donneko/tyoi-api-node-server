@@ -68,4 +68,4 @@ export const logger = {
         const width = process.stdout.columns ?? 10;
         console.log("─".repeat(width));
     }
-};
+} as const;
