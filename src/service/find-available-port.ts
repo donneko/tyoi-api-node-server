@@ -1,19 +1,25 @@
 import { isUserRequest } from "../util/is-user-request.js";
 import { isPortInUse } from "../util/is-portIn-use.js";
-import { logger } from "../util/logger.js";
+import { type ServicesRegister } from "../util/services-register.js";
+import { type ServerServicesRegister } from "../app/server.js"
+
 
 type FindPortData = {
     startPort: number;
-    host:string
-    isAutoPort:boolean
+    host:string;
+    isAutoPort:boolean;
+    servicesRegister:ServicesRegister<ServerServicesRegister>;
 }
 export async function findAvailablePort(findPortData:FindPortData) {
 
     const {
         startPort,
         host,
-        isAutoPort
+        isAutoPort,
+        servicesRegister
     } = findPortData;
+
+    const serverLogger = servicesRegister.get("serverLogger");
 
     let port = startPort;
 
@@ -24,10 +30,11 @@ export async function findAvailablePort(findPortData:FindPortData) {
             continue;
         }
 
-        logger.bar();
-        logger.warn(`ポート[${port}]は使用できませんでした。`);
+        serverLogger.logger("bar","");
+        serverLogger.logger("warn",`ポート[${port}]は使用できませんでした。`);
+
         const isAllow = await isUserRequest(
-            logger._createSystem(
+            serverLogger.logger("_createSystem",
             `代わりにポート[${port + 1}]を使用してもいいですか？`
         ));
 
@@ -36,7 +43,7 @@ export async function findAvailablePort(findPortData:FindPortData) {
         }
 
         port++
-        logger.info(`ポート[${port}]を使用します`);
+        serverLogger.logger("info",`ポート[${port}]を使用します`);
     }
 
     return port;

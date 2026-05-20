@@ -43,8 +43,7 @@ type ServerConfig = ServerDefaultConfig & {
     baseDirname: string;
 }
 
-type ServerServicesRegister = {
-    logger: typeof logger;
+export type ServerServicesRegister = {
     innerEventBus:EventBus<InnerEventBusMap>;
     outEventBus:EventBus<OutEventBusMap>;
     serverLogger:ServerLogger
@@ -63,7 +62,6 @@ export class Server<RequestNameList extends string>
     #SERVER_DEFAULT_CONFIG:ServerDefaultConfig = TYOI_DEFAULT_CONFIG;
     #serverConfig!:ServerConfig;
     #serverServicesRegister = new ServicesRegister<ServerServicesRegister>({
-        logger:logger,
         innerEventBus:this.#innerEventBus,
         outEventBus:this.#outEventBus,
         serverLogger:this.#serverLogger,
@@ -255,6 +253,7 @@ export class Server<RequestNameList extends string>
                 startPort:this.#serverPort,
                 host,
                 isAutoPort:startServerOptions.autoPort,
+                servicesRegister:this.#serverServicesRegister
             });
             const port = this.#serverPort;
 
