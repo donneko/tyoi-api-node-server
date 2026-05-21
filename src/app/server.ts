@@ -371,7 +371,7 @@ export class Server<RequestNameList extends string>
         this.#outEventBus.off(type,fn);
     }
     // Eventが存在するか？
-    hasEventt<Key extends keyof OutEventBusMap>(type:Key){
+    hasEvent<Key extends keyof OutEventBusMap>(type:Key){
         return this.#outEventBus.has(type);
     }
 
