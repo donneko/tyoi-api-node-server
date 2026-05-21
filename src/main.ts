@@ -40,8 +40,6 @@ async function tyoiServer(argv:string[]):Promise<void>{
         optionArgs:args,
     }
 
-    // TODO 後で別のプロジェクトで作成したコマンド実行する関数に変える。
-
     // 実行
     switch(args._[0]?.toLowerCase() ?? ""){
         case "":
