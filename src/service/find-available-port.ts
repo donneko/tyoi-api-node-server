@@ -34,7 +34,7 @@ export async function findAvailablePort(findPortData:FindPortData) {
         serverLogger.logger("warn",`ポート[${port}]は使用できませんでした。`);
 
         const isAllow = await isUserRequest(
-            serverLogger.logger("_createSystem",
+            serverLogger.logger("createSystem",
             `代わりにポート[${port + 1}]を使用してもいいですか？`
         ).createMessage);
 

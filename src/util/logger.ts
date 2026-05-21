@@ -78,10 +78,10 @@ class Logger{
     }
 
     info(message: string):LoggerCreateData{
-        const data = this._createInfo(message);
+        const data = this.createInfo(message);
         return this.#loggerSelectProcess(data);
     }
-    _createInfo(message: string):LoggerCreateData{
+    createInfo(message: string):LoggerCreateData{
         const obj = createData({
             type:"INFO",
             message:`[INFO] ${message}`,
@@ -91,10 +91,10 @@ class Logger{
     }
 
     warn(message: string):LoggerCreateData{
-        const data = this._createWarn(message);
+        const data = this.createWarn(message);
         return this.#loggerSelectProcess(data);
     }
-    _createWarn(message: string):LoggerCreateData{
+    createWarn(message: string):LoggerCreateData{
         const obj = createData({
             type: "WARN",
             message: `[WARN] ${message}`,
@@ -104,15 +104,12 @@ class Logger{
     }
 
     error(message: string):LoggerCreateData{
-        console.log(message)
-        console.log(this)
 
-        const data = this._createError(message);
-        console.log(data)
+        const data = this.createError(message);
 
         return this.#loggerSelectProcess(data);
     }
-    _createError(message: string):LoggerCreateData{
+    createError(message: string):LoggerCreateData{
         const obj = createData({
             type: "ERROR",
             message: `[ERROR] ${message}`,
@@ -124,10 +121,10 @@ class Logger{
     }
 
     success(message: string):LoggerCreateData{
-        const data = this._createSuccess(message);
+        const data = this.createSuccess(message);
         return this.#loggerSelectProcess(data);
     }
-    _createSuccess(message: string):LoggerCreateData{
+    createSuccess(message: string):LoggerCreateData{
         const obj = createData({
             type: "SUCCESS",
             message: `[SUCCESS] ${message}`,
@@ -137,10 +134,10 @@ class Logger{
     }
 
     process(message: string):LoggerCreateData{
-        const data = this._createProcess(message);
+        const data = this.createProcess(message);
         return this.#loggerSelectProcess(data);
     }
-    _createProcess(message: string):LoggerCreateData{
+    createProcess(message: string):LoggerCreateData{
         const obj = createData({
             type: "PROCESS",
             message: `[PROCESS] ${message}`,
@@ -150,10 +147,10 @@ class Logger{
     }
 
     message(message: string):LoggerCreateData{
-        const data = this._createMessage(message);
+        const data = this.createMessage(message);
         return this.#loggerSelectProcess(data);
     }
-    _createMessage(message: string):LoggerCreateData{
+    createMessage(message: string):LoggerCreateData{
         const obj = createData({
             type: "MESSAGE",
             message: `[MESSAGE] ${message}`,
@@ -163,10 +160,10 @@ class Logger{
     }
 
     system(message: string):LoggerCreateData{
-        const data = this._createSystem(message);
+        const data = this.createSystem(message);
         return this.#loggerSelectProcess(data);
     }
-    _createSystem(message: string):LoggerCreateData{
+    createSystem(message: string):LoggerCreateData{
         const obj = createData({
             type: "SYSTEM",
             message: `[SYSTEM] ${message}`,
@@ -176,10 +173,10 @@ class Logger{
     }
 
     bar():LoggerCreateData{
-        const data = this._createBar();
+        const data = this.createBar();
         return this.#loggerSelectProcess(data);
     }
-    _createBar():LoggerCreateData{
+    createBar():LoggerCreateData{
         const width = process.stdout.columns ?? 10;
         const line = `${"─".repeat(width - 2)}`;
         const obj = createData({
