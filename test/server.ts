@@ -12,7 +12,7 @@ const server = new Server<ApiName>({
         baseDirname: import.meta.dirname,
         publicDirname: "./public",
         port: 3000,
-        exposeLan: false,
+        exposeLan: true,
         showQrCode: true,
     }
 });

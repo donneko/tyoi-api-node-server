@@ -40,13 +40,13 @@ export function serverStartSummary(summaryData:SummaryData):void{
     serverLogger.logger("window",{
         title:systemMetaManager.getMeta(121).message,
         content:[
-            serverLogger.logger("success",systemMetaManager.getMeta(113).message),
-            serverLogger.logger("info",`${systemMetaManager.getMeta(114).message}${port}`),
-            serverLogger.logger("info",`${systemMetaManager.getMeta(115).message}${port}`),
-            ...(isLAN ? [serverLogger.logger("info",`${systemMetaManager.getMeta(116).message}${networkUrl}`)] : []),
-            serverLogger.logger("info",`${systemMetaManager.getMeta(117).message}${publicFullPath}`),
-            serverLogger.logger("info",`${systemMetaManager.getMeta(118).message}${publicPath}`),
-            serverLogger.logger("info",`${systemMetaManager.getMeta(119).message}${apiPrefix}`),
+            serverLogger.logger("createSuccess",systemMetaManager.getMeta(113).message),
+            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(114).message}${port}`),
+            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(115).message}${port}`),
+            ...(isLAN ? [serverLogger.logger("createInfo",`${systemMetaManager.getMeta(116).message}${networkUrl}`)] : []),
+            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(117).message}${publicFullPath}`),
+            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(118).message}${publicPath}`),
+            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(119).message}${apiPrefix}`),
         ]
     })
 
@@ -55,8 +55,8 @@ export function serverStartSummary(summaryData:SummaryData):void{
         serverLogger.logger("window",{
             title:systemMetaManager.getMeta(122).message,
             content:[
-                serverLogger.logger("info",systemMetaManager.getMeta(120).message),
-                serverLogger.logger("info",(() => {
+                serverLogger.logger("createInfo",systemMetaManager.getMeta(120).message),
+                serverLogger.logger("createInfo",(() => {
                     let qrString = "";
                     qrcode.generate(networkUrl, {small: true},(qr)=>{qrString = qr});
                     return qrString;

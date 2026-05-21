@@ -1,9 +1,9 @@
-import { checkInternet } from "./service/check-internet";
-import { scanHost } from "./service/scan-host";
-import { scanPingIp } from "./service/scan-ping-ip";
-import { scanPorts } from "./service/scan-ports";
-import { scanPortsRange } from "./service/scan-ports-range";
-import { getIp } from "./util/get-ip";
+import { checkInternet } from "./service/check-internet.js";
+import { scanHost } from "./service/scan-host.js";
+import { scanPingIp } from "./service/scan-ping-ip.js";
+import { scanPorts } from "./service/scan-ports.js";
+import { scanPortsRange } from "./service/scan-ports-range.js";
+import { getIp } from "./util/get-ip.js";
 
 // const internetData = await checkInternet();
 // console.table(internetData);
