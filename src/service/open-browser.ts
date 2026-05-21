@@ -1,7 +1,6 @@
 import open from "open";
 import { getLanIp } from "../util/get-lan-ip.js";
 import type { BrowserOpenConfig } from "../types/config.type.js"
-import { logger } from "../util/logger.js";
 import { type ServicesRegister } from "../util/services-register.js";
 import { type ServerServicesRegister } from "../app/server.js"
 
