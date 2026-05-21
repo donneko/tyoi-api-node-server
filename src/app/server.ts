@@ -15,6 +15,7 @@ import type { OutEventBusMap } from "../types/out.event-bus.type.js";
 import type { InnerEventBusMap } from "../types/inner.event-bus.type.js";
 import { ServicesRegister } from "../util/services-register.js";
 import { HttpMetaManager } from "../service/http-meta/http-meta-manager.js";
+import { SystemMetaManager } from "../service/system-meta/system-meta-manager.js";
 
 type RequestData = {
     query  : unknown,
@@ -44,12 +45,12 @@ type ServerConfig = ServerDefaultConfig & {
     baseDirname: string;
 }
 
-
 export type ServerServicesRegister = {
     innerEventBus:EventBus<InnerEventBusMap>;
     outEventBus:EventBus<OutEventBusMap>;
     serverLogger:ServerLogger
     httpMetaManager:HttpMetaManager;
+    systemMetaManager:SystemMetaManager;
 }
 
 export class Server<RequestNameList extends string>
@@ -68,7 +69,8 @@ export class Server<RequestNameList extends string>
         innerEventBus:this.#innerEventBus,
         outEventBus:this.#outEventBus,
         serverLogger:this.#serverLogger,
-        httpMetaManager:new HttpMetaManager()
+        httpMetaManager:new HttpMetaManager(),
+        systemMetaManager:new SystemMetaManager()
     });
 
     /**
@@ -217,12 +219,19 @@ export class Server<RequestNameList extends string>
         this.#isShuttingDown = true;
 
         logger.bar();
-        this.#serverLogger.logger("process","サーバーをシャットダウン中...");
+        this.#serverLogger.logger("process",
+            this.#serverServicesRegister
+            .get("systemMetaManager")
+            .getMeta(100).message
+        );
 
         await this.stopServer();
 
-        this.#serverLogger.logger("success","サーバーをシャットダウンしました。");
-
+        this.#serverLogger.logger("success",
+            this.#serverServicesRegister
+            .get("systemMetaManager")
+            .getMeta(101).message
+        );
     }
 
     #isStarting:boolean = false;
@@ -240,7 +249,11 @@ export class Server<RequestNameList extends string>
     async startServer(options?:StartServerOptions){
         try {
             if(this.#httpServer){
-                this.#serverLogger.logger("warn","すでにサーバーは起動しています。");
+                this.#serverLogger.logger("warn",
+                    this.#serverServicesRegister
+                    .get("systemMetaManager")
+                    .getMeta(102).message
+                );
                 return;
             }
             if(this.#isStarting) return;
@@ -299,7 +312,11 @@ export class Server<RequestNameList extends string>
         } catch (error) {
             this.#isStarting = false;
 
-            this.#serverLogger.logger("error","サーバー起動中にエラーが発生しました。");
+            this.#serverLogger.logger("error",
+                this.#serverServicesRegister
+                .get("systemMetaManager")
+                .getMeta(103).message
+            );
 
             if(error instanceof Error){
                 this.#serverLogger.logger("error",error.message);
@@ -330,14 +347,22 @@ export class Server<RequestNameList extends string>
                 this.#isStopServer = false;
                 this.#httpServer = null;
             };
-            this.#serverLogger.logger("process","終了処理を開始しました...");
+            this.#serverLogger.logger("process",
+                this.#serverServicesRegister
+                .get("systemMetaManager")
+                .getMeta(104).message
+            );
             this.#innerEventBus.emit("server/stop:process",{});
 
             const timeout = setTimeout(() => {
                 if (settled) return;
 
                 server?.closeAllConnections();
-                this.#serverLogger.logger("warn","タイムアウトしました。");
+                this.#serverLogger.logger("warn",
+                    this.#serverServicesRegister
+                    .get("systemMetaManager")
+                    .getMeta(105).message
+                );
                 this.#innerEventBus.emit("server/stop:timeout",{});
 
                 finish();
@@ -348,15 +373,22 @@ export class Server<RequestNameList extends string>
                 if (settled) return;
 
                 if(error){
-                    this.#serverLogger.logger("error","サーバー終了中にエラーが発生しました");
+                    this.#serverLogger.logger("error",
+                        this.#serverServicesRegister
+                        .get("systemMetaManager")
+                        .getMeta(106).message
+                    );
                     this.#innerEventBus.emit("server/stop:error",{});
 
                     finish();
                     reject(error);
                     return;
                 };
-
-                this.#serverLogger.logger("success","サーバー終了しました。");
+                this.#serverLogger.logger("success",
+                    this.#serverServicesRegister
+                    .get("systemMetaManager")
+                    .getMeta(107).message
+                );
                 this.#innerEventBus.emit("server/stop:success",{});
 
                 finish();

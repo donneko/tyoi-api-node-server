@@ -25,7 +25,11 @@ export async function openBrowser(openBrowserData:OpenBrowserData):Promise<void>
     const ip = getLanIp();
     const networkUrl = `http://${ip}:${port}`;
 
-    if((!isLAN && target === "network")) serverLogger.logger("warn","ネットワークが有効ではないため開けません。");
+    if((!isLAN && target === "network")) serverLogger.logger("warn",
+        servicesRegister
+            .get("systemMetaManager")
+            .getMeta(112).message
+    );
 
     const targetUrl = (isLAN && target === "network")
         ? networkUrl

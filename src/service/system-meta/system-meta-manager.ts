@@ -8,6 +8,6 @@ export class SystemMetaManager{
     getMeta(
         code:Parameters<CodeToMetaManager<typeof  SYSTEM_CODE [number]>["getMeta"]>[1]
     ){
-        return this.DATA_MANAGER.getMeta("http",code);
+        return this.DATA_MANAGER.getMeta("system",code);
     }
 }

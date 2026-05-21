@@ -28,6 +28,7 @@ export function serverStartSummary(summaryData:SummaryData):void{
     } = summaryData;
 
     const serverLogger = servicesRegister.get("serverLogger");
+    const systemMetaManager = servicesRegister.get("systemMetaManager");
 
     // LAN設定
     const isLAN = host === "0.0.0.0";
@@ -37,24 +38,24 @@ export function serverStartSummary(summaryData:SummaryData):void{
 
     // ログ系
     serverLogger.logger("window",{
-        title:"summary",
+        title:systemMetaManager.getMeta(121).message,
         content:[
-            serverLogger.logger("success","サーバーは起動しました"),
-            serverLogger.logger("info",`Port: ${port}`),
-            serverLogger.logger("info",`Local: http://localhost:${port}`),
-            ...(isLAN ? [serverLogger.logger("info",`Network :${networkUrl}`)] : []),
-            serverLogger.logger("info",`public full: ${publicFullPath}`),
-            serverLogger.logger("info",`Public: ${publicPath}`),
-            serverLogger.logger("info",`API: ${apiPrefix}`),
+            serverLogger.logger("success",systemMetaManager.getMeta(113).message),
+            serverLogger.logger("info",`${systemMetaManager.getMeta(114).message}${port}`),
+            serverLogger.logger("info",`${systemMetaManager.getMeta(115).message}${port}`),
+            ...(isLAN ? [serverLogger.logger("info",`${systemMetaManager.getMeta(116).message}${networkUrl}`)] : []),
+            serverLogger.logger("info",`${systemMetaManager.getMeta(117).message}${publicFullPath}`),
+            serverLogger.logger("info",`${systemMetaManager.getMeta(118).message}${publicPath}`),
+            serverLogger.logger("info",`${systemMetaManager.getMeta(119).message}${apiPrefix}`),
         ]
     })
 
     // QRcode生成
     if(isShowQrCode && isLAN){
         serverLogger.logger("window",{
-            title:"QRcode",
+            title:systemMetaManager.getMeta(122).message,
             content:[
-                serverLogger.logger("info","Network URL QRcode"),
+                serverLogger.logger("info",systemMetaManager.getMeta(120).message),
                 serverLogger.logger("info",(() => {
                     let qrString = "";
                     qrcode.generate(networkUrl, {small: true},(qr)=>{qrString = qr});

@@ -31,19 +31,33 @@ export async function findAvailablePort(findPortData:FindPortData) {
         }
 
         serverLogger.logger("bar");
-        serverLogger.logger("warn",`ポート[${port}]は使用できませんでした。`);
+        serverLogger.logger("warn",
+            servicesRegister
+            .get("systemMetaManager")
+            .getMeta(108).message.replace("__PORT__",(port).toString())
+        );
 
         const isAllow = await isUserRequest(
             serverLogger.logger("createSystem",
-            `代わりにポート[${port + 1}]を使用してもいいですか？`
+                servicesRegister
+                .get("systemMetaManager")
+                .getMeta(109).message.replace("__PORT__",(port + 1).toString())
         ).createMessage);
 
         if(!isAllow){
-            throw new Error(`ポート[${port}]は使用中です。起動を中止しました。`);
+            throw new Error(
+                servicesRegister
+                .get("systemMetaManager")
+                .getMeta(110).message.replace("__PORT__",(port).toString())
+            );
         }
 
         port++
-        serverLogger.logger("info",`ポート[${port}]を使用します`);
+        serverLogger.logger("info",
+            servicesRegister
+            .get("systemMetaManager")
+            .getMeta(111).message.replace("__PORT__",(port).toString())
+        );
     }
 
     return port;
