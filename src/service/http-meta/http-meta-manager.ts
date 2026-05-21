@@ -3,7 +3,7 @@ import { HTTP_ERROR_CODE } from "./data/error-code-index.js";
 
 
 
-export class getHttpToMeta{
+export class HttpMetaManager{
     private DATA_MANAGER:CodeToMetaManager<typeof HTTP_ERROR_CODE[number]> = new CodeToMetaManager<typeof HTTP_ERROR_CODE[number]>(HTTP_ERROR_CODE);
     getMeta(
         code:Parameters<CodeToMetaManager<typeof HTTP_ERROR_CODE[number]>["getMeta"]>[1]

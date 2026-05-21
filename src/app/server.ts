@@ -14,6 +14,7 @@ import { ServerLogger } from "../service/server-logger.js";
 import type { OutEventBusMap } from "../types/out.event-bus.type.js";
 import type { InnerEventBusMap } from "../types/inner.event-bus.type.js";
 import { ServicesRegister } from "../util/services-register.js";
+import { HttpMetaManager } from "../service/http-meta/http-meta-manager.js";
 
 type RequestData = {
     query  : unknown,
@@ -43,10 +44,12 @@ type ServerConfig = ServerDefaultConfig & {
     baseDirname: string;
 }
 
+
 export type ServerServicesRegister = {
     innerEventBus:EventBus<InnerEventBusMap>;
     outEventBus:EventBus<OutEventBusMap>;
     serverLogger:ServerLogger
+    httpMetaManager:HttpMetaManager;
 }
 
 export class Server<RequestNameList extends string>
@@ -65,6 +68,7 @@ export class Server<RequestNameList extends string>
         innerEventBus:this.#innerEventBus,
         outEventBus:this.#outEventBus,
         serverLogger:this.#serverLogger,
+        httpMetaManager:new HttpMetaManager()
     });
 
     /**
@@ -143,7 +147,9 @@ export class Server<RequestNameList extends string>
         this.#appServer.use(express.static(this.#publicDirectoryPath));
 
         this.#appServer.use((req, res) => {
-            res.status(404).send("Not Found");
+            const sendData = this.#serverServicesRegister.get("httpMetaManager").getMeta(404);
+            res.status(sendData.code)
+                .send(`<h1>${sendData.message}</h1><br><p>${sendData.description}</p>`);
         });
     }
 
