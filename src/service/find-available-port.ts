@@ -36,7 +36,7 @@ export async function findAvailablePort(findPortData:FindPortData) {
         const isAllow = await isUserRequest(
             serverLogger.logger("_createSystem",
             `代わりにポート[${port + 1}]を使用してもいいですか？`
-        ));
+        ).createMessage);
 
         if(!isAllow){
             throw new Error(`ポート[${port}]は使用中です。起動を中止しました。`);
