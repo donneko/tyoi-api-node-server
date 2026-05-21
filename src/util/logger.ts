@@ -1,6 +1,6 @@
 import pc from "picocolors";
+import stringWidth from "string-width";
 import stripAnsi from "strip-ansi";
-
 
 function calcAnsiLength(text:string){
     const cleanText =  stripAnsi(text);
@@ -15,21 +15,33 @@ function textNormalizer(text:string,width:number):string[] {
         [text];
 
     let fixedTextList:string[] = [];
+    const headerLength = stringWidth(stripAnsi(textList[0]?? "").match(/\[[a-zA-Z1-9]*\]\s/)?.[0] ?? "");
 
     for(const text of textList){
+        const index = textList.indexOf(text);
 
-        const overLength = Math.ceil((text.length - calcAnsiLength(text)) / width);
+        const calcAnsiLengthValue = calcAnsiLength(text);
+        const textWidth   = stringWidth(text);
+        const overContent = Math.ceil(textWidth / width);
+        const overHeader  = (overContent - 1) * headerLength;
+        const textLength  = (textWidth - headerLength) + overHeader + calcAnsiLengthValue;
+
         let fixedText = [];
 
-        if(overLength <= 1){
-            fixedTextList.push(text);
+        if(textLength <= width){
+            const prefix = " ".repeat(index === 0?0:headerLength)
+            fixedTextList.push(`${prefix}${text}`);
             continue;
         }
 
         // 横幅より長かったら...
-        for(let i = 0; i < overLength;i++){
-            const tmp = text.slice(i * width,(i + 1) * width);
+        for(let i = 0; i < textLength;){
+            const prefix = " ".repeat(i >= width?headerLength:0);
+            const end = width + (i >= width? -headerLength:calcAnsiLengthValue);
+
+            const tmp = `${prefix}${text.slice(i, i + end)}`;
             fixedText.push(tmp);
+            i += width;
         }
         fixedTextList = fixedTextList.concat(fixedText);
     }
@@ -193,8 +205,9 @@ class Logger{
     }):void{
         const width = process.stdout.columns ?? 10;
         const createLine = (line:string):string => {
-            const repeatNumber = (width - 2) - (line.length - calcAnsiLength(line));
-            return `│${line}${" ".repeat(repeatNumber)}│`;
+            const repeatNumber = (width - 2) - stringWidth(line);
+            const safeRepeatNumber = repeatNumber >= 0 ? repeatNumber : 0;
+            return `│${line}${" ".repeat(safeRepeatNumber)}│`;
         }
 
         this.#addStderr(`┌${"─".repeat(width - 2)}┐`);
