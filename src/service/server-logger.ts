@@ -8,12 +8,16 @@ export class ServerLogger{
     constructor(eventBus:EventBus<InnerEventBusMap>){
         this.#eventBus = eventBus;
     }
-    logger<K extends keyof typeof logger >(type:K,message:string):ReturnType<(typeof logger)[K]>{
-        this.#eventBus.emit("server/*:log",{
-            message,
-            type
-        });
+    logger<K extends keyof typeof logger >(
+        type:K,
+        ...args:Parameters<(typeof logger)[K]>
+    ):ReturnType<(typeof logger)[K]>{
+        const fn = logger[type] as
+            (...args:Parameters<(typeof logger)[K]>)
+            => ReturnType<(typeof logger)[K]>;
 
-        return logger[type](message) as ReturnType<(typeof logger)[K]>;
+        const data = fn(...args);
+        this.#eventBus.emit("server/*:log",data);
+        return data;
     }
 }

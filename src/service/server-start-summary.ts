@@ -29,6 +29,7 @@ export function serverStartSummary(summaryData:SummaryData):void{
     const ip = getLanIp();
     const networkUrl = `http://${ip}:${port}`;
 
+
     // ログ系
     logger.bar();
     logger.success("サーバーは起動しました");

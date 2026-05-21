@@ -1,8 +1,7 @@
+import type { LoggerCreateData } from "../util/logger.js";
+
 export type InnerEventBusMap = {
-    "server/*:log":{
-        message:string;
-        type:string;
-    },
+    "server/*:log": LoggerCreateData | void,
     "server/start:error":{
         error?:Error
     },

@@ -42,7 +42,7 @@ type CreateData = {
     createMessage:string;
 }
 
-type LoggerCreateData = {
+export type LoggerCreateData = {
     type:string;
     message:string;
     createMessage:string;
@@ -67,16 +67,21 @@ class Logger{
         const out = message.endsWith("\n") ? message : message + "\n";
         process.stderr.write(out);
     }
-
-    info(message: string) {
-        const data = this._createInfo(message);
+    #loggerSelectProcess(data:LoggerCreateData){
         if(process.stdout.isTTY){
             this.#addStderr(data.createMessage);
         }else{
             this.#addStdout(data);
         }
+
+        return data;
     }
-    _createInfo(message: string){
+
+    info(message: string):LoggerCreateData{
+        const data = this._createInfo(message);
+        return this.#loggerSelectProcess(data);
+    }
+    _createInfo(message: string):LoggerCreateData{
         const obj = createData({
             type:"INFO",
             message:`[INFO] ${message}`,
@@ -85,15 +90,11 @@ class Logger{
         return obj;
     }
 
-    warn(message: string) {
+    warn(message: string):LoggerCreateData{
         const data = this._createWarn(message);
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createWarn(message: string){
+    _createWarn(message: string):LoggerCreateData{
         const obj = createData({
             type: "WARN",
             message: `[WARN] ${message}`,
@@ -102,15 +103,11 @@ class Logger{
         return obj;
     }
 
-    error(message: string) {
+    error(message: string):LoggerCreateData{
         const data = this._createError(message);
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createError(message: string){
+    _createError(message: string):LoggerCreateData{
         const obj = createData({
             type: "ERROR",
             message: `[ERROR] ${message}`,
@@ -119,15 +116,11 @@ class Logger{
         return obj;
     }
 
-    success(message: string) {
+    success(message: string):LoggerCreateData{
         const data = this._createSuccess(message);
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createSuccess(message: string){
+    _createSuccess(message: string):LoggerCreateData{
         const obj = createData({
             type: "SUCCESS",
             message: `[SUCCESS] ${message}`,
@@ -136,15 +129,11 @@ class Logger{
         return obj;
     }
 
-    process(message: string) {
+    process(message: string):LoggerCreateData{
         const data = this._createProcess(message);
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createProcess(message: string){
+    _createProcess(message: string):LoggerCreateData{
         const obj = createData({
             type: "PROCESS",
             message: `[PROCESS] ${message}`,
@@ -153,15 +142,11 @@ class Logger{
         return obj;
     }
 
-    message(message: string) {
+    message(message: string):LoggerCreateData{
         const data = this._createMessage(message);
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createMessage(message: string){
+    _createMessage(message: string):LoggerCreateData{
         const obj = createData({
             type: "MESSAGE",
             message: `[MESSAGE] ${message}`,
@@ -170,15 +155,11 @@ class Logger{
         return obj;
     }
 
-    system(message: string) {
+    system(message: string):LoggerCreateData{
         const data = this._createSystem(message);
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createSystem(message: string){
+    _createSystem(message: string):LoggerCreateData{
         const obj = createData({
             type: "SYSTEM",
             message: `[SYSTEM] ${message}`,
@@ -187,15 +168,11 @@ class Logger{
         return obj;
     }
 
-    bar() {
+    bar():LoggerCreateData{
         const data = this._createBar();
-        if(process.stdout.isTTY){
-            this.#addStderr(data.createMessage);
-        }else{
-            this.#addStdout(data);
-        }
+        return this.#loggerSelectProcess(data);
     }
-    _createBar(){
+    _createBar():LoggerCreateData{
         const width = process.stdout.columns ?? 10;
         const line = `${"─".repeat(width - 2)}`;
         const obj = createData({
@@ -209,7 +186,7 @@ class Logger{
     window(window:{
         title:string;
         content:LoggerCreateData[];
-    }){
+    }):void{
         const width = process.stdout.columns ?? 10;
         const createLine = (line:string):string => {
             const repeatNumber = (width - 2) - (line.length - calcAnsiLength(line));
@@ -233,7 +210,7 @@ class Logger{
                 });
         });
 
-    this.#addStderr(`└${"─".repeat(width - 2)}┘`);
+        this.#addStderr(`└${"─".repeat(width - 2)}┘`);
     }
 }
 
