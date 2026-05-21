@@ -26,7 +26,7 @@ export class CodeToMetaManager<CodeTable extends CodeTableRecord> {
         this.CODE_TABLE = [...this.CODE_TABLE, record];
     }
 
-    getCodeToMeta<
+    getMeta<
         L extends CodeTable["label"],
         C extends CodeByLabel<CodeTable, L>
     >(
