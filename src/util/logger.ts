@@ -104,7 +104,12 @@ class Logger{
     }
 
     error(message: string):LoggerCreateData{
+        console.log(message)
+        console.log(this)
+
         const data = this._createError(message);
+        console.log(data)
+
         return this.#loggerSelectProcess(data);
     }
     _createError(message: string):LoggerCreateData{
@@ -113,6 +118,8 @@ class Logger{
             message: `[ERROR] ${message}`,
             createMessage: `${pc.red("[ERROR]")} ${message}`,
         });
+        console.log(message)
+
         return obj;
     }
 

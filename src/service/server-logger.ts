@@ -16,7 +16,7 @@ export class ServerLogger{
             (...args:Parameters<(typeof logger)[K]>)
             => ReturnType<(typeof logger)[K]>;
 
-        const data = fn(...args);
+        const data = fn.call(logger,...args);
         this.#eventBus.emit("server/*:log",data);
         return data;
     }

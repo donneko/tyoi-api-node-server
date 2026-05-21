@@ -16,24 +16,9 @@ const server = new Server<ApiName>({
         showQrCode: true,
     }
 });
-const {
-    parser,
-    port
-} = getSerial();
 
-port.on("open", () => {
-    console.log("Arduino connected");
-    console.log("送信したい文字を入力してください");
-    setTimeout(() => {
-        port.write("hello\n");
-    }, 2000);
-});
 
-parser.on("data",(line)=>{
-    
-})
-port.write("aaa" + "\n");
-
+// サーバーのAPI
 const messageData:string[] = [];
 server.onAPI("POST:/a",(data)=>{
     const message = (data.body as { message?: string } | undefined)?.message;
@@ -47,3 +32,23 @@ server.onAPI("GET:/a",(data)=>{
 
 // サーバー起動
 await server.startServer();
+
+
+
+// アルディーノ通信用
+// const {
+//     parser,
+//     port
+// } = getSerial();
+// port.on("open", () => {
+//     console.log("Arduino connected");
+//     console.log("送信したい文字を入力してください");
+//     setTimeout(() => {
+//         port.write("hello\n");
+//     }, 2000);
+// });
+
+// parser.on("data",(line)=>{
+// })
+
+// port.write("aaa" + "\n");
