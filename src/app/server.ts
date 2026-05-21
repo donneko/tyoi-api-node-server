@@ -281,7 +281,8 @@ export class Server<RequestNameList extends string>
                 await openBrowser({
                     host,
                     port:listeningPort,
-                    target:startServerOptions.openBrowser
+                    target:startServerOptions.openBrowser,
+                    servicesRegister:this.#serverServicesRegister
                 });
             }
 
