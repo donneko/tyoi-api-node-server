@@ -273,6 +273,7 @@ export class Server<RequestNameList extends string>
                 publicFullPath:this.#publicDirectoryPath,
                 apiPrefix:startServerOptions.apiPrefix,
                 isShowQrCode:startServerOptions.showQrCode,
+                servicesRegister:this.#serverServicesRegister
             });
 
             // ブラウザオープン

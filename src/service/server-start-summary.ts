@@ -1,7 +1,8 @@
 import qrcode from "qrcode-terminal";
 
 import { getLanIp } from "../util/get-lan-ip.js";
-import { logger } from "../util/logger.js";
+import { type ServicesRegister } from "../util/services-register.js";
+import { type ServerServicesRegister } from "../app/server.js"
 
 
 type SummaryData = {
@@ -11,6 +12,7 @@ type SummaryData = {
     publicFullPath:string;
     apiPrefix:string;
     isShowQrCode:boolean;
+    servicesRegister:ServicesRegister<ServerServicesRegister>;
 }
 
 export function serverStartSummary(summaryData:SummaryData):void{
@@ -22,7 +24,10 @@ export function serverStartSummary(summaryData:SummaryData):void{
         publicFullPath,
         apiPrefix,
         isShowQrCode,
+        servicesRegister
     } = summaryData;
+
+    const serverLogger = servicesRegister.get("serverLogger");
 
     // LAN設定
     const isLAN = host === "0.0.0.0";
@@ -31,23 +36,31 @@ export function serverStartSummary(summaryData:SummaryData):void{
 
 
     // ログ系
-    logger.bar();
-    logger.success("サーバーは起動しました");
-    logger.bar();
-    logger.info(`Port: ${port}`);
-    logger.info(`Local: http://localhost:${port}`);
-    if(isLAN) logger.info(`Network :${networkUrl}`);
-    logger.info(`public full: ${publicFullPath}`);
-    logger.info(`Public: ${publicPath}`);
-    logger.info(`API: ${apiPrefix}`);
+    serverLogger.logger("window",{
+        title:"summary",
+        content:[
+            serverLogger.logger("success","サーバーは起動しました"),
+            serverLogger.logger("info",`Port: ${port}`),
+            serverLogger.logger("info",`Local: http://localhost:${port}`),
+            ...(isLAN ? [serverLogger.logger("info",`Network :${networkUrl}`)] : []),
+            serverLogger.logger("info",`public full: ${publicFullPath}`),
+            serverLogger.logger("info",`Public: ${publicPath}`),
+            serverLogger.logger("info",`API: ${apiPrefix}`),
+        ]
+    })
 
     // QRcode生成
     if(isShowQrCode && isLAN){
-        logger.bar();
-        logger.info(`Network URL QRcode`);
-        qrcode.generate(networkUrl, {
-            small: true
+        serverLogger.logger("window",{
+            title:"QRcode",
+            content:[
+                serverLogger.logger("info","Network URL QRcode"),
+                serverLogger.logger("info",(() => {
+                    let qrString = "";
+                    qrcode.generate(networkUrl, {small: true},(qr)=>{qrString = qr});
+                    return qrString;
+                })())
+            ]
         });
     }
-    logger.bar();
 }
