@@ -1,4 +1,12 @@
 import pc from "picocolors";
+import stripAnsi from "strip-ansi";
+
+
+function calcAnsiLength(text:string){
+    const cleanText =  stripAnsi(text);
+    const ansiLength = (text.length - cleanText.length);
+    return ansiLength;
+}
 
 function textNormalizer(text:string,width:number):string[] {
 
@@ -6,122 +14,227 @@ function textNormalizer(text:string,width:number):string[] {
         text.split("\n"):
         [text];
 
-    let fixdTextList:string[] = [];
+    let fixedTextList:string[] = [];
 
     for(const text of textList){
-        const overLength = Math.ceil(text.length / width);
-        let fixdText = [];
+
+        const overLength = Math.ceil((text.length - calcAnsiLength(text)) / width);
+        let fixedText = [];
 
         if(overLength <= 1){
-            fixdTextList.push(text);
+            fixedTextList.push(text);
             continue;
         }
 
         // 横幅より長かったら...
         for(let i = 0; i < overLength;i++){
             const tmp = text.slice(i * width,(i + 1) * width);
-            fixdText.push(tmp);
+            fixedText.push(tmp);
         }
-        fixdTextList = fixdTextList.concat(fixdText);
+        fixedTextList = fixedTextList.concat(fixedText);
     }
-    return fixdTextList;
+    return fixedTextList;
+}
+
+type CreateData = {
+    type:string;
+    message:string;
+    createMessage:string;
+}
+
+type LoggerCreateData = {
+    type:string;
+    message:string;
+    createMessage:string;
+    date:number;
 }
 
 
-export const logger = {
+function createData(data:CreateData):LoggerCreateData{
+    return {
+        ...data,
+        date: Date.now(),
+    };
+}
+
+
+class Logger{
+    #addStdout(obj:LoggerCreateData){
+        const {createMessage,...stdoutObj } = obj;
+        process.stdout.write(JSON.stringify(stdoutObj));
+    }
+    #addStderr(message:string){
+        const out = message.endsWith("\n") ? message : message + "\n";
+        process.stderr.write(out);
+    }
+
     info(message: string) {
-        console.log(
-            `${logger._createInfo(message)}`
-        );
-    },
-    _createInfo(message: string):string{
-        return `${pc.blueBright("[INFO]")} ${message}`;
-    },
+        const data = this._createInfo(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createInfo(message: string){
+        const obj = createData({
+            type:"INFO",
+            message:`[INFO] ${message}`,
+            createMessage:`${pc.blueBright("[INFO]")} ${message}`,
+        });
+        return obj;
+    }
 
     warn(message: string) {
-        console.log(
-            `${logger._createWarn(message)}`
-        );
-    },
-    _createWarn(message: string):string{
-        return `${pc.yellow("[WARN]")} ${message}`;
-    },
+        const data = this._createWarn(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createWarn(message: string){
+        const obj = createData({
+            type: "WARN",
+            message: `[WARN] ${message}`,
+            createMessage: `${pc.yellow("[WARN]")} ${message}`,
+        });
+        return obj;
+    }
 
     error(message: string) {
-        console.log(
-            `${logger._createError(message)}`
-        );
-    },
-    _createError(message: string):string{
-        return `${pc.red("[ERROR]")} ${message}`;
-    },
+        const data = this._createError(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createError(message: string){
+        const obj = createData({
+            type: "ERROR",
+            message: `[ERROR] ${message}`,
+            createMessage: `${pc.red("[ERROR]")} ${message}`,
+        });
+        return obj;
+    }
 
     success(message: string) {
-        console.log(
-            `${logger._createSuccess(message)}`
-        );
-    },
-    _createSuccess(message: string):string{
-        return `${pc.green("[SUCCESS]")} ${message}`;
-    },
+        const data = this._createSuccess(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createSuccess(message: string){
+        const obj = createData({
+            type: "SUCCESS",
+            message: `[SUCCESS] ${message}`,
+            createMessage: `${pc.green("[SUCCESS]")} ${message}`,
+        });
+        return obj;
+    }
 
     process(message: string) {
-        console.log(
-            `${logger._createProcess(message)}`
-        );
-    },
-    _createProcess(message: string):string{
-        return `${pc.magentaBright("[PROCESS]")} ${message}`;
-    },
+        const data = this._createProcess(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createProcess(message: string){
+        const obj = createData({
+            type: "PROCESS",
+            message: `[PROCESS] ${message}`,
+            createMessage: `${pc.magentaBright("[PROCESS]")} ${message}`,
+        });
+        return obj;
+    }
 
     message(message: string) {
-        console.log(
-            `${logger._createMessage(message)}`
-        );
-    },
-    _createMessage(message: string):string{
-        return `${pc.gray("[MESSAGE]")} ${message}`;
-    },
+        const data = this._createMessage(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createMessage(message: string){
+        const obj = createData({
+            type: "MESSAGE",
+            message: `[MESSAGE] ${message}`,
+            createMessage: `${pc.gray("[MESSAGE]")} ${message}`,
+        });
+        return obj;
+    }
 
     system(message: string) {
-        console.log(
-            `${logger._createSystem(message)}`
-        );
-    },
-    _createSystem(message: string):string{
-        return `${pc.magentaBright("[SYSTEM]")} ${message}`;
-    },
+        const data = this._createSystem(message);
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createSystem(message: string){
+        const obj = createData({
+            type: "SYSTEM",
+            message: `[SYSTEM] ${message}`,
+            createMessage: `${pc.magentaBright("[SYSTEM]")} ${message}`,
+        });
+        return obj;
+    }
 
     bar() {
+        const data = this._createBar();
+        if(process.stdout.isTTY){
+            this.#addStderr(data.createMessage);
+        }else{
+            this.#addStdout(data);
+        }
+    }
+    _createBar(){
         const width = process.stdout.columns ?? 10;
-        console.log("─".repeat(width));
-    },
+        const line = `${"─".repeat(width - 2)}`;
+        const obj = createData({
+            type: "BAR",
+            message: line,
+            createMessage: line,
+        });
+        return obj;
+    }
 
     window(window:{
         title:string;
-        content:string[];
+        content:LoggerCreateData[];
     }){
         const width = process.stdout.columns ?? 10;
         const createLine = (line:string):string => {
-            return `│${line}${" ".repeat((width - 2) - line.length)}│`;
+            const repeatNumber = (width - 2) - (line.length - calcAnsiLength(line));
+            return `│${line}${" ".repeat(repeatNumber)}│`;
         }
 
-        console.log(`┌${"─".repeat(width - 2)}┐`);
+        this.#addStderr(`┌${"─".repeat(width - 2)}┐`);
 
         textNormalizer(window.title,(width - 2))
             .forEach((text)=>{
-                console.log(createLine(text));
+                this.#addStderr(createLine(text));
         });
 
-        console.log(`├${"─".repeat(width - 2)}┤`);
+        this.#addStderr(`├${"─".repeat(width - 2)}┤`);
 
-        window.content.forEach((lineText)=>{
-            textNormalizer(lineText,(width - 2))
-                .forEach((text)=>{
-                    console.log(createLine(text));
-            });
-        })
+        window.content.
+            forEach((lineText)=>{
+                textNormalizer(lineText.createMessage,(width - 2)).
+                    forEach((text)=>{
+                        this.#addStderr(createLine(text));
+                });
+        });
 
-        console.log(`└${"─".repeat(width - 2)}┘`);
+    this.#addStderr(`└${"─".repeat(width - 2)}┘`);
     }
-} as const;
+}
+
+export const logger = new Logger();
