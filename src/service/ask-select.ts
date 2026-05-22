@@ -46,7 +46,7 @@ function selectRender(args:SelectArgs,index:number,oldIndex:number) {
 }
 
 
-export async function select(args:SelectArgs):Promise<number> {
+export async function askSelect(args:SelectArgs):Promise<number> {
 
     return new Promise((resolve) => {
 
@@ -110,9 +110,3 @@ export async function select(args:SelectArgs):Promise<number> {
         };
     })
 }
-
-const index = await select({
-    message:"選択してください",
-    selects:["選択肢1","選択肢2","選択肢3"]
-})
-console.log(index);
