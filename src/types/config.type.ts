@@ -19,6 +19,7 @@ export type ServerUserConfig = {
 };
 
 export type ServerDefaultConfig = {
+    baseDirname?: string;
     publicDirname: string;
     apiPrefix: string;
     port: number;
