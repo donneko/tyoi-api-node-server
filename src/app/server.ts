@@ -38,6 +38,12 @@ type ServerOptions = ServerUserConfig & {
     baseDirname: string;
 }
 
+function removeUndefinedConfig(config:ServerUserConfig):Partial<ServerDefaultConfig>{
+    return Object.fromEntries(
+        Object.entries(config).filter(([, value]) => value !== undefined)
+    ) as Partial<ServerDefaultConfig>;
+}
+
 export type ServerServicesRegister = {
     innerEventBus:EventBus<InnerEventBusMap>;
     outEventBus:EventBus<OutEventBusMap>;
@@ -97,7 +103,9 @@ export class Server<RequestNameList extends string>
      */
     constructor(options?:ServerOptions){
 
-        this.#serverConfig.updateConfig(options ?? {});
+        if(options){
+            this.#serverConfig.updateConfig(removeUndefinedConfig(options));
+        }
 
         this.#init();
         this.#initServer();
@@ -256,7 +264,9 @@ export class Server<RequestNameList extends string>
 
             this.#innerEventBus.emit("server/start:process",{});
 
-            this.#serverConfig.updateConfig(options ?? {});
+            if(options){
+                this.#serverConfig.updateConfig(removeUndefinedConfig(options));
+            }
             const exposeLan = this.#serverConfig.getConfig("exposeLan");
             const autoPort = this.#serverConfig.getConfig("autoPort");
             const showQrCode = this.#serverConfig.getConfig("showQrCode");
