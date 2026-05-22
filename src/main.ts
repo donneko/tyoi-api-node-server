@@ -5,11 +5,13 @@ import { logger } from "./util/logger.js";
 import dev from "./cli/dev.js";
 import init from "./cli/init.js";
 import help from "./cli/help.js";
+import run from "./cli/start.js";
 
 export type MainContextData = {
     mainDirname:string;
     commandArgs:string[];
     optionArgs:minimist.ParsedArgs;
+    processCwd:string;
 }
 
 async function tyoiServer(argv:string[]):Promise<void>{
@@ -38,6 +40,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
         mainDirname:import.meta.dirname,
         commandArgs:args._,
         optionArgs:args,
+        processCwd:process.cwd()
     }
 
     // 実行
@@ -56,6 +59,9 @@ async function tyoiServer(argv:string[]):Promise<void>{
         break;
         case "dev":
             await dev(mainContextData);
+        break;
+        case "run":
+            await run(mainContextData);
         break;
         case "init":
             init(mainContextData);
