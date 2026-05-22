@@ -48,7 +48,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
         case "":
 
             if(mainContextData.optionArgs?.version){
-                logger.system("v0.0.1")
+                logger.system("v0.1.0")
                 break;
             }
             if(mainContextData.optionArgs?.help){
