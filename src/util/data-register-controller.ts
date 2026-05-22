@@ -1,5 +1,5 @@
 type DefaultTable = Record<string,unknown>
-export class DataStoreController<Table extends DefaultTable>{
+export class DataRegisterController<Table extends DefaultTable>{
     private DATA_TABLE:readonly Table[];
 
     constructor(dataTable:readonly Table[]){
@@ -13,11 +13,11 @@ export class DataStoreController<Table extends DefaultTable>{
     length():number{
         return this.DATA_TABLE.length;
     }
-    allList(key:string):Table[]{
+    allList():Table[]{
         return [...this.DATA_TABLE];
     }
-    selectIndex(number:number){
-        return this.DATA_TABLE[number];
+    selectIndex(index:number){
+        return this.DATA_TABLE[index];
     }
     searchDataTable(key:string,value:any){
         return this.DATA_TABLE.find(table => table[key] === value)
