@@ -11,10 +11,9 @@ export class configManager{
     {
         return this.configController.updateConfig(...config);
     }
-    getConfig(
-        ...key:Parameters<ConfigControllerType["getConfig"]>
-    ):ReturnType<ConfigControllerType["getConfig"]>
-    {
-        return this.configController.getConfig(...key);
+    getConfig<K extends keyof ServerDefaultConfig>(
+        key: K
+    ): ServerDefaultConfig[K] {
+        return this.configController.getConfig(key);
     }
 }

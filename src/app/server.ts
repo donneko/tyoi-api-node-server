@@ -1,7 +1,6 @@
 import express from "express";
 import http from "node:http";
 
-import TYOI_DEFAULT_CONFIG from "../config/tyoi.default.config.js"
 import { pathNormalization } from "../service/path-normalization.js";
 import { ApiRegistry , ApiRegistryHandler} from "../util/api-registry.js";
 import { logger } from "../util/logger.js";
@@ -16,6 +15,7 @@ import type { InnerEventBusMap } from "../types/inner.event-bus.type.js";
 import { ServicesRegister } from "../util/services-register.js";
 import { HttpMetaManager } from "../service/http-meta/http-meta-manager.js";
 import { SystemMetaManager } from "../service/system-meta/system-meta-manager.js";
+import { configManager } from "../service/config-manager.js";
 
 type RequestData = {
     query  : unknown,
@@ -32,16 +32,7 @@ type StartServerOptions = {
     autoPort?:boolean;
     openBrowser?:BrowserOpenConfig;
 };
-type initConfigData = {
-    baseDirname:string;
-    publicDirname:string;
-    port:number;
-}
 type ServerOptions = ServerUserConfig & {
-    baseDirname: string;
-}
-
-type ServerConfig = ServerDefaultConfig & {
     baseDirname: string;
 }
 
@@ -51,26 +42,26 @@ export type ServerServicesRegister = {
     serverLogger:ServerLogger
     httpMetaManager:HttpMetaManager;
     systemMetaManager:SystemMetaManager;
+    serverConfig:configManager;
 }
 
 export class Server<RequestNameList extends string>
 {
     #appServer = express();
     #publicDirectoryPath!:string;
-    #serverPort!:number;
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #outEventBus = new EventBus<OutEventBusMap>();
     #innerEventBus = new EventBus<InnerEventBusMap>();
     #serverLogger = new ServerLogger(this.#innerEventBus);
     #httpServer: http.Server | null = null;
-    #SERVER_DEFAULT_CONFIG:ServerDefaultConfig = TYOI_DEFAULT_CONFIG;
-    #serverConfig!:ServerConfig;
+    #serverConfig:configManager = new configManager();
     #serverServicesRegister = new ServicesRegister<ServerServicesRegister>({
         innerEventBus:this.#innerEventBus,
         outEventBus:this.#outEventBus,
         serverLogger:this.#serverLogger,
         httpMetaManager:new HttpMetaManager(),
-        systemMetaManager:new SystemMetaManager()
+        systemMetaManager:new SystemMetaManager(),
+        serverConfig:this.#serverConfig
     });
 
     /**
@@ -100,9 +91,9 @@ export class Server<RequestNameList extends string>
      *      return data;
      *  })
      */
-    constructor(options:ServerOptions){
+    constructor(options?:ServerOptions){
 
-        this.#serverConfig = {...this.#SERVER_DEFAULT_CONFIG,...options};
+        this.#serverConfig.updateConfig(options ?? {});
 
         this.#init();
         this.#initServer();
@@ -110,15 +101,14 @@ export class Server<RequestNameList extends string>
 
     // サーバー作成前の設定
     #init(){
-        const {
-            baseDirname,
-            publicDirname,
-            port,
-            signalShutdownHandling
-        } = this.#serverConfig;
+        const baseDirname = this.#serverConfig.getConfig("baseDirname");
+        const publicDirname = this.#serverConfig.getConfig("publicDirname");
+        const signalShutdownHandling = this.#serverConfig.getConfig("signalShutdownHandling");
 
+        if(!baseDirname) throw new Error("baseDirname is required");
+
+        this.#serverConfig.updateConfig({baseDirname});
         this.#publicDirectoryPath = pathNormalization(baseDirname,publicDirname);
-        this.#serverPort = port;
 
         if(signalShutdownHandling){
             process.on("SIGINT" , async ()=>{ await this.#shutdownServer() });
@@ -128,10 +118,8 @@ export class Server<RequestNameList extends string>
 
     // サーバー作成
     #initServer(){
-        const {
-            middlewares,
-            apiPrefix
-        } = this.#serverConfig;
+        const middlewares = this.#serverConfig.getConfig("middlewares");
+        const apiPrefix = this.#serverConfig.getConfig("apiPrefix");
 
         // ミドルウェアと追加する。
         for(const middleware of middlewares){
@@ -260,47 +248,54 @@ export class Server<RequestNameList extends string>
             this.#isStarting = true;
 
             this.#innerEventBus.emit("server/start:process",{});
-            const startServerOptions = {...this.#serverConfig,...options};
+
+            this.#serverConfig.updateConfig(options ?? {});
+            const exposeLan = this.#serverConfig.getConfig("exposeLan");
+            const autoPort = this.#serverConfig.getConfig("autoPort");
+            const showQrCode = this.#serverConfig.getConfig("showQrCode");
+            const publicDirname = this.#serverConfig.getConfig("publicDirname");
+            const openBrowserConfig = this.#serverConfig.getConfig("openBrowser");
+            const apiPrefix = this.#serverConfig.getConfig("apiPrefix");
+            const configPort = this.#serverConfig.getConfig("port");
+
 
             // ホスト設定
-            const host = startServerOptions.exposeLan ? "0.0.0.0" : "127.0.0.1";
+            const host = exposeLan ? "0.0.0.0" : "127.0.0.1";
 
             // ポート設定
             // MEMO constructorで設定した値がデフォルトで上書きされる可能性があるから、ifはoptionsで比較
-            if(options?.port !== undefined)this.#serverPort = options.port;
-            this.#serverPort = await findAvailablePort({
-                startPort:this.#serverPort,
+            const tmpPort = await findAvailablePort({
+                startPort:configPort,
                 host,
-                isAutoPort:startServerOptions.autoPort,
+                isAutoPort:autoPort,
                 servicesRegister:this.#serverServicesRegister
             });
-            const port = this.#serverPort;
 
             // サーバー起動処理
-            const httpServer = await this.#createHttpServer(port,host);
+            const httpServer = await this.#createHttpServer(tmpPort,host);
             const address = httpServer.address();
-            const listeningPort = typeof address === "object" && address !== null
+            const port = typeof address === "object" && address !== null
                 ? address.port
-                : port;
-            this.#serverPort = listeningPort;
+                : tmpPort;
+            this.#serverConfig.updateConfig({port});
 
             // スタートログ
             serverStartSummary({
                 host,
-                port:listeningPort,
-                publicPath:startServerOptions.publicDirname,
+                port,
+                publicPath:publicDirname,
                 publicFullPath:this.#publicDirectoryPath,
-                apiPrefix:startServerOptions.apiPrefix,
-                isShowQrCode:startServerOptions.showQrCode,
+                apiPrefix:apiPrefix,
+                isShowQrCode:showQrCode,
                 servicesRegister:this.#serverServicesRegister
             });
 
             // ブラウザオープン
-            if(startServerOptions.openBrowser){
+            if(openBrowserConfig){
                 await openBrowser({
                     host,
-                    port:listeningPort,
-                    target:startServerOptions.openBrowser,
+                    port,
+                    target:openBrowserConfig,
                     servicesRegister:this.#serverServicesRegister
                 });
             }
@@ -441,7 +436,11 @@ export class Server<RequestNameList extends string>
     }
     // サーバーポート取得
     getPort():number{
-        return this.#serverPort;
+        return this.#serverConfig.getConfig("port");
+    }
+    // サーバー設定取得
+    getConfig<K extends keyof ServerDefaultConfig>(key:K):ServerDefaultConfig[K]{
+        return this.#serverConfig.getConfig(key);
     }
     // HTTPサーバー取得
     getHttpServer():http.Server | null{
