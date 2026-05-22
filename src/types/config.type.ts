@@ -6,18 +6,20 @@ export type BrowserOpenConfig =
     | "local"
     | "network";
 
-export type ServerUserConfig = {
-    baseDirname?: string;
-    publicDirname?: string;
-    apiPrefix?: string;
-    port?: number;
-    middlewares?: express.RequestHandler[];
-    exposeLan?: boolean;
-    showQrCode?: boolean;
-    openBrowser?:BrowserOpenConfig;
-    autoPort?:boolean;
-    signalShutdownHandling?:boolean
-};
+export const serverUserConfigSchema = z.object({
+    baseDirname: z.string().optional(),
+    publicDirname: z.string().optional(),
+    apiPrefix: z.string().optional(),
+    port: z.number().optional(),
+    middlewares: z.array(z.custom<express.RequestHandler>()).optional(),
+    exposeLan: z.boolean().optional(),
+    showQrCode: z.boolean().optional(),
+    openBrowser: z.union([z.boolean(), z.enum(["local", "network"])]).optional(),
+    autoPort: z.boolean().optional(),
+    signalShutdownHandling: z.boolean().optional()
+});
+
+export type ServerUserConfig = z.infer<typeof serverUserConfigSchema>;
 
 export const serverDefaultConfigSchema = z.object({
     baseDirname: z.string().optional(),
