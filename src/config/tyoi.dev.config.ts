@@ -8,7 +8,7 @@ import rateLimit from "express-rate-limit";
 import hpp from "hpp";
 import slowDown from "express-slow-down";
 
-export default defineConfig<ServerUserConfig>({
+export default defineConfig({
     port: 3000,
     autoPort:true,
 

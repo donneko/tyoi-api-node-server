@@ -1,7 +1,6 @@
-import { defineConfig } from "../app/config-server.js";
-import type { ServerDefaultConfig } from "../types/config.type.js";
+import { defineDefaultConfig } from "../app/config-server.js";
 
-export default defineConfig<ServerDefaultConfig>({
+export default defineDefaultConfig({
     port: 3000,
     autoPort:false,
 
