@@ -24,7 +24,7 @@ export const serverDefaultConfigSchema = z.object({
     publicDirname: z.string(),
     apiPrefix: z.string(),
     port: z.number(),
-    middlewares: z.array(z.function()),
+    middlewares: z.array(z.custom<express.RequestHandler>()),
     exposeLan: z.boolean(),
     showQrCode: z.boolean(),
     openBrowser: z.union([z.boolean(), z.enum(["local", "network"])]),

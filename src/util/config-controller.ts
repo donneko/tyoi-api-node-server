@@ -11,7 +11,7 @@ export class ConfigController<ConfigMap extends Record<string,unknown>>{
     }
 
     updateConfig(config:Partial<ConfigMap>):void{
-        const newConfig = {...config,...this.configData};
+        const newConfig = { ...this.configData, ...config };
         this.configData = this.schema ? this.schema.parse(newConfig) : newConfig;
     }
     getConfig<K extends keyof ConfigMap>(key:K):ConfigMap[K]{
