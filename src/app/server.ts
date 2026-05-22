@@ -16,6 +16,8 @@ import { ServicesRegister } from "../util/services-register.js";
 import { HttpMetaManager } from "../service/http-meta/http-meta-manager.js";
 import { SystemMetaManager } from "../service/system-meta/system-meta-manager.js";
 import { configManager } from "../service/config-manager.js";
+import { RegisterManager } from "../service/register-manager.js";
+
 
 type RequestData = {
     query  : unknown,
@@ -43,25 +45,27 @@ export type ServerServicesRegister = {
     httpMetaManager:HttpMetaManager;
     systemMetaManager:SystemMetaManager;
     serverConfig:configManager;
+    serverRegister:RegisterManager;
 }
 
 export class Server<RequestNameList extends string>
 {
     #appServer = express();
-    #publicDirectoryPath!:string;
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #outEventBus = new EventBus<OutEventBusMap>();
     #innerEventBus = new EventBus<InnerEventBusMap>();
     #serverLogger = new ServerLogger(this.#innerEventBus);
     #httpServer: http.Server | null = null;
     #serverConfig:configManager = new configManager();
+    #serverRegister:RegisterManager = new RegisterManager();
     #serverServicesRegister = new ServicesRegister<ServerServicesRegister>({
         innerEventBus:this.#innerEventBus,
         outEventBus:this.#outEventBus,
         serverLogger:this.#serverLogger,
         httpMetaManager:new HttpMetaManager(),
         systemMetaManager:new SystemMetaManager(),
-        serverConfig:this.#serverConfig
+        serverConfig:this.#serverConfig,
+        serverRegister:this.#serverRegister
     });
 
     /**
@@ -108,7 +112,9 @@ export class Server<RequestNameList extends string>
         if(!baseDirname) throw new Error("baseDirname is required");
 
         this.#serverConfig.updateConfig({baseDirname});
-        this.#publicDirectoryPath = pathNormalization(baseDirname,publicDirname);
+
+        const publicDirectoryPath = pathNormalization(baseDirname,publicDirname);
+        this.#serverRegister.updateConfig({publicDirectoryPath});
 
         if(signalShutdownHandling){
             process.on("SIGINT" , async ()=>{ await this.#shutdownServer() });
@@ -120,6 +126,7 @@ export class Server<RequestNameList extends string>
     #initServer(){
         const middlewares = this.#serverConfig.getConfig("middlewares");
         const apiPrefix = this.#serverConfig.getConfig("apiPrefix");
+        const publicDirectoryPath = this.#serverRegister.getConfig("publicDirectoryPath") ?? "";
 
         // ミドルウェアと追加する。
         for(const middleware of middlewares){
@@ -134,7 +141,7 @@ export class Server<RequestNameList extends string>
         });
 
         // 静的ファイル配信
-        this.#appServer.use(express.static(this.#publicDirectoryPath));
+        this.#appServer.use(express.static(publicDirectoryPath));
 
         this.#appServer.use((req, res) => {
             const sendData = this.#serverServicesRegister.get("httpMetaManager").getMeta(404);
@@ -257,6 +264,7 @@ export class Server<RequestNameList extends string>
             const openBrowserConfig = this.#serverConfig.getConfig("openBrowser");
             const apiPrefix = this.#serverConfig.getConfig("apiPrefix");
             const configPort = this.#serverConfig.getConfig("port");
+            const publicDirectoryPath = this.#serverRegister.getConfig("publicDirectoryPath") ?? "";
 
 
             // ホスト設定
@@ -284,7 +292,7 @@ export class Server<RequestNameList extends string>
                 host,
                 port,
                 publicPath:publicDirname,
-                publicFullPath:this.#publicDirectoryPath,
+                publicFullPath:publicDirectoryPath,
                 apiPrefix:apiPrefix,
                 isShowQrCode:showQrCode,
                 servicesRegister:this.#serverServicesRegister
