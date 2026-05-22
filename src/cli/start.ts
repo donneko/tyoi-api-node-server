@@ -1,4 +1,5 @@
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { Server } from "../app/server.js";
 import type { MainContextData } from "../main.js"
 import { askSelect } from "../service/ask-select.js";
@@ -26,22 +27,18 @@ async function getConfigFile(processCwd:string):Promise<string|null|undefined>{
 
 export default async function runStartServer(mainContextData:MainContextData){
     const file = await getConfigFile(mainContextData.processCwd);
-    console.log(file)
     let useConfig = {};
 
     if(file){
         const filePath = path.join(mainContextData.processCwd,file)
-    console.log(filePath)
-        useConfig = await import(filePath).then((r)=> r.default);
-    console.log(useConfig)
-
+        useConfig = await import(pathToFileURL(filePath).href).then((r)=> r.default);
     }
 
     // サーバー作成
     const server = new Server<RequestNameList>({
         ...useConfig,
         ...mainContextData.optionArgs,
-        ...{baseDirname:mainContextData.mainDirname}
+        ...{baseDirname:file ? mainContextData.processCwd : mainContextData.mainDirname}
     });
 
     // サーバー起動
