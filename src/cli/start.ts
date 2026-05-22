@@ -26,11 +26,15 @@ async function getConfigFile(processCwd:string):Promise<string|null|undefined>{
 
 export default async function runStartServer(mainContextData:MainContextData){
     const file = await getConfigFile(mainContextData.processCwd);
+    console.log(file)
     let useConfig = {};
 
     if(file){
         const filePath = path.join(mainContextData.processCwd,file)
+    console.log(filePath)
         useConfig = await import(filePath).then((r)=> r.default);
+    console.log(useConfig)
+
     }
 
     // サーバー作成

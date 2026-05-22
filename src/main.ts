@@ -55,7 +55,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
                 help(mainContextData);
                 break;
             }
-            await dev(mainContextData);
+            await run(mainContextData);
         break;
         case "dev":
             await dev(mainContextData);
