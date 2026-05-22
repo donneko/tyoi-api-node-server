@@ -1,6 +1,6 @@
 {
   "name": "@donneko/tyoi-server",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "scripts": {
     "dev": "tsx ./src/main.ts dev",
     "dev-test": "tsx ./test/server.ts",
