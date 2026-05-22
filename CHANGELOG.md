@@ -13,7 +13,7 @@
 - `tyoi` の実行が `tyoi dev` から `tyoi run` になりました
 - ログなどのメッセージ系をデータから読み込む方式に変更
 
-# Fixed
+### Fixed
 - `npm install donneko@tyoi-server`をすると、`node_module` の `config` が参照もとになって、ファイルで設定ができない問題を修正
 
 ## 0.0.1 - 2026-05-11
@@ -27,4 +27,4 @@
 - Express middleware　対応
 
 [Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...HEAD
-[0.1.0]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.1...v0.0.2
+[0.0.2]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.1...v0.0.2
