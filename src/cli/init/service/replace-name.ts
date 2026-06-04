@@ -6,7 +6,7 @@ export function replacePackageJson(
         projectName: string
     ): void {
     const packageJsonPath = path.join(projectPath, "package.json");
-    console.log(packageJsonPath)
+
     const text = fs.readFileSync(packageJsonPath, "utf-8");
     const fixText =
         text.replaceAll("__PROJECT_NAME__", projectName)
