@@ -24,7 +24,8 @@ export async function getTemplatePath(
             message: "選択してください",
             selects: templateFiles
         });
-        template = templateFiles[index];
+        
+        template = templateFiles[(index === -1)?0:index];
     }
 
     logger.info(`選択されたテンプレート[${template}]`);
