@@ -3,11 +3,18 @@
 ## [Unreleased]
 
 ### Added
+- WebSocket機能追加
 - `Server` に `onWebSocket` メソッドを追加
 - `Server` に `onceWebSocket` メソッドを追加
 - `Server` に `offWebSocket` メソッドを追加
 - `Server` に `hasWebSocket` メソッドを追加
 
+### Fixed
+- ログ表示がある条件で10文字のみになる問題を修正
+- CLIで `--open` のプションが適用されない問題を修正
+- ログのErrorにconsole.logが残っていた問題を修正
+- summaryがTYYで正常に動作しない問題を修正
+- ログのwindowがTYYに対応していない問題を修正
 
 ## [0.0.2] - 2026-05-23
 
