@@ -45,7 +45,7 @@
   "license": "MIT",
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
-    "@serialport/parser-readline": "^13.0.0",
+    "@types/express": "^5.0.6",
     "@types/ws": "^8.18.1",
     "express": "^5.2.1",
     "minimist": "^1.2.8",
@@ -53,14 +53,12 @@
     "open": "^11.0.0",
     "picocolors": "^1.1.1",
     "qrcode-terminal": "^0.12.0",
-    "serialport": "^13.0.0",
     "string-width": "^8.2.1",
     "strip-ansi": "^7.2.0",
     "ws": "^8.21.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
     "@types/minimist": "^1.2.5",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.7.0",
