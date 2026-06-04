@@ -6,12 +6,15 @@ export function replacePackageJson(
         projectName: string
     ): void {
     const packageJsonPath = path.join(projectPath, "package.json");
-
+    console.log(packageJsonPath)
     const text = fs.readFileSync(packageJsonPath, "utf-8");
-    text.replaceAll("__PROJECT_NAME__", projectName);
+    const fixText =
+        text.replaceAll("__PROJECT_NAME__", projectName)
+            .replaceAll("__TYOI_SERVER_VERSION__", "0.0.3");
 
+    
     fs.writeFileSync(
         packageJsonPath,
-        text
+        fixText
     );
 }
