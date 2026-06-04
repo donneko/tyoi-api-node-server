@@ -10,7 +10,7 @@ export function replacePackageJson(
     const text = fs.readFileSync(packageJsonPath, "utf-8");
     const fixText =
         text.replaceAll("__PROJECT_NAME__", projectName)
-            .replaceAll("__TYOI_SERVER_VERSION__", "0.0.3");
+            .replaceAll("__TYOI_SERVER_VERSION__", "0.0.4");
 
     fs.writeFileSync(
         packageJsonPath,
