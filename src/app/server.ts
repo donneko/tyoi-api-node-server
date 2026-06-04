@@ -55,8 +55,10 @@ export type ServerServicesRegister = {
     serverRegister:RegisterManager;
 }
 
-export class Server<RequestNameList extends string,WebSocketNameList extends string>
-{
+export class Server<
+    RequestNameList extends string = "",
+    WebSocketNameList extends string = ""
+>{
     #appServer = express();
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #outEventBus = new EventBus<OutEventBusMap>();
