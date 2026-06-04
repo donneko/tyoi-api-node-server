@@ -56,8 +56,8 @@ export type ServerServicesRegister = {
 }
 
 export class Server<
-    RequestNameList extends string = "",
-    WebSocketNameList extends string = ""
+    RequestNameList extends string = string,
+    WebSocketNameList extends string = string
 >{
     #appServer = express();
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
