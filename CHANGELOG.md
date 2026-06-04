@@ -2,13 +2,18 @@
 
 ## [Unreleased]
 
-## [0.0.2] - 2026-05-23
-
 ### Added
 - `Server` に `onWebSocket` メソッドを追加
 - `Server` に `onceWebSocket` メソッドを追加
 - `Server` に `offWebSocket` メソッドを追加
 - `Server` に `hasWebSocket` メソッドを追加
+
+
+## [0.0.2] - 2026-05-23
+
+### Added
+- 設定ファイル対応
+- `Server` から `getConfig` メソッドを使用して設定を取得するのを追加
 
 ### Changed
 - README　の `npx tyoi` など誤解を招く導線を修正しました
