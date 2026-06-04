@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev":"npx run start",
+        "dev":"npm run start",
         "start": "node src/server.js"
     },
     "dependencies": {

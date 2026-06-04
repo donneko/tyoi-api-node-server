@@ -45,7 +45,6 @@
   "license": "MIT",
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
-    "@donneko/tyoi-server": "file:test/playground/donneko-tyoi-server-0.0.3.tgz",
     "@serialport/parser-readline": "^13.0.0",
     "@types/ws": "^8.18.1",
     "cors": "^2.8.6",
