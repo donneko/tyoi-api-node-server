@@ -53,5 +53,5 @@
 - Express middleware　対応
 
 [Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.3...HEAD
-[0.0.2]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...v0.0.3
+[0.0.3]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.1...v0.0.2
