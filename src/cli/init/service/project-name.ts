@@ -10,16 +10,19 @@ export async function getProjectName(
     let projectName = argProjectName;
 
     if(!projectName){
-        const defaultName = path.basename(processCwd)
-        const InputProjectName = await askInput(`Project名を入力してください。デフォルト(${defaultName}) : `)
+        const defaultName = path.basename(processCwd);
+        const InputProjectName = await askInput(
+                `Project名を入力してください。デフォルト(${defaultName}) : `
+            ) ?? defaultName;
+
         projectName = InputProjectName
     }
 
     if (!/^[a-zA-Z0-9-]+$/.test(projectName)) {
-        throw Error("プロジェクト名に使える文字は英数字・- のみです。");
+        throw Error(`プロジェクト名に使える文字は英数字・- のみです。[${projectName}]`);
     }
 
-    logger.success("プロジェクト名の検証に成功しました。");
+    logger.info(`選択されたプロジェクト名[${projectName}]`);
     return projectName;
 }
 

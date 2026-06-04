@@ -4,5 +4,5 @@ export function fixPath(
     mainDirname:string,
     targetPath:string
 ):string{
-    return path.relative(mainDirname,targetPath);
+    return path.join(mainDirname,targetPath);
 }
