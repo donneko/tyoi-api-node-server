@@ -28,6 +28,8 @@
 - テンプレート のログなど変更
 - テンプレート のオプションや引数がなくても実行できるように
 
+### Removed
+-`cors`, `helmet`, `hpp`,` express-rate-limit`, `express-slow-down`, `@types/cors,` `@types/hpp` 使用していないパッケージを消去
 ## [0.0.2] - 2026-05-23
 
 ### Added
