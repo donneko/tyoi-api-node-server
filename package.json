@@ -46,6 +46,7 @@
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
     "@serialport/parser-readline": "^13.0.0",
+    "@types/ws": "^8.18.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.1",
@@ -60,6 +61,7 @@
     "serialport": "^13.0.0",
     "string-width": "^8.2.1",
     "strip-ansi": "^7.2.0",
+    "ws": "^8.21.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -70,7 +72,6 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.7.0",
     "@types/qrcode-terminal": "^0.12.2",
-    "@types/ws": "^8.18.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   }
