@@ -10,6 +10,7 @@ import { showNextSteps } from "./service/next-steps.js";
 export default async function serverInit(mainContextData:MainContextData){
 
     const mainDirname = mainContextData.mainDirname;
+    const processCwd = mainContextData.processCwd
 
     const templatePass = await getTemplatePath(
         mainContextData.optionArgs?.template,
@@ -18,12 +19,11 @@ export default async function serverInit(mainContextData:MainContextData){
 
     const projectName = await getProjectName(
         mainContextData.commandArgs[1],
-        mainDirname
+        processCwd
     );
 
     const templatePath = fixPath(mainDirname,templatePass);
-    const projectPath  = fixPath(mainDirname,projectName);
-
+    const projectPath  = fixPath(processCwd,projectName);
 
     copyTemplate(
         templatePath,
