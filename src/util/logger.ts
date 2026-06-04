@@ -87,7 +87,7 @@ class Logger{
         process.stderr.write(out);
     }
     #loggerSelectProcess(data:LoggerCreateData){
-        if(process.stdout.isTTY){
+        if((process.stdout.isTTY)){
             this.#addStderr(data.createMessage);
         }else{
             this.#addStdout(data);
@@ -210,7 +210,7 @@ class Logger{
         content:LoggerCreateData[];
     }):void{
 
-        if(process.stdout.isTTY){
+        if(!(process.stdout.isTTY)){
             window.content.forEach((data)=>{
                 this.#loggerSelectProcess(data)
             });
