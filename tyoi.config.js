@@ -1,4 +1,5 @@
 import { defineConfig } from "./dist/index.js";
+import morgan from "morgan";
 
 export default defineConfig({
     port: 3000,
@@ -10,5 +11,9 @@ export default defineConfig({
     exposeLan: false,
     showQrCode: false,
 
-    openBrowser: true,
+    openBrowser: false,
+
+    middlewares:[
+        morgan("dev")
+    ]
 });

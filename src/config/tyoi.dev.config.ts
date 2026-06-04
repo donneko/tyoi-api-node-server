@@ -1,5 +1,4 @@
 import { defineConfig } from "../app/config-server.js";
-import type { ServerUserConfig } from "../types/config.type.js";
 
 import morgan from "morgan";
 import helmet from "helmet";
