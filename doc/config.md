@@ -62,19 +62,21 @@ export default defineConfig({
 LAN 公開時は、同じ Wi-Fi やネットワークに接続している端末からアクセス可能になります。
 公開してよいファイルや API だけを扱ってください。
 
-## Constructor Options
+## Programmatic Options
 
-`Server` を直接使う場合も、ほぼ同じ設定を渡せます。
+`tyoi()` からサーバーを作る場合も、ほぼ同じ設定を渡せます。
 
 ```ts
-import { Server } from "@donneko/tyoi-server";
+import { tyoi } from "@donneko/tyoi-server";
 
-const server = new Server({
+const app = tyoi({
     baseDirname: import.meta.dirname,
     publicDirname: "../public/main",
     port: 3000,
     autoPort: true
 });
+
+await app.start();
 ```
 
-`baseDirname` は直接 `Server` を作る場合に必要です。CLI から起動する場合は自動で設定されます。
+`baseDirname` は `tyoi()` や `new Server()` で直接作る場合に必要です。CLI から起動する場合は自動で設定されます。

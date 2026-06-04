@@ -1,6 +1,6 @@
 # tyoi-server
 
-![NPM Version](https://img.shields.io/npm/v/%40donneko%2Ftyoi-server) ![NPM License](https://img.shields.io/npm/l/%40donneko%2Ftyoi-server) [![Socket Badge](https://badge.socket.dev/npm/package/@donneko/tyoi-server/0.0.3)](https://badge.socket.dev/npm/package/@donneko/tyoi-server/0.0.3)
+![NPM Version](https://img.shields.io/npm/v/%40donneko%2Ftyoi-server) ![NPM License](https://img.shields.io/npm/l/%40donneko%2Ftyoi-server)
 
 小さな API と静的ファイル配信をすぐに立てるための、ローカル向けサーバーフレームワークです。
 CLI でテンプレートを作り、HTML / CSS / API / WebSocket の動作確認をすばやく始められます。
@@ -39,6 +39,28 @@ npm run dev
 
 起動後、表示された Local URL をブラウザで開くと、`public/main` のページを確認できます。
 
+## Programmatic Usage
+
+コードから小さな API サーバーを作る場合は `tyoi()` を使えます。
+
+```ts
+import { tyoi } from "@donneko/tyoi-server";
+
+const app = tyoi({
+    baseDirname: import.meta.dirname,
+    publicDirname: "../public/main",
+    port: 3000
+});
+
+app.get("/hello", () => {
+    return {
+        message: "Hello Tyoi!"
+    };
+});
+
+await app.start();
+```
+
 ## Templates
 
 - `basic-ts`: TypeScript 用テンプレート
@@ -73,7 +95,7 @@ tyoi --version
 
 詳しい使い方は `doc/` に分けています。
 
-- [Usage](./doc/usage.md): `Server` の基本、API、WebSocket、middleware、イベント
+- [Usage](./doc/usage.md): `tyoi()` の基本、API、WebSocket、middleware、イベント、`Server` 直接利用
 - [Config](./doc/config.md): `tyoi.config.js` と設定項目
 - [CLI](./doc/cli.md): CLI コマンドとオプション
 
