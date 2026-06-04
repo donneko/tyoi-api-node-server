@@ -188,7 +188,7 @@ class Logger{
         return this.#loggerSelectProcess(data);
     }
     createBar():LoggerCreateData{
-        const width = process.stdout.columns ?? 10;
+        const width = process.stdout.columns ?? 80;
         const line = `${"─".repeat(width - 2)}`;
         const obj = createData({
             type: "BAR",
@@ -202,7 +202,15 @@ class Logger{
         title:string;
         content:LoggerCreateData[];
     }):void{
-        const width = process.stdout.columns ?? 10;
+
+        if(process.stdout.isTTY){
+            window.content.forEach((data)=>{
+                this.#loggerSelectProcess(data)
+            });
+            return;
+        }
+
+        const width = process.stdout.columns ?? 80;
         const createLine = (line:string):string => {
             const repeatNumber = (width - 2) - stringWidth(line);
             const safeRepeatNumber = repeatNumber >= 0 ? repeatNumber : 0;
