@@ -3,8 +3,11 @@ import stringWidth from "string-width";
 import stripAnsi from "strip-ansi";
 
 function getWidth():number{
+    const number = Number(process.env.COLUMNS);
+    const envColumns = Number.isFinite(number)? number : null;
+
     return process.stdout.columns ??
-            Number(process.env.COLUMNS) ??
+            envColumns ??
             80;
 }
 
