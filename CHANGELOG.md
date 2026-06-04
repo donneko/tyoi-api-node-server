@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-06-04
+
 ### Added
 - WebSocket機能追加
 - `Server` に `onWebSocket` メソッドを追加
@@ -40,5 +42,6 @@
 - 使用中ポートの自動切り替え対応
 - Express middleware　対応
 
-[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.3...HEAD
+[0.0.2]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.1...v0.0.2
