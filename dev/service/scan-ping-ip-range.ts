@@ -1,5 +1,5 @@
-import { getIp } from "../util/get-ip";
-import { pingIp } from "../util/ping-ip";
+import { getIp } from "../util/get-ip.js";
+import { pingIp } from "../util/ping-ip.js";
 
 type Output = {
         ip:string;

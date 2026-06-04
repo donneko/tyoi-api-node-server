@@ -1,4 +1,4 @@
-import { scanPingIpRange } from "./scan-ping-ip-range";
+import { scanPingIpRange } from "./scan-ping-ip-range.js";
 
 type Option = {
     step?:number;

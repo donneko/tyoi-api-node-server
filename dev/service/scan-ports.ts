@@ -1,4 +1,4 @@
-import { scanPort } from "../util/port-scan";
+import { scanPort } from "../util/port-scan.js";
 
 export async function scanPorts(ip:string, ports:number[]):Promise<
     {

@@ -1,4 +1,4 @@
-import { scanPortsRange } from "./scan-ports-range";
+import { scanPortsRange } from "./scan-ports-range.js";
 
 type Option = {
     step?:number;
