@@ -127,7 +127,6 @@ class Logger{
             message: `[ERROR] ${message}`,
             createMessage: `${pc.red("[ERROR]")} ${message}`,
         });
-        console.log(message)
 
         return obj;
     }
