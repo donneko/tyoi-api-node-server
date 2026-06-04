@@ -1,10 +1,14 @@
 import { Server } from "@donneko/tyoi-server";
+import morgan from "morgan";
 
 // サーバー作成
 const server = new Server({
     baseDirname: import.meta.dirname,
     publicDirname: "../public/main",
-    port: 3000
+    port: 3000,
+    middlewares:[
+        morgan("dev")
+    ]
 });
 
 // サーバー起動

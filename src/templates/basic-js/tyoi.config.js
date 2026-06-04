@@ -1,4 +1,5 @@
 import { defineConfig } from "@donneko/tyoi-server";
+import morgan from "morgan";
 
 export default defineConfig({
     port: 3000,
@@ -11,4 +12,8 @@ export default defineConfig({
     showQrCode: false,
 
     openBrowser: true,
+
+    middlewares:[
+        morgan("dev")
+    ]
 });

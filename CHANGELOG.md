@@ -10,6 +10,8 @@
 - `Server` に `onceWebSocket` メソッドを追加
 - `Server` に `offWebSocket` メソッドを追加
 - `Server` に `hasWebSocket` メソッドを追加
+- テンプレート に `basic-js` 追加
+- テンプレート に `basic-ts` 追加
 
 ### Fixed
 - ログ表示がある条件で10文字のみになる問題を修正
@@ -17,6 +19,9 @@
 - ログのErrorにconsole.logが残っていた問題を修正
 - summaryがTYYで正常に動作しない問題を修正
 - ログのwindowがTYYに対応していない問題を修正
+
+### Changed
+- `tyoi.config.js` の `middlewares` に `morgan("dev")` を入れるように変更
 
 ## [0.0.2] - 2026-05-23
 
