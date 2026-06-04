@@ -2,11 +2,18 @@ import pc from "picocolors";
 import stringWidth from "string-width";
 import stripAnsi from "strip-ansi";
 
+function getWidth():number{
+    return process.stdout.columns ??
+            Number(process.env.COLUMNS) ??
+            80;
+}
+
 function calcAnsiLength(text:string){
     const cleanText =  stripAnsi(text);
     const ansiLength = (text.length - cleanText.length);
     return ansiLength;
 }
+
 
 function textNormalizer(text:string,width:number):string[] {
 
@@ -188,7 +195,7 @@ class Logger{
         return this.#loggerSelectProcess(data);
     }
     createBar():LoggerCreateData{
-        const width = process.stdout.columns ?? 80;
+        const width = getWidth();
         const line = `${"─".repeat(width - 2)}`;
         const obj = createData({
             type: "BAR",
@@ -210,7 +217,7 @@ class Logger{
             return;
         }
 
-        const width = process.stdout.columns ?? 80;
+        const width = getWidth();
         const createLine = (line:string):string => {
             const repeatNumber = (width - 2) - stringWidth(line);
             const safeRepeatNumber = repeatNumber >= 0 ? repeatNumber : 0;
