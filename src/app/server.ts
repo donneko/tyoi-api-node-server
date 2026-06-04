@@ -17,6 +17,7 @@ import { HttpMetaManager } from "../service/http-meta/http-meta-manager.js";
 import { SystemMetaManager } from "../service/system-meta/system-meta-manager.js";
 import { configManager } from "../service/config-manager.js";
 import { RegisterManager } from "../service/register-manager.js";
+import { WebSocketRouter ,type WsHandler } from "../service/web-socket-router.js";
 
 
 type RequestData = {
@@ -54,7 +55,7 @@ export type ServerServicesRegister = {
     serverRegister:RegisterManager;
 }
 
-export class Server<RequestNameList extends string>
+export class Server<RequestNameList extends string,WebSocketNameList extends string>
 {
     #appServer = express();
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
@@ -73,6 +74,7 @@ export class Server<RequestNameList extends string>
         serverConfig:this.#serverConfig,
         serverRegister:this.#serverRegister
     });
+    #webSocketRouter = new WebSocketRouter<WebSocketNameList>();
 
     /**
      * expressを使用した簡単なサーバーを作れるようにします。
@@ -194,7 +196,11 @@ export class Server<RequestNameList extends string>
 
     async #createHttpServer(port:number,host:string):Promise<http.Server>{
         const httpServer = await new Promise<http.Server>((resolve,reject)=>{
-            const server = this.#appServer.listen(port,host);
+            const server = http.createServer(this.#appServer);
+
+            this.#webSocketRouter.start(server);
+
+            server.listen(port,host);
 
             const onError = (error: Error) => {
                 server.off("listening",onListening);
@@ -448,6 +454,30 @@ export class Server<RequestNameList extends string>
     emitAPI<Key extends keyof RequestEventMap<RequestNameList>>(type:Key,data:RequestEventMap<RequestNameList>[Key]){
         return this.#serverAPIs.emit(type,data);
     }
+
+    // WebSocket登録
+    onWebSocket<Key extends WebSocketNameList>(
+        type:Key,
+        fn:ApiRegistryHandler<WsHandler>
+    ){
+        return this.#webSocketRouter.on(type,fn);
+    }
+    // WebSocket一度のみ起動
+    onceWebSocket<Key extends WebSocketNameList>(
+        type:Key,
+        fn:ApiRegistryHandler<WsHandler>
+    ){
+        return this.#webSocketRouter.once(type,fn);
+    }
+    // WebSocket消去
+    offWebSocket<Key extends WebSocketNameList>(type:Key){
+        this.#webSocketRouter.off(type);
+    }
+    // WebSocketが存在するか？
+    hasWebSocket(type:string){
+        return this.#webSocketRouter.has(type);
+    }
+
     // サーバー起動中か？
     isRunning():boolean{
         return this.#httpServer !== null;
