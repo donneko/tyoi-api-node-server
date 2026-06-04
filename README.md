@@ -1,11 +1,13 @@
 # tyoi-server
+![NPM Version](https://img.shields.io/npm/v/%40donneko%2Ftyoi-server) ![NPM License](https://img.shields.io/npm/l/%40donneko%2Ftyoi-server)
 
 TypeScript 向けの、小さな API と静的ファイル配信を素早く立てるためのローカル向けサーバーフレームワークです。
 
 tyoi-server は、API を少し試したい、HTML や画像を配信したい、同じ LAN 内のスマートフォンから手元の画面を確認したい、といった用途に向いています。
 
+
 > This project is experimental. APIs may change in future releases.
-> v0.1.0 includes CLI and template behavior changes from v0.0.1.
+> v0.0.2 includes CLI and template behavior changes from v0.0.1.
 ## Features
 
 - TypeScript 対応
