@@ -30,7 +30,7 @@ class shortHandler{
 }
 
 export function tyoi(
-    options?:ServerOptions
+    options:ServerOptions
 ):shortHandler{
     const server = new Server(options);
     return new shortHandler(server);
