@@ -1,6 +1,6 @@
 # tyoi-server
 
-![NPM Version](https://img.shields.io/npm/v/%40donneko%2Ftyoi-server) ![NPM License](https://img.shields.io/npm/l/%40donneko%2Ftyoi-server)
+![NPM Version](https://img.shields.io/npm/v/%40donneko%2Ftyoi-server) ![NPM License](https://img.shields.io/npm/l/%40donneko%2Ftyoi-server) [![Socket Badge](https://badge.socket.dev/npm/package/@donneko/tyoi-server/0.0.3)](https://badge.socket.dev/npm/package/@donneko/tyoi-server/0.0.3)
 
 小さな API と静的ファイル配信をすぐに立てるための、ローカル向けサーバーフレームワークです。
 CLI でテンプレートを作り、HTML / CSS / API / WebSocket の動作確認をすばやく始められます。
