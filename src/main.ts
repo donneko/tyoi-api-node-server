@@ -37,7 +37,7 @@ async function tyoiServer(argv:string[]):Promise<void>{
     });
 
     const {open:openBrowser,...tmp} = args;
-    const updateArgs = {openBrowser,...tmp};
+    const updateArgs = args.open?{openBrowser,...tmp}:args;
 
     const mainContextData:MainContextData = {
         mainDirname:import.meta.dirname,
