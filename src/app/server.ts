@@ -61,7 +61,10 @@ export class Server<RequestNameList extends string,WebSocketNameList extends str
     #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
     #outEventBus = new EventBus<OutEventBusMap>();
     #innerEventBus = new EventBus<InnerEventBusMap>();
-    #serverLogger = new ServerLogger(this.#innerEventBus);
+    #serverLogger = new ServerLogger(
+        this.#innerEventBus,
+        this.#outEventBus
+    );
     #httpServer: http.Server | null = null;
     #serverConfig:configManager = new configManager();
     #serverRegister:RegisterManager = new RegisterManager();

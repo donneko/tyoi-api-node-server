@@ -84,18 +84,22 @@ export class EventBus<EventBusMap extends Record<string,unknown>>{
      */
     async emit<Key extends keyof EventBusMap>(type:Key,arg:EventBusMap[Key]):Promise<unknown>{
         const list = this.#EVENT_DATA_STORE.get(type);
+        const task = [];
 
         if(!list)return;
-
-        for(const fn of [...list]){
-            try {
-                return await (
-                    fn as EventBusHandler<EventBusMap[Key]>
-                )(arg);
-            } catch (error) {
-                console.error(`[EventBus emit error] ${String(type)}`, error);
-                throw error;
+        try {
+            for(const fn of [...list]){
+                task.push(
+                    (
+                        fn as EventBusHandler<EventBusMap[Key]>
+                    )(arg)
+                );
             }
+            await Promise.all(task);
+        } catch (error) {
+            console.error(`[EventBus emit error] ${String(type)}`, error);
+            throw error;
         }
+
     }
 }
