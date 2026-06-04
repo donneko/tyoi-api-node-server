@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+
+
+### Added
+- `tyoi()` を追加
+
+### Changed
+- `server` の 型のデフォルト引数を変更
+
 ## [0.0.3] - 2026-06-04
 
 ### Added

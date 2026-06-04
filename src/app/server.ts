@@ -20,7 +20,7 @@ import { RegisterManager } from "../service/register-manager.js";
 import { WebSocketRouter ,type WsHandler } from "../service/web-socket-router.js";
 
 
-type RequestData = {
+export type RequestData = {
     query  : unknown,
     body   : unknown,
     headers: unknown
@@ -28,14 +28,14 @@ type RequestData = {
 type RequestEventMap<L extends string> = {
     [N in L]: RequestData;
 }
-type StartServerOptions = {
+export type StartServerOptions = {
     port?: number;
     exposeLan?: boolean;
     showQrCode?:boolean;
     autoPort?:boolean;
     openBrowser?:BrowserOpenConfig;
 };
-type ServerOptions = ServerUserConfig & {
+export type ServerOptions = ServerUserConfig & {
     baseDirname: string;
 }
 
@@ -260,7 +260,7 @@ export class Server<
             port:3000
         });
      */
-    async startServer(options?:StartServerOptions){
+    async startServer(options?:StartServerOptions):Promise<http.Server | undefined>{
         try {
             if(this.#httpServer){
                 this.#serverLogger.logger("warn",
