@@ -12,7 +12,6 @@ export function replacePackageJson(
         text.replaceAll("__PROJECT_NAME__", projectName)
             .replaceAll("__TYOI_SERVER_VERSION__", "0.0.3");
 
-    
     fs.writeFileSync(
         packageJsonPath,
         fixText
