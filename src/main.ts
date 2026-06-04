@@ -3,7 +3,7 @@
 import minimist from "minimist"
 import { logger } from "./util/logger.js";
 import dev from "./cli/dev.js";
-import init from "./cli/init.js";
+import init from "./cli/init/main.js";
 import help from "./cli/help.js";
 import run from "./cli/start.js";
 
