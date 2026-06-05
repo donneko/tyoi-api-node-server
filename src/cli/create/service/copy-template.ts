@@ -10,7 +10,7 @@ export async function copyTemplate(
         throw Error(`エラー: コピー先がすでに存在するため、安全のために終了します。 (${projectPath})`);
     }
 
-    fs.mkdirSync(templatePath);
+    fs.mkdirSync(projectPath);
 
     const {error,ok}= await copyFolder(templatePath,projectPath);
     logger.window({
