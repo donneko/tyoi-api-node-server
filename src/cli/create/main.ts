@@ -22,7 +22,7 @@ export default async function serverCreate(mainContextData:MainContextData){
         processCwd
     );
 
-    const templatePath = fixPath(mainDirname,templatePass);
+    const templatePath = templatePass;
     const projectPath  = fixPath(processCwd,projectName);
 
 

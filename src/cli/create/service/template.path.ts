@@ -24,10 +24,14 @@ export async function getTemplatePath(
             message: "選択してください",
             selects: templateFiles
         });
-        
+
         template = templateFiles[(index === -1)?0:index];
     }
 
+    if(!template){
+        throw new Error(`コピー元のテンプレートが指定されていません: ${templateName}`);
+    }
+
     logger.info(`選択されたテンプレート[${template}]`);
-    return `.${path.sep}templates${path.sep}${template}`;
+    return path.join(readPath,template);
 }
