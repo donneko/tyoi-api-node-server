@@ -20,7 +20,7 @@ export async function copyFolder(
             continue;
         }
 
-        fs.copyFileSync(templateItem,projectItem);
+        fs.cpSync(templateItem,projectItem);
         ok.push(projectItem);
     }
 
