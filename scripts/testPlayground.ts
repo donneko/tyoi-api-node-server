@@ -1,5 +1,7 @@
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { undoPlayground } from "./undoPlayground.js";
+import { logger } from "./logger.js";
 
 const PLAYGROUND_PASS = "../test/playground"
 
@@ -12,29 +14,61 @@ function getPlaygroundPath():string{
 
 function testCLI(
     playgroundPath:string
-){
+):{args:string[],ok:boolean}[]{
+    const testResult:{args:string[],ok:boolean}[] = []
     const run = (...args:string[]) => {
         console.log(`[テスト実行] : `,...args);
-        spawnSync("npx", ["tyoi",...args], {
+        const result = spawnSync("npx", ["tyoi",...args], {
             cwd: playgroundPath,
             stdio: "inherit",
         });
+
+        testResult.push({
+            args:["npx","tyoi",...args],
+            ok:result.status === 0
+        });
+    }
+    const undo = () =>{
+        console.log("[戻しています]")
+        undoPlayground(playgroundPath);
     }
 
-    // run("help");
-    // run("info");
+    run("help");
+    run("info");
     run("init");
-    // run("config");
-    // run("create");
-    // run("run");
-    // run("dev");
+    undo();
+    run("create");
+    undo();
+    run("config");
+    run("run");
+    run("dev");
 
+    return testResult
 }
 
 function main(){
     const playgroundPath = getPlaygroundPath();
 
-    testCLI(playgroundPath);
+    const results = testCLI(playgroundPath);
+
+    const summary = logger.createInfo((()=>{
+        const ok    = results.filter((r)=>r.ok);
+        const error = results.filter((r)=>!(r.ok));
+
+        return `テスト回数 : ${results.length} \n OK : ${ok.length} \n ERROR : ${error.length}`;
+    })());
+
+    logger.window({
+        title:"CLIテスト結果の結果",
+        content:[
+            summary,
+            ...results.map(r=>
+                r.ok?
+                    logger.createSuccess(r.args.join(" ")):
+                    logger.createError(r.args.join(" "))
+            )
+        ]
+    })
 }
 
 main();
