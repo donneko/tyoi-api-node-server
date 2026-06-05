@@ -25,11 +25,6 @@ export default async function serverInit(mainContextData:MainContextData){
     const templatePath = fixPath(mainDirname,templatePass);
     const projectPath  = processCwd;
 
-    console.log(
-        projectName,
-    templatePath,
-    projectPath
-    )
 
     await copyTemplate(
         templatePath,
