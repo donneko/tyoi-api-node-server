@@ -34,15 +34,15 @@ function testCLI(
         undoPlayground(playgroundPath);
     }
 
-    // run(["help"]);
-    // run(["info"]);
+    run(["help"]);
+    run(["info"]);
     run(["init"]);
     undo();
-    // run(["create"]);
-    // undo();
-    // run(["config"]);
-    // run(["run"],3000);
-    // run(["dev"],3000);
+    run(["create"]);
+    undo();
+    run(["config"]);
+    run(["run"],3000);
+    run(["dev"],3000);
 
     return testResult
 }

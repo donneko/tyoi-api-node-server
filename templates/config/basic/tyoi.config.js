@@ -1,4 +1,4 @@
-import { defineConfig } from "./dist/index.js";
+import { defineConfig } from "@donneko/tyoi-server";
 import morgan from "morgan";
 
 export default defineConfig({
