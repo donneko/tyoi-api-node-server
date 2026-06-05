@@ -16,7 +16,6 @@ export default async function serverInit(mainContextData:MainContextData){
         mainContextData.optionArgs?.template,
         mainDirname
     );
-    console.log(templatePass)
     const projectName = await getProjectName(
         mainContextData.commandArgs[1],
         processCwd
