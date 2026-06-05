@@ -3,6 +3,7 @@
 import minimist from "minimist"
 import { logger } from "./util/logger.js";
 import dev from "./cli/dev.js";
+import create from "./cli/create/main.js";
 import init from "./cli/init/main.js";
 import help from "./cli/help.js";
 import run from "./cli/start.js";
@@ -65,6 +66,9 @@ async function tyoiServer(argv:string[]):Promise<void>{
         break;
         case "run":
             await run(mainContextData);
+        break;
+        case "create":
+            create(mainContextData);
         break;
         case "init":
             init(mainContextData);
