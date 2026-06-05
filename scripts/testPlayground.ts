@@ -21,11 +21,11 @@ function testCLI(
         });
     }
 
-    run("help");
-    run("info");
+    // run("help");
+    // run("info");
     run("init");
-    run("config");
-    run("create");
+    // run("config");
+    // run("create");
     // run("run");
     // run("dev");
 

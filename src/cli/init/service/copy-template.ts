@@ -6,7 +6,7 @@ export async function copyTemplate(
     projectPath:string
 ):Promise<void>{
 
-    const {error,ok}= await copyFolder(templatePath,projectPath);
+    const {error,ok} = await copyFolder(templatePath,projectPath);
     logger.window({
         title:"コピー結果",
         content:[

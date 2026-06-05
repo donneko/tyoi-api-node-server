@@ -20,7 +20,12 @@ export async function copyFolder(
             continue;
         }
 
-        fs.cpSync(templateItem,projectItem);
+        fs.cpSync(
+            templateItem,
+            projectItem,
+            { recursive: true }
+        );
+
         ok.push(projectItem);
     }
 
