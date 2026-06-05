@@ -1,7 +1,6 @@
 import type { MainContextData } from "../../main.js";
 import { getTemplatePath } from "./service/template.path.js";
 import { getProjectName } from "./service/project-name.js";
-import { fixPath } from "./service/fix-path.js";
 import { copyTemplate } from "./service/copy-template.js";
 import { replacePackageJson } from "./service/replace-name.js";
 import { showNextSteps } from "./service/next-steps.js";
@@ -21,7 +20,7 @@ export default async function serverInit(mainContextData:MainContextData){
         processCwd
     );
 
-    const templatePath = fixPath(mainDirname,templatePass);
+    const templatePath = templatePass;
     const projectPath  = processCwd;
 
 
