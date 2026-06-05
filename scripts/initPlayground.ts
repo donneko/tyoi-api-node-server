@@ -35,6 +35,7 @@ function clearPlayground(
     playgroundPath:string
 ){
     fs.rmSync(playgroundPath,{ recursive: true, force: true });
+    fs.mkdirSync(playgroundPath,{ recursive: true});
 }
 
 function createPlayground(
@@ -77,7 +78,8 @@ function editPackageJson(
     fs.writeFileSync(
         packageJsonPath,
         fixText
-    );}
+    );
+}
 
 function main(){
     const packagePath = getPackagePath();
