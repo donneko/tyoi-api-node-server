@@ -27,7 +27,9 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
-    "public"
+    "public",
+    "templates",
+    "tyoi.config.js"
   ],
   "repository": {
     "type": "git",
