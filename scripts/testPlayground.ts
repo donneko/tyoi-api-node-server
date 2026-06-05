@@ -16,12 +16,12 @@ function testCLI(
     playgroundPath:string
 ):{args:string[],ok:boolean}[]{
     const testResult:{args:string[],ok:boolean}[] = []
-    const run = (...args:string[]) => {
+    const run = (args:string[],timeout?:number | undefined) => {
         console.log(`[テスト実行] : `,...args);
         const result = spawnSync("npx", ["tyoi",...args], {
             cwd: playgroundPath,
             stdio: "inherit",
-            timeout: 3000,
+            timeout,
         });
 
         testResult.push({
@@ -34,15 +34,15 @@ function testCLI(
         undoPlayground(playgroundPath);
     }
 
-    run("help");
-    run("info");
-    run("init");
+    run(["help"]);
+    run(["info"]);
+    run(["init"]);
     undo();
-    run("create");
+    run(["create"]);
     undo();
-    run("config");
-    // run("run");
-    // run("dev");
+    run(["config"]);
+    run(["run"],3000);
+    run(["dev"],3000);
 
     return testResult
 }
