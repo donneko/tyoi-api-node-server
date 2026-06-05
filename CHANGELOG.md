@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+- `tyoi init` を `tyoi create` に変更
+- `tyoi init` を今のフォルダーにテンプレ作成機能にした
+
 ## [0.0.4] - 2026-06-05
 
 ### Added

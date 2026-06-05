@@ -7,7 +7,7 @@ import { replacePackageJson } from "./service/replace-name.js";
 import { showNextSteps } from "./service/next-steps.js";
 
 
-export default async function serverInit(mainContextData:MainContextData){
+export default async function serverCreate(mainContextData:MainContextData){
 
     const mainDirname = mainContextData.mainDirname;
     const processCwd = mainContextData.processCwd
