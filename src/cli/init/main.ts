@@ -34,5 +34,5 @@ export default async function serverInit(mainContextData:MainContextData){
         projectName
     );
 
-    showNextSteps(projectName);
+    showNextSteps();
 }
