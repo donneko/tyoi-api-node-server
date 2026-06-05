@@ -11,7 +11,8 @@
     "prepublishOnly": "npm run build",
     "start": "node ./dist/main.js",
     "d-init": "tsx ./scripts/initPlayground.ts",
-    "d-test": "tsx ./scripts/testPlayground.ts"
+    "d-test": "tsx ./scripts/testPlayground.ts",
+    "d-dev": "npm run d-init && npm run d-test"
   },
   "engines": {
     "node": ">=20.14"
