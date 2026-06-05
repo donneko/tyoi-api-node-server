@@ -1,5 +1,6 @@
 import path from "node:path";
 import fs from "node:fs"
+import { spawnSync } from "node:child_process";
 
 const PLAYGROUND_PASS = "../test/playground"
 const PACK_PASS       = "../"
@@ -34,8 +35,12 @@ function getTemplatePath():string{
 function clearPlayground(
     playgroundPath:string
 ){
-    fs.rmSync(playgroundPath,{ recursive: true, force: true });
-    fs.mkdirSync(playgroundPath,{ recursive: true});
+    const items = fs.readdirSync(playgroundPath);
+
+    items.forEach(item=>{
+        const itemPath = path.join(playgroundPath,item);
+        fs.rmSync(itemPath,{ recursive: true, force: true });
+    });
 }
 
 function createPlayground(
@@ -81,6 +86,15 @@ function editPackageJson(
     );
 }
 
+function installNPM(
+    playgroundPath:string,
+){
+    spawnSync("npm", ["install"], {
+        cwd: playgroundPath,
+        stdio: "inherit",
+    });
+}
+
 function main(){
     const packagePath = getPackagePath();
     const playgroundPath = getPlaygroundPath();
@@ -101,6 +115,8 @@ function main(){
         packagePath,
         playgroundPath
     );
+
+    installNPM(playgroundPath);
 }
 
 main();
