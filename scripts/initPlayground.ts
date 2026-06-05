@@ -42,9 +42,11 @@ function createPlayground(
     templatePath:string
 ){
 
+    const name = path.basename(templatePath)
+    const fixPath = path.join(playgroundPath,name);
     fs.copyFileSync(
         templatePath,
-        playgroundPath
+        fixPath
     );
 }
 
@@ -52,12 +54,30 @@ function copyPackage(
     packagePath:string,
     playgroundPath:string
 ){
+
+    const name = path.basename(packagePath)
+    const fixPath = path.join(playgroundPath,name);
     fs.copyFileSync(
         packagePath,
-        playgroundPath
+        fixPath
     );
 }
 
+function editPackageJson(
+    packagePath:string,
+    playgroundPath:string
+){
+    const packageFileName = path.basename(packagePath)
+    const packageJsonPath = path.join(playgroundPath, "package.json");
+
+    const text = fs.readFileSync(packageJsonPath, "utf-8");
+    const fixText =
+        text.replaceAll("__PACK_FILE_NAME__", packageFileName);
+
+    fs.writeFileSync(
+        packageJsonPath,
+        fixText
+    );}
 
 function main(){
     const packagePath = getPackagePath();
@@ -71,6 +91,11 @@ function main(){
     );
 
     copyPackage(
+        packagePath,
+        playgroundPath
+    );
+
+    editPackageJson(
         packagePath,
         playgroundPath
     );

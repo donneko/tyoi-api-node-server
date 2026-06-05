@@ -9,6 +9,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@donneko/tyoi-server": "file:donneko-tyoi-server-0.0.4.tgz"
+    "@donneko/tyoi-server": "file:__PACK_FILE_NAME__"
   }
 }
