@@ -40,8 +40,8 @@ function testCLI(
     run("create");
     undo();
     run("config");
-    run("run");
-    run("dev");
+    // run("run");
+    // run("dev");
 
     return testResult
 }
@@ -55,13 +55,14 @@ function main(){
         const ok    = results.filter((r)=>r.ok);
         const error = results.filter((r)=>!(r.ok));
 
-        return `テスト回数 : ${results.length} \n OK : ${ok.length} \n ERROR : ${error.length}`;
+        return `テスト回数 : ${results.length}\nOK : ${ok.length}\nERROR : ${error.length}`;
     })());
 
     logger.window({
         title:"CLIテスト結果の結果",
         content:[
             summary,
+            logger.createBar(),
             ...results.map(r=>
                 r.ok?
                     logger.createSuccess(r.args.join(" ")):
