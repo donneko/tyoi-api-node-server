@@ -14,6 +14,7 @@ function testCLI(
     playgroundPath:string
 ){
     const run = (...args:string[]) => {
+        console.log(`[テスト実行] : `,...args);
         spawnSync("npx", ["tyoi",...args], {
             cwd: playgroundPath,
             stdio: "inherit",
