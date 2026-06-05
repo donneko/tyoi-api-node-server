@@ -15,6 +15,7 @@ export async function copyFolder(
         const templateItem = path.join(templatePath,item);
         const projectItem = path.join(projectPath,item);
 
+        // TODO コピーを再帰コピーにして、エラーをちゃんと把握できるようにする。
         if(fs.existsSync(projectItem)){
             error.push(projectItem);
             continue;
