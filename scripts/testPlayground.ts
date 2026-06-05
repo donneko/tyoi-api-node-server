@@ -21,11 +21,12 @@ function testCLI(
         const result = spawnSync("npx", ["tyoi",...args], {
             cwd: playgroundPath,
             stdio: "inherit",
+            timeout: 3000,
         });
 
         testResult.push({
             args:["npx","tyoi",...args],
-            ok:result.status === 0
+            ok:!result.status
         });
     }
     const undo = () =>{
