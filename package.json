@@ -5,7 +5,7 @@
     "dev": "tsx ./src/main.ts dev",
     "dev-test": "tsx ./test/server.ts",
     "test": "tsc --noEmit",
-    "compile": "rm -rf dist && tsc && cp -R src/templates dist/templates",
+    "compile": "rm -rf dist && tsc",
     "build": "npm run test && npm run compile",
     "prepack": "npm run build",
     "prepublishOnly": "npm run build",

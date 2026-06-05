@@ -7,5 +7,7 @@ __MACOSX
 .vscode
 a
 test-server
+test/
+dev/
 *.tgz
 playground/

@@ -8,7 +8,7 @@ export async function getTemplatePath(
     templateName:string | undefined,
     mainDirname:string
 ):Promise<string>{
-    const readPath = path.join(mainDirname, "./cli/config/template");
+    const readPath = path.join(mainDirname, "../templates/config");
     const templateFiles = await readDirectory(readPath, false);
 
     let template = templateName;
