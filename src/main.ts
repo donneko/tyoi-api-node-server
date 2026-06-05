@@ -8,6 +8,7 @@ import init from "./cli/init/main.js";
 import help from "./cli/help.js";
 import run from "./cli/start.js";
 import config from "./cli/config/main.js";
+import info from "./cli/info/main.js";
 
 export type MainContextData = {
     mainDirname:string;
@@ -69,13 +70,16 @@ async function tyoiServer(argv:string[]):Promise<void>{
             await run(mainContextData);
         break;
         case "create":
-            create(mainContextData);
+            await create(mainContextData);
         break;
         case "config":
-            config(mainContextData);
+            await config(mainContextData);
         break;
         case "init":
-            init(mainContextData);
+            await init(mainContextData);
+        break;
+        case "info":
+            await info(mainContextData);
         break;
         case "help":
             help(mainContextData);
