@@ -5,7 +5,7 @@ function copy(
     templatePath:string,
     projectPath:string,
     {
-        error =[],
+        error = [],
         ok    = []
     }:{error?:string[],ok?:string[]} = {}
 ){
@@ -15,7 +15,7 @@ function copy(
         const templateItem = path.join(templatePath,item.name);
         const projectItem = path.join(projectPath,item.name);
         try {
-            if(item.isFile()){
+            if(item.isDirectory()){
                 fs.mkdirSync(projectItem);
                 copy(
                     templateItem,
@@ -26,8 +26,9 @@ function copy(
                 fs.copyFileSync(templateItem,projectItem);
             }
             ok.push(projectItem);
-        } catch {
+        } catch (e) {
             error.push(projectItem);
+            throw e;
         }
     }
     return {error,ok};
