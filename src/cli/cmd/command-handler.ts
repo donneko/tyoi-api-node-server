@@ -59,8 +59,18 @@ export class CommandHandler{
     }
     run(cmds:string[]){
 
-        
-        this.nodeController.getNode(cmds);
+        const cmdOnly = this.parserCmds(cmds);
+
+        for(const i in cmdOnly){
+            if(this.nodeController.hasNode(cmdOnly))break;
+            cmdOnly.pop();
+        }
+
+        if(!cmdOnly[0]) return;
+
+        const node = this.nodeController.getNode(cmdOnly);
+
+        if(!node.data) throw Error(`input is not command [ ${cmds} ]\n`);
     }
 }
 
