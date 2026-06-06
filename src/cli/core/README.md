@@ -16,11 +16,11 @@ data => run;
 ## data
 
 ```
-data = {
-    meta :{},
-    args :{any},
-    cmds :[string[]],
-    input:[string[]]
+type data<META> = {
+    meta :META;
+    args :string[];
+    cmd  :string[];
+    input:string[];
 };
 
 data.meta = {
