@@ -75,3 +75,20 @@ export class CommandHandler{
 }
 
 const ch = new CommandHandler()
+
+ch.add("a",()=>{console.log("run => a")});
+ch.add("b",()=>{console.log("run => b")});
+ch.add("c",()=>{console.log("run => c")});
+ch.add("d",()=>{console.log("run => d")});
+ch.group("aaa",(add,group)=>{
+    add("aaa-1",()=>{console.log("run => aaa-1")});
+    group("bbb",(add)=>{
+        add("bbb-1",()=>{console.log("run => bbb-1")});
+    });
+});
+
+
+ch.run(["a"]);
+ch.run(["aaa","aaa-1"]);
+ch.run(["aaa"]);
+ch.run(["aaaa"])
