@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-06-07
 ### Added
 - `tyoi config` を追加 今のフォルダーに設定ファイルを追加する 
 - `tyoi info` を追加 今 `tyoi run` をするとどの設定が適用されるのか？表示する
@@ -81,7 +82,8 @@
 - 使用中ポートの自動切り替え対応
 - Express middleware　対応
 
-[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.4...HEAD
+[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.1...v0.0.2
