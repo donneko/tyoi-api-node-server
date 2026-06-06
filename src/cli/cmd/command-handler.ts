@@ -7,7 +7,7 @@ type data = {
     input:string[]
 };
 
-type Handler = ()=>void
+type Handler = ()=>void;
 
 
 export class CommandHandler{
@@ -45,24 +45,23 @@ export class CommandHandler{
 
         callback(add,group);
     }
+
+    private parserCmds(cmds:string[]):string[]{
+        const cmdOnly :string[]= [];
+        const REGEXP = /^(-|--).*/
+
+        for(const cmd of cmds){
+            if(REGEXP.test(cmd)) break;
+            cmdOnly.push(cmd);
+        }
+
+        return cmdOnly;
+    }
     run(cmds:string[]){
 
+        
         this.nodeController.getNode(cmds);
     }
 }
 
 const ch = new CommandHandler()
-
-ch.add("a",()=>{});
-ch.add("b",()=>{});
-ch.add("c",()=>{});
-ch.add("d",()=>{});
-ch.group("aaa",(add,group)=>{
-    add("aaa-1",()=>{});
-    group("bbb",(add)=>{
-        add("bbb-1",()=>{});
-    });
-});
-
-console.dir(ch.commandNode, { depth: null, colors: true });
-// console.log(JSON.stringify(ch.commandNode))
