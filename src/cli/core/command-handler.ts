@@ -1,6 +1,6 @@
 import { NodeController } from "./node-controller.js";
 
-type Data<META> = {
+export type Data<META> = {
     meta :META;
     args :string[];
     cmd  :string[];

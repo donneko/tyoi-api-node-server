@@ -1,6 +1,6 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { Server } from "../app/server.js";
+import { Server } from "../core/server.js";
 import type { MainContextData } from "../main.js"
 import { askSelect } from "../service/ask-select.js";
 import { scanConfigFiles } from "../service/scan-config-files.js";

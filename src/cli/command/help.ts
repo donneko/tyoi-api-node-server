@@ -1,7 +1,7 @@
-import type { MainContextData } from "../main.js";
-import { logger } from "../util/logger.js";
+import type { CmdMetaData } from "../main.js";
+import { logger } from "../../util/logger.js";
 
-export default function serverHelp(mainContextData:MainContextData ){
+export default function serverHelp(data:CmdMetaData){
     logger.bar();
     logger.info("HELP : tyoi-server-cli");
     logger.info(`更新[2026/06/04]:現在使用できるコマンドは以下の通りです。`);
