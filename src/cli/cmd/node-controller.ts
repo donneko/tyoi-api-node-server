@@ -48,7 +48,7 @@ export class NodeController<DATA extends unknown = unknown>{
                 nodePath,
                 this.node
             );
-            return false;
+            return true;
         } catch {
             return false;
         }
