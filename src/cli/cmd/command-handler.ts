@@ -1,27 +1,31 @@
 import { NodeController } from "./node-controller.js";
 
-type data = {
-    meta :{},
-    args :any,
-    cmds :string[],
-    input:string[]
+type Data<META> = {
+    meta :META;
+    args :string[];
+    cmd  :string[];
+    input:string[];
 };
 
-type Handler = ()=>void;
-export type OnError = (cmds:string[])=> void | never;
+type Handler<META>        = (data:Data<META>)=> void;
+export type OnError<META> = (data:Data<META>)=> void | unknown;
 
 
-export class CommandHandler{
-    private nodeController = new NodeController<Handler>();
-    private commandUndefined:OnError = (cmds) => { throw Error(`input is not command [ ${cmds} ]\n`) };
-
-    public set onError(callback:OnError){
+export class CommandHandler<META extends unknown = unknown>{
+    private nodeController = new NodeController<Handler<META>>();
+    private commandUndefined:OnError<META> = (data) => { throw Error(`input is not command [ ${data.input} ]\n`) };
+    private commandMetaData!:META;
+    
+    public set onError(callback:OnError<META>){
         this.commandUndefined = callback;
+    }
+    public set meta(meta:META){
+        this.commandMetaData = meta;
     }
 
     add(
         name :string,
-        handler:Handler
+        handler:Handler<META>
     ){
         const fixName = name.trim();
         this.nodeController.addNode([fixName],handler);
@@ -51,33 +55,48 @@ export class CommandHandler{
         callback(add,group);
     }
 
-    private parserCmds(cmds:string[]):string[]{
+    private parserCmd(
+        input:string[]
+    ):{
+        cmd:string[],
+        args:string[]
+    }{
         const cmdOnly :string[]= [];
         const REGEXP = /^(-|--).*/
 
-        for(const cmd of cmds){
-            if(REGEXP.test(cmd)) break;
-            cmdOnly.push(cmd);
+        for(const i of input){
+            if(REGEXP.test(i)) break;
+            cmdOnly.push(i);
         }
 
-        return cmdOnly;
+        return {
+                cmd:cmdOnly,
+                args:input.slice(cmdOnly.length)
+            };
     }
-    run(cmds:string[]){
+    run(input:string[]){
 
-        const cmdOnly = this.parserCmds(cmds);
+        const {cmd,args} = this.parserCmd(input);
 
-        for(const i in cmdOnly){
-            if(this.nodeController.hasNode(cmdOnly))break;
-            cmdOnly.pop();
+        for(const i in cmd){
+            if(this.nodeController.hasNode(cmd))break;
+            const tmp = cmd.pop();
+            if(!tmp)continue;
+            args.unshift(tmp);
         }
 
-        if(!cmdOnly[0]){return this.commandUndefined(cmds)};
+        const data:Data<META> = {
+            args,cmd,input,
+            meta:this.meta
+        }
 
-        const node = this.nodeController.getNode(cmdOnly);
+        if(!cmd[0]){return this.commandUndefined(data)};
 
-        if(!(node?.data)){return this.commandUndefined(cmds)};
+        const node = this.nodeController.getNode(cmd);
 
-        node.data();
+        if(!(node?.data)){return this.commandUndefined(data)};
+
+        node.data(data);
     }
 }
 
@@ -95,7 +114,6 @@ ch.group("aaa",(add,group)=>{
         add("bbb-1",()=>{console.log("run => bbb-1")});
     });
 });
-
 
 // ch.run(["a"]);
 // ch.run(["aaa","aaa-1"]);
