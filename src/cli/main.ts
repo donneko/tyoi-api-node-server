@@ -96,13 +96,13 @@ function getOnError(){
 }
 
 
-export function tyoiCli(){
+export async function tyoiCli(){
     const argv = process.argv.slice(2);
+
     const cmdHandler = new CommandHandler<MetaData>();
     cmdHandler.meta = getMetaData(argv);
     cmdHandler.onError = getOnError;
 
     addCommand(cmdHandler);
-
-    cmdHandler.run(argv);
+    await cmdHandler.run(argv);
 }

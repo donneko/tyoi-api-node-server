@@ -2,7 +2,7 @@
 
 import { tyoiCli } from "./cli/main.js";
 
-function boot(){
-    tyoiCli();
+async function boot(){
+    await tyoiCli();
 }
-boot();
+await boot();

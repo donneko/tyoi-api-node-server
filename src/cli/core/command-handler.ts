@@ -27,7 +27,8 @@ export class CommandHandler<META extends unknown = unknown>{
         name :string,
         handler:Handler<META>
     ){
-        const fixName = name.trim();
+        const fixName = (name.trim().length)?name.trim():"";
+
         this.nodeController.addNode([fixName],handler);
     }
     group(
@@ -74,15 +75,16 @@ export class CommandHandler<META extends unknown = unknown>{
                 args:input.slice(cmdOnly.length)
             };
     }
-    run(input:string[]){
+    async run(input:string[]){
 
         const {cmd,args} = this.parserCmd(input);
 
         for(const i in cmd){
             if(this.nodeController.hasNode(cmd))break;
+
             const tmp = cmd.pop();
-            if(!tmp)continue;
-            args.unshift(tmp);
+
+            if(tmp)args.unshift(tmp);
         }
 
         const data:Data<META> = {
@@ -90,12 +92,13 @@ export class CommandHandler<META extends unknown = unknown>{
             meta:this.commandMetaData
         }
 
-        if(!cmd[0]){return this.commandUndefined(data)};
+        if(!cmd.length)cmd.push("");
+        if(cmd[0] == null){return this.commandUndefined(data)};
 
         const node = this.nodeController.getNode(cmd);
 
         if(!(node?.data)){return this.commandUndefined(data)};
 
-        node.data(data);
+        (await node.data(data));
     }
 }

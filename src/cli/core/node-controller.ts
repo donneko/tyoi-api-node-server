@@ -24,7 +24,7 @@ export class NodeController<DATA extends unknown = unknown>{
 
     private getNodeRecursion(nodePath:string[],nodeData:Map<string, Node<DATA>>):Node<DATA>{
         const [name,...nextPath] = nodePath;
-        if(!name) throw Error(`Node path is undefined`);
+        if(name == null) throw Error(`Node path is undefined`);
 
         const node = nodeData.get(name);
 
@@ -56,7 +56,8 @@ export class NodeController<DATA extends unknown = unknown>{
 
     private mkDirNodeRecursion(nodePath:string[],nodeData:Map<string, Node<DATA>>){
         const [name,...nextPath] = nodePath;
-        if(!name)return;
+
+        if(name == null) return;
 
         const node = nodeData.get(name);
 
