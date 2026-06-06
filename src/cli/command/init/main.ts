@@ -31,7 +31,8 @@ export default async function serverInit(data:CmdMetaData){
 
     replacePackageJson(
         projectPath,
-        projectName
+        projectName,
+        data.meta.pack
     );
 
     showNextSteps();

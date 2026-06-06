@@ -33,7 +33,8 @@ export default async function serverCreate(data:CmdMetaData){
 
     replacePackageJson(
         projectPath,
-        projectName
+        projectName,
+        data.meta.pack
     );
 
     showNextSteps(projectName);
