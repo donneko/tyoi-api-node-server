@@ -78,7 +78,7 @@ function getOption(argv:string[]){
 function getMetaData(argv:string[]):MetaData{
     return {
         pack:{
-            version:"0.0.5-alpha",
+            version:"0.0.5",
             name:""
         },
         cli:{
