@@ -1,4 +1,4 @@
-import { logger } from "../../../util/logger.js";
+import { logger } from "../../../../util/logger.js";
 import { copyFolder } from "./copy-folder.js";
 import fs from "node:fs"
 

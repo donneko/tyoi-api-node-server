@@ -1,5 +1,5 @@
-import { askSelect } from "../../../service/ask-select.js";
-import { scanConfigFiles } from "../../../service/scan-config-files.js";
+import { askSelect } from "../../../../service/ask-select.js";
+import { scanConfigFiles } from "../../../../service/scan-config-files.js";
 
 export async function getConfigFile(processCwd:string):Promise<string|null|undefined>{
     const files = await scanConfigFiles(processCwd)

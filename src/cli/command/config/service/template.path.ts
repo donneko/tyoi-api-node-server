@@ -1,7 +1,7 @@
 import path from "node:path";
-import { askSelect } from "../../../service/ask-select.js";
-import { readDirectory } from "../../../util/read-directory.js";
-import { logger } from "../../../util/logger.js";
+import { askSelect } from "../../../../service/ask-select.js";
+import { readDirectory } from "../../../../util/read-directory.js";
+import { logger } from "../../../../util/logger.js";
 
 
 export async function getTemplatePath(

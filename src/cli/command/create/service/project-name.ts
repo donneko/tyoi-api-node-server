@@ -1,6 +1,6 @@
 import path from "node:path";
-import { askInput } from "../../../service/ask-input.js";
-import { logger } from "../../../util/logger.js";
+import { askInput } from "../../../../service/ask-input.js";
+import { logger } from "../../../../util/logger.js";
 
 export async function getProjectName(
     argProjectName:string | undefined,
@@ -25,4 +25,3 @@ export async function getProjectName(
     logger.info(`選択されたプロジェクト名[${projectName}]`);
     return projectName;
 }
-

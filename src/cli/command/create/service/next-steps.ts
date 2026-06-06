@@ -1,4 +1,4 @@
-import { logger } from "../../../util/logger.js";
+import { logger } from "../../../../util/logger.js";
 
 export function showNextSteps(
     projectName: string
