@@ -2,9 +2,24 @@
 
 ## [Unreleased]
 
+### Added
+- `tyoi config` を追加 今のフォルダーに設定ファイルを追加する 
+- `tyoi info` を追加 今 `tyoi run` をするとどの設定が適用されるのか？表示する
+- `tyoi init` `tyoi create` `tyoi config` のファイル操作系にファイルの操作が正常に行われたか、結果を表示する機能を追加
+- 開発しやすいように、自動でパッケージ作って検証するテストを追加。
+- `package.json` の `script` に `d-init` `d-test` `d-dev` 追加
+
 ### Changed
 - `tyoi init` を `tyoi create` に変更
 - `tyoi init` を今のフォルダーにテンプレ作成機能にした
+- テンプレートの場所変更
+
+### Fixed
+- `tyoi init` 、`tyoi create` の Next step 表記を修正
+- `src/cli/*` 系がリファクタリングされました
+- `src/main.ts` がリファクタリングされました
+- 旧 `tyoi init` Project名を聞いたあとに、聞く表示が残り続ける問題を修正
+- コマンドの呼ばれる方式変更。
 
 ## [0.0.4] - 2026-06-05
 
