@@ -1,5 +1,5 @@
 
-type Node<D extends unknown> = {
+export type Node<D extends unknown> = {
     name:string;
     data?:D;
     children: Map<string, Node<D>>;
@@ -8,6 +8,10 @@ type Node<D extends unknown> = {
 export class NodeController<DATA extends unknown = unknown>{
     private node = new Map<string, Node<DATA>>();
 
+
+    getAllNode():Map<string, Node<DATA>>{
+        return this.node
+    }
 
     private createNodeObject(name:string):Node<DATA>{
         const obj = {
