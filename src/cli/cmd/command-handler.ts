@@ -8,11 +8,16 @@ type data = {
 };
 
 type Handler = ()=>void;
+export type OnError = (cmds:string[])=> void | never;
 
 
 export class CommandHandler{
     private nodeController = new NodeController<Handler>();
-    
+    private commandUndefined:OnError = (cmds) => { throw Error(`input is not command [ ${cmds} ]\n`) };
+
+    public set onError(callback:OnError){
+        this.commandUndefined = callback;
+    }
 
     add(
         name :string,
@@ -66,9 +71,11 @@ export class CommandHandler{
             cmdOnly.pop();
         }
 
+        if(!cmdOnly[0]){return this.commandUndefined(cmds)};
+
         const node = this.nodeController.getNode(cmdOnly);
 
-        if(!(node?.data)) throw Error(`input is not command [ ${cmds} ]\n`);
+        if(!(node?.data)){return this.commandUndefined(cmds)};
 
         node.data();
     }
@@ -90,7 +97,7 @@ ch.group("aaa",(add,group)=>{
 });
 
 
-ch.run(["a"]);
-ch.run(["aaa","aaa-1"]);
-ch.run(["aaa"]);
+// ch.run(["a"]);
+// ch.run(["aaa","aaa-1"]);
+// ch.run(["aaa"]);
 ch.run(["aaaa"])
