@@ -18,7 +18,7 @@
     "node": ">=20.14"
   },
   "bin": {
-    "tyoi": "./dist/main.js"
+    "tyoi": "dist/main.js"
   },
   "types": "./dist/index.d.ts",
   "files": [
