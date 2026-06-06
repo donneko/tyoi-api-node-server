@@ -6,7 +6,7 @@ const PLAYGROUND_PASS = "../test/playground"
 const PACK_PASS       = "../"
 const TEMPLATE_PASS   = "./template/package.json"
 
-const PACK_REGEX = /^donneko-tyoi-server-[0-9].[0-9].[0-9].tgz$/;
+const PACK_REGEX = /^donneko-tyoi-server-[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?\.tgz$/;
 
 function getPackagePath():string{
     const dirname = import.meta.dirname;
