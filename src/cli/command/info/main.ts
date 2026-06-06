@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { MainContextData } from "../../main.js";
+import type { CmdMetaData } from "../../main.js";
 import { getConfigFile } from "./service/getConfigFile.js";
 import { pathToFileURL } from "node:url";
-import { logger } from "../../util/logger.js";
+import { logger } from "../../../util/logger.js";
 
 
 async function getConfig(
@@ -45,15 +45,15 @@ function addLog(
     })
 }
 
-export default async function serverCreate(mainContextData:MainContextData){
+export default async function serverCreate(data:CmdMetaData){
 
-    const mainDirname = mainContextData.mainDirname;
-    const processCwd = mainContextData.processCwd
+    const mainDirname = data.meta.cli.dirname;
+    const processCwd  = data.meta.cli.cwd;
 
     const config = await getConfig(
         processCwd,
         mainDirname,
-        mainContextData.optionArgs
+        data.meta.option.optionArgs,
     );
 
     addLog(config);

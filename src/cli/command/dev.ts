@@ -1,15 +1,17 @@
-import { Server } from "../core/server.js";
-import type { MainContextData } from "../main.js"
+import { Server } from "../../app/server.js";
+import type { CmdMetaData } from "../main.js";
 
 type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
-export default async function runDevServer(mainContextData:MainContextData){
+export default async function runDevServer(data:CmdMetaData){
+    const mainDirname = data.meta.cli.dirname;
+
     // サーバー作成
-    const devConfig = await import("../config/tyoi.dev.config.js");
+    const devConfig = await import("../../config/tyoi.dev.config.js");
     const server = new Server<RequestNameList>({
         ...devConfig.default,
-        ...mainContextData.optionArgs,
-        ...{baseDirname:mainContextData.mainDirname}
+        ...data.meta.option,
+        ...{baseDirname:mainDirname}
     });
 
     // サーバー起動

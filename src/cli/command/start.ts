@@ -1,9 +1,9 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { Server } from "../core/server.js";
-import type { MainContextData } from "../main.js"
-import { askSelect } from "../service/ask-select.js";
-import { scanConfigFiles } from "../service/scan-config-files.js";
+import { Server } from "../../app/server.js";
+import type { CmdMetaData } from "../main.js";
+import { askSelect } from "../../service/ask-select.js";
+import { scanConfigFiles } from "../../service/scan-config-files.js";
 
 type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
 
@@ -25,20 +25,23 @@ async function getConfigFile(processCwd:string):Promise<string|null|undefined>{
     return files[0];
 }
 
-export default async function runStartServer(mainContextData:MainContextData){
-    const file = await getConfigFile(mainContextData.processCwd);
+export default async function runStartServer(data:CmdMetaData){
+    const cwd     = data.meta.cli.cwd;
+    const dirname = data.meta.cli.dirname;
+
+    const file = await getConfigFile(cwd);
     let useConfig = {};
 
     if(file){
-        const filePath = path.join(mainContextData.processCwd,file)
+        const filePath = path.join(cwd,file)
         useConfig = await import(pathToFileURL(filePath).href).then((r)=> r.default);
     }
 
     // サーバー作成
     const server = new Server<RequestNameList>({
         ...useConfig,
-        ...mainContextData.optionArgs,
-        ...{baseDirname:file ? mainContextData.processCwd : mainContextData.mainDirname}
+        ...data.meta.option,
+        ...{baseDirname:file ? cwd : dirname}
     });
 
     // サーバー起動

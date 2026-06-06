@@ -2,13 +2,14 @@ import { CommandHandler ,type Data} from "./core/command-handler.js";
 import { logger } from "../util/logger.js";
 import minimist from "minimist"
 
-import dev from "./cli/dev.js";
-import create from "./cli/create/main.js";
-import init from "./cli/init/main.js";
-import help from "./cli/help.js";
-import run from "./cli/start.js";
-import config from "./cli/config/main.js";
-import info from "./cli/info/main.js";
+import dev from "./command/dev.js";
+import create from "./command/create/main.js";
+import init from "./command/init/main.js";
+import help from "./command/help.js";
+import run from "./command/start.js";
+import config from "./command/config/main.js";
+import info from "./command/info/main.js";
+import path from "node:path";
 
 type MetaData = {
     pack:{
@@ -36,6 +37,14 @@ function addCommand(cmdHandler:CommandHandler<MetaData>){
         }
         await run(data);
     });
+
+    cmdHandler.add("dev",dev);
+    cmdHandler.add("run",run);
+    cmdHandler.add("create",create);
+    cmdHandler.add("config",config);
+    cmdHandler.add("init",init);
+    cmdHandler.add("info",info);
+    cmdHandler.add("help",help);
 }
 
 function getOption(argv:string[]){
@@ -74,7 +83,7 @@ function getMetaData(argv:string[]):MetaData{
         },
         cli:{
             cwd:process.cwd(),
-            dirname:import.meta.dirname
+            dirname:path.join(import.meta.dirname,"../")
         },
         option:getOption(argv)
     }
@@ -87,12 +96,13 @@ function getOnError(){
 }
 
 
-export function command(argv:string[]){
+export function tyoiCli(){
+    const argv = process.argv.slice(2);
     const cmdHandler = new CommandHandler<MetaData>();
     cmdHandler.meta = getMetaData(argv);
     cmdHandler.onError = getOnError;
 
     addCommand(cmdHandler);
 
-    run(argv);
+    cmdHandler.run(argv);
 }
