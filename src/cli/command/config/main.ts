@@ -12,7 +12,7 @@ export default async function serverConfig(data:CmdMetaData){
     const processCwd  = data.meta.cli.cwd;
 
     const templatePass = await getTemplatePath(
-        data.meta.option.optionArgs?.template,
+        data.meta.option?.template,
         mainDirname
     );
 
