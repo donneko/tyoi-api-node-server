@@ -66,11 +66,11 @@ export class CommandHandler{
             cmdOnly.pop();
         }
 
-        if(!cmdOnly[0]) return;
-
         const node = this.nodeController.getNode(cmdOnly);
 
-        if(!node.data) throw Error(`input is not command [ ${cmds} ]\n`);
+        if(!(node?.data)) throw Error(`input is not command [ ${cmds} ]\n`);
+
+        node.data();
     }
 }
 
@@ -80,6 +80,8 @@ ch.add("a",()=>{console.log("run => a")});
 ch.add("b",()=>{console.log("run => b")});
 ch.add("c",()=>{console.log("run => c")});
 ch.add("d",()=>{console.log("run => d")});
+
+
 ch.group("aaa",(add,group)=>{
     add("aaa-1",()=>{console.log("run => aaa-1")});
     group("bbb",(add)=>{
