@@ -1,26 +1,55 @@
 # CLI
 
-`tyoi` はテンプレート作成とサーバー起動を行う CLI です。
+`tyoi` はテンプレート作成、設定ファイル作成、サーバー起動を行う CLI です。
+
+## Quick Start
+
+新しいフォルダを作って始める場合は `create` を使います。
+
+```bash
+npm exec --package @donneko/tyoi-server tyoi -- create my-app --template basic-ts
+cd my-app
+npm install
+npm run dev
+```
+
+今いるフォルダにテンプレートを作る場合は `init` を使います。
+
+```bash
+mkdir my-app
+cd my-app
+npm exec --package @donneko/tyoi-server tyoi -- init my-app --template basic-ts
+npm install
+npm run dev
+```
+
+## create
+
+新しいフォルダにテンプレートを作成します。
+
+```bash
+tyoi create my-app --template basic-ts
+tyoi create my-app --template basic-js
+```
+
+`my-app` は作成するフォルダ名と `package.json` の `name` に使われます。
+
+テンプレートを指定しない場合は、CLI 上で選択できます。
+
+```bash
+tyoi create my-app
+```
 
 ## init
 
-テンプレートからプロジェクトを作成します。
+今いるフォルダにテンプレートを作成します。
 
 ```bash
 tyoi init my-app --template basic-ts
-```
-
-インストールせずに実行する場合:
-
-```bash
-npm exec --package @donneko/tyoi-server tyoi -- init my-app --template basic-ts
-```
-
-JavaScript テンプレートを使う場合:
-
-```bash
 tyoi init my-app --template basic-js
 ```
+
+`my-app` は `package.json` の `name` に使われます。フォルダは新しく作られません。
 
 テンプレートを指定しない場合は、CLI 上で選択できます。
 
@@ -32,6 +61,32 @@ tyoi init my-app
 
 - `basic-ts`
 - `basic-js`
+
+## config
+
+今いるフォルダに `tyoi.config.js` を追加します。
+
+```bash
+tyoi config
+```
+
+現在の設定テンプレートは `basic` です。明示する場合は `--template basic` を使います。
+
+```bash
+tyoi config --template basic
+```
+
+`tyoi config` は既存プロジェクトに設定ファイルを追加するためのコマンドです。生成済みテンプレートには最初から `tyoi.config.js` が含まれています。
+
+## info
+
+`tyoi run` で使われる設定を表示します。
+
+```bash
+tyoi info
+```
+
+複数の設定ファイルが見つかった場合は、CLI 上で使用する設定ファイルを選択できます。
 
 ## run
 
@@ -59,21 +114,22 @@ tyoi dev
 
 ## help
 
+コマンド一覧を表示します。
+
 ```bash
 tyoi help
 ```
-
-コマンド一覧を表示します。
 
 ## Options
 
 ### `--template`
 
-`init` で使うテンプレートを指定します。
+`create` / `init` / `config` で使うテンプレートを指定します。
 
 ```bash
-tyoi init my-app --template basic-ts
+tyoi create my-app --template basic-ts
 tyoi init my-app --template basic-js
+tyoi config --template basic
 ```
 
 ### `--port` / `-p`
@@ -92,6 +148,15 @@ tyoi run -p 3001
 ```bash
 tyoi run --open
 tyoi run -o
+```
+
+### `--help` / `-h`
+
+ヘルプを表示します。
+
+```bash
+tyoi --help
+tyoi -h
 ```
 
 ### `--version` / `-v`

@@ -3,6 +3,7 @@
 基本的な利用では `tyoi()` を使います。`tyoi()` は `Server` のショートハンドで、API、WebSocket、起動・停止を少ない記述で扱えます。
 
 CLI テンプレートから始める場合は、まず README の Quick Start を使ってください。
+生成されるテンプレートでは `Server` を直接使っています。短い記述で API や WebSocket を追加したい場合は、このページの `tyoi()` 例を使えます。
 
 ## Basic Server
 
