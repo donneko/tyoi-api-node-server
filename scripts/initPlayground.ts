@@ -1,24 +1,31 @@
 import path from "node:path";
 import fs from "node:fs"
 import { spawnSync } from "node:child_process";
+import { askSelect } from "./ask-select.js";
+import { symbol } from "zod";
 
 const PLAYGROUND_PASS = "../test/playground"
 const PACK_PASS       = "../"
 const TEMPLATE_PASS   = "./template/package.json"
 
-const PACK_REGEX = /^donneko-tyoi-server-[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?\.tgz$/;
+const PACK_REGEX = /^donneko-tyoi-server-.*\.tgz$/;
 
-function getPackagePath():string{
+async function getPackagePath():Promise<string>{
     const dirname = import.meta.dirname;
     const packDirPath = path.join(dirname,PACK_PASS);
 
     const items = fs.readdirSync(packDirPath);
 
-    const packPath = items.find(i => PACK_REGEX.test(i));
-
+    const packPath = items.filter(i => PACK_REGEX.test(i));
     if(!packPath)throw Error("パッケージがありませんでした");
 
-    return packPath;
+    const index = await askSelect({
+        message:"使用するパッケージを選択してください",
+        selects:packPath
+    });
+
+    if(!packPath[index])throw Error("パッケージが見つかりませんでした");
+    return packPath[index];
 }
 
 function getPlaygroundPath():string{
@@ -95,8 +102,8 @@ function installNPM(
     });
 }
 
-function main(){
-    const packagePath = getPackagePath();
+async function main(){
+    const packagePath = await getPackagePath();
     const playgroundPath = getPlaygroundPath();
     const templatePath = getTemplatePath();
 
@@ -119,4 +126,4 @@ function main(){
     installNPM(playgroundPath);
 }
 
-main();
+await main();
