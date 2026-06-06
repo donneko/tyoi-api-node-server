@@ -2,7 +2,6 @@ import path from "node:path";
 import fs from "node:fs"
 import { spawnSync } from "node:child_process";
 import { askSelect } from "./ask-select.js";
-import { symbol } from "zod";
 
 const PLAYGROUND_PASS = "../test/playground"
 const PACK_PASS       = "../"
