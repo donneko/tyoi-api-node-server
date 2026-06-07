@@ -26,34 +26,45 @@ export class CommandHandler<META extends unknown = unknown>{
     add(
         name :string,
         handler:Handler<META>
-    ){
+    ):this{
         const fixName = (name.trim().length)?name.trim():"";
 
         this.nodeController.addNode([fixName],handler);
+
+        return this;
     }
     group(
         groupName :string,
         callback  :(
-                add:OmitThisParameter<CommandHandler["add"]>,
-                group:OmitThisParameter<CommandHandler["group"]>
+                add:OmitThisParameter<CommandHandler<META>["add"]>,
+                group:OmitThisParameter<CommandHandler<META>["group"]>
             )=>void
-    ){
+    ):this{
         const fixGroupName = groupName.trim().split(/\s+/);
         this.nodeController.mkDirNode(fixGroupName);
 
-        const add:OmitThisParameter<CommandHandler["add"]> = 
-            (name, handler) => {
+        const add:OmitThisParameter<CommandHandler<META>["add"]> = 
+            (
+                name,
+                handler
+            ) => {
             const fixName = name.trim(); 
 
             this.nodeController.addNode([...fixGroupName,fixName], handler);
+            return this;
         };
-        const group:OmitThisParameter<CommandHandler["group"]> = 
-            (groupName, callback) => {
+        const group:OmitThisParameter<CommandHandler<META>["group"]> = 
+            (
+                groupName,
+                callback
+            ) => {
             const fixName = groupName.trim(); 
-            this.group(`${fixGroupName} ${fixName}`, callback);
+            this.group([...fixGroupName,fixName].join(" "), callback);
+            return this;
         };
 
         callback(add,group);
+        return this;
     }
 
     private parserCmd(
