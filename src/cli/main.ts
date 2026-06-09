@@ -1,4 +1,4 @@
-import { CommandHandler ,type Data} from "./core/command-handler.js";
+import { CommandHandler ,type Data} from "./app/shell/command-handler.js";
 import { logger } from "../util/logger.js";
 import minimist from "minimist"
 
