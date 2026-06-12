@@ -1,8 +1,4 @@
 import type { CmdMetaData } from "../../main.js";
-import { getTemplatePath } from "./service/template.path.js";
-import { getProjectName } from "./service/project-name.js";
-import { fixPath } from "./service/fix-path.js";
-import { replacePackageJson } from "./service/replace-name.js";
 import { showNextSteps } from "./service/next-steps.js";
 import copyTemplate from "../../service/template-copy/main.js"
 
@@ -24,7 +20,7 @@ export default async function serverCreate(data:CmdMetaData){
             base:mainDirname,
             option:{
                 template:option?.template,
-                projectName:projectName
+                ...(projectName !== undefined ? { projectName } : {}),
             },
             pack:{
                 version:pack.version,
