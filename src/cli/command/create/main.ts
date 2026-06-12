@@ -4,6 +4,8 @@ import copyTemplate from "../../service/template-copy/main.js"
 
 export default async function serverCreate(data:CmdMetaData){
 
+    const TEMPLATE_PASS = "../templates/project";
+
     const mainDirname = data.meta.cli.dirname;
     const processCwd  = data.meta.cli.cwd;
 
@@ -11,8 +13,6 @@ export default async function serverCreate(data:CmdMetaData){
     const projectName = data.args[0];
 
     const pack = data.meta.pack;
-
-    const TEMPLATE_PASS = "../templates/project";
 
     const usedProjectName = await copyTemplate(
         {

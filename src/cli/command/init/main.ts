@@ -1,39 +1,34 @@
 import type { CmdMetaData } from "../../main.js";
-import { getTemplatePath } from "./service/template.path.js";
-import { getProjectName } from "./service/project-name.js";
-import { copyTemplate } from "./service/copy-template.js";
-import { replacePackageJson } from "./service/replace-name.js";
 import { showNextSteps } from "./service/next-steps.js";
-
+import copyTemplate from "../../service/template-copy/main.js"
 
 export default async function serverInit(data:CmdMetaData){
+
+    const TEMPLATE_PASS = "../templates/project";
 
     const mainDirname = data.meta.cli.dirname;
     const processCwd  = data.meta.cli.cwd;
 
-    const templatePass = await getTemplatePath(
-        data.meta.option?.template,
-        mainDirname
-    );
-    const projectName = await getProjectName(
-        data.args[0],
-        processCwd
-    );
+    const option = data.meta.option;
+    const projectName = data.args[0];
 
-    const templatePath = templatePass;
-    const projectPath  = processCwd;
-
+    const pack = data.meta.pack;
 
     await copyTemplate(
-        templatePath,
-        projectPath
-    );
-
-    replacePackageJson(
-        projectPath,
-        projectName,
-        data.meta.pack
-    );
+        {
+            target:processCwd,
+            base:mainDirname,
+            option:{
+                template:option?.template,
+                ...(projectName !== undefined ? { projectName } : {}),
+            },
+            pack:{
+                version:pack.version,
+            },
+            app:{
+                templatePass:TEMPLATE_PASS
+            }
+        });
 
     showNextSteps();
 }
