@@ -1,7 +1,10 @@
 import { getTemplatePath } from "../shell/template.path.js";
 import { getProjectName } from "../shell/project-name.js";
-import { copyTemplate } from "../shell/copy-template.js";
 import { replacePackageJson } from "../shell/replace-name.js";
+import { copyFolder } from "../shell/copy-folder.js";
+import { createCopyResult } from "../shell/create-copy-result.js";
+
+import { logger } from "../../../../util/logger.js";
 
 
 export type AppTemplateCopyData = {
@@ -47,10 +50,9 @@ export async function appTemplateCopy(
         target
     );
 
-
-    await copyTemplate(
-        templatePath,
-        base
+    const copyResult = await copyFolder(templatePath,base);
+    logger.window(
+        createCopyResult(copyResult)
     );
 
     replacePackageJson(
