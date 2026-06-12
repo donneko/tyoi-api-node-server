@@ -26,7 +26,8 @@ export default async function serverCreate(data:CmdMetaData){
                 version:pack.version,
             },
             app:{
-                templatePass:TEMPLATE_PASS
+                templatePass:TEMPLATE_PASS,
+                destination:"target-project"
             }
         });
 

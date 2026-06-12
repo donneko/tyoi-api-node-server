@@ -5,6 +5,7 @@
     "dev": "tsx ./src/main.ts dev",
     "dev-test": "tsx ./test/server.ts",
     "test": "tsc --noEmit",
+    "test:template-copy": "node --import ./node_modules/tsx/dist/loader.mjs ./scripts/testTemplateCopyRegression.ts",
     "compile": "rm -rf dist && tsc",
     "build": "npm run test && npm run compile",
     "prepack": "npm run build",

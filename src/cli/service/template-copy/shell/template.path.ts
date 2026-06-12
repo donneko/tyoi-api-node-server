@@ -15,24 +15,25 @@ export async function getTemplatePath(
 
     let template = templateName;
 
-    if (
-        isValidTemplate(
-            template,
-            templateFiles
-        )
-    ){
-        if(template) return path.join(readPath,template);
+    if (template) {
+        if (
+            isValidTemplate(
+                template,
+                templateFiles
+            )
+        ){
+            return path.join(readPath,template);
+        }
+
+        throw new Error(`コピー元のテンプレートが見つかりません: ${template}`);
     }
 
-    logger.warn(`テンプレートが見つかりません: ${template}`);
-    if (!template) {
-        const index = await askSelect({
-            message: "テンプレートを選択してください",
-            selects: templateFiles
-        });
+    const index = await askSelect({
+        message: "テンプレートを選択してください",
+        selects: templateFiles
+    });
 
-        template = templateFiles[(index === -1)?0:index];
-    }
+    template = templateFiles[(index === -1)?0:index];
 
     if(!template){
         throw new Error(`コピー元のテンプレートが指定されていません: ${template}`);
