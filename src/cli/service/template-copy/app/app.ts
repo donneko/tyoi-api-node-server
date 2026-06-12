@@ -21,10 +21,14 @@ export type AppTemplateCopyData = {
         templatePass:string
     }
 }
+export type AppTemplateCopyReturn = {
+    projectName:string
+}
+
 
 export async function appTemplateCopy(
     data:AppTemplateCopyData
-){
+):Promise<AppTemplateCopyReturn>{
     const {
         target,
         base,
@@ -60,4 +64,8 @@ export async function appTemplateCopy(
         fixProjectName,
         pack.version
     );
+
+    return {
+        projectName:fixProjectName,
+    }
 }
