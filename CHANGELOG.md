@@ -2,18 +2,20 @@
 
 ## [Unreleased]
 
+## [0.0.6] - 2026-06-20
 ### Changed
 - CLI 内部構造の整理
 - テンプレートコピー共通化
 
 ### Removed
 - 古いテンプレート
-- dev/
+- `dev/`
 - 旧 CLI core
 
 ### Added
 - Vitest
 - メソッドチェーン対応
+- `README.md` に画像追加
 
 ### Fixed
 - CLI パス
@@ -100,7 +102,8 @@
 - 使用中ポートの自動切り替え対応
 - Express middleware　対応
 
-[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.5...HEAD
+[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.2...v0.0.3

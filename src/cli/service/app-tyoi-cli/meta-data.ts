@@ -5,7 +5,7 @@ import type { MetaData } from "../../types/tyoi-cli.js"
 export function getMetaData(argv:string[]):MetaData{
     return {
         pack:{
-            version:"0.0.5",
+            version:"0.0.6",
             name:""
         },
         cli:{

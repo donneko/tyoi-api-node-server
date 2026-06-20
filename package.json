@@ -1,6 +1,6 @@
 {
   "name": "@donneko/tyoi-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "test": "npm run use-test && npm run vi-test",
     "vi-test": "npx vitest run",

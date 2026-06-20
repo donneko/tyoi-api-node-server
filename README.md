@@ -5,6 +5,8 @@
 小さな API と静的ファイル配信をすぐに立てるための、ローカル向けサーバーフレームワークです。
 CLI でテンプレートを作り、HTML / CSS / API / WebSocket の動作確認をすばやく始められます。
 
+![server start img](./doc/img/server-start-image.png)
+
 > This project is experimental. APIs may change in future releases.
 
 ## Features
