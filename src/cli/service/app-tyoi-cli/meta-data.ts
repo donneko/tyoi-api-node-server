@@ -10,7 +10,7 @@ export function getMetaData(argv:string[]):MetaData{
         },
         cli:{
             cwd:process.cwd(),
-            dirname:path.join(import.meta.dirname,"../")
+            dirname:path.join(import.meta.dirname,"../../../")
         },
         option:getOption(argv)
     }
