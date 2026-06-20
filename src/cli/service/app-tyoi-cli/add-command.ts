@@ -10,12 +10,13 @@ import info   from "../../command/info/main.js";
 import def    from "../../command/default.js";
 
 export function addCommand(cmdHandler:CmdHandler){
-    cmdHandler.add(""      ,def);
-    cmdHandler.add("dev"   ,dev);
-    cmdHandler.add("run"   ,run);
-    cmdHandler.add("create",create);
-    cmdHandler.add("config",config);
-    cmdHandler.add("init"  ,init);
-    cmdHandler.add("info"  ,info);
-    cmdHandler.add("help"  ,help);
+    cmdHandler
+        .add(""      ,def)
+        .add("dev"   ,dev)
+        .add("run"   ,run)
+        .add("create",create)
+        .add("config",config)
+        .add("init"  ,init)
+        .add("info"  ,info)
+        .add("help"  ,help);
 }
