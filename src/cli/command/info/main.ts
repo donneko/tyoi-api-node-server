@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { CmdMetaData } from "../../main.js";
+import type { CmdMetaData } from "../../types/tyoi-cli.js";
 import { getConfigFile } from "./service/getConfigFile.js";
 import { pathToFileURL } from "node:url";
-import { logger } from "../../../util/logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 
 
 async function getConfig(
@@ -10,6 +10,7 @@ async function getConfig(
     mainDirname:string,
     optionArgs:any
 ):Promise<any>{
+    
     const file = await getConfigFile(processCwd);
 
     let useConfig = {};
@@ -31,6 +32,8 @@ async function getConfig(
 function addLog(
     config:any
 ){
+    const logger = new Logger();
+
     const logs = [];
 
     for (const [key, value] of Object.entries(config)) {

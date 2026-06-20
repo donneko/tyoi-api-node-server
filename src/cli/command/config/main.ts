@@ -1,4 +1,4 @@
-import type { CmdMetaData } from "../../main.js";
+import type { CmdMetaData } from "../../types/tyoi-cli.js";
 import { showNextSteps } from "./service/next-steps.js";
 import copyTemplate from "../../service/template-copy/main.js"
 
