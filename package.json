@@ -2,17 +2,16 @@
   "name": "@donneko/tyoi-server",
   "version": "0.0.5",
   "scripts": {
-    "dev": "tsx ./src/main.ts dev",
-    "dev-test": "tsx ./test/server.ts",
-    "test": "tsc --noEmit",
-    "compile": "rm -rf dist && tsc",
-    "build": "npm run test && npm run compile",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm run build",
+    "test": "npm run use-test && npx vitest run",
+    "ts-test": "tsc --noEmit",
+    "pg-init": "npm pack && tsx ./scripts/initPlayground.ts",
+    "use-test": "npm run pg-init && tsx ./scripts/testPlayground.ts",
+  
     "start": "node ./dist/main.js",
-    "d-init": "npm pack && tsx ./scripts/initPlayground.ts",
-    "d-test": "tsx ./scripts/testPlayground.ts",
-    "d-dev": "npm run d-init && npm run d-test"
+    "compile": "rm -rf dist && tsc",
+    "build": "npm run ts-test && npm run compile",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">=20.14"
@@ -72,6 +71,7 @@
     "@types/node": "^25.7.0",
     "@types/qrcode-terminal": "^0.12.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
