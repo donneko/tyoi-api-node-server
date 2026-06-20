@@ -5,9 +5,5 @@ dist
 .DS_Store
 __MACOSX
 .vscode
-a
-test-server
-test/
-dev/
+test/playground/
 *.tgz
-playground/
