@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "node:fs"
-import type { CmdMetaData } from "../../../main.js";
+import type { CmdMetaData } from "../../../types/tyoi-cli.js";
 
 export function replacePackageJson(
         projectPath: string,
