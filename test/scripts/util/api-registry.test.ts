@@ -15,6 +15,7 @@ describe("ApiRegistry",()=>{
     });
     test("emit 着火",()=>{
         apiRegistry.emit("a",{});
+        expect(onceCallback).toHaveBeenCalledTimes(1);
     });
 
     test("on 登録",()=>{
@@ -23,13 +24,11 @@ describe("ApiRegistry",()=>{
     test("has 存在確認",()=>{
         apiRegistry.has("b");
     });
-    test("解除",()=>{
+    test("off 解除",()=>{
         apiRegistry.off("b");
     });
-    test("登録",()=>{
+    test("emit 発火",()=>{
         apiRegistry.emit("b",{});
+        expect(onCallback).toHaveBeenCalledTimes(0);
     });
-
-    expect(onCallback).toHaveBeenCalled();
-    expect(onceCallback).toHaveBeenCalled();
 });
