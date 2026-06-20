@@ -4,20 +4,26 @@ import type { WsHandler } from "../service/web-socket-router.js";
 import http from "node:http";
 
 class shortHandler{
-    server:Server;
+    private server:Server;
 
     constructor(server:Server){
         this.server = server;
     }
+    get tyoiServer(){
+        return this.server;
+    }
 
-    get(pass:string,fn:ApiRegistryHandler<RequestData>){
+    get(pass:string,fn:ApiRegistryHandler<RequestData>):this{
         this.server.onAPI(`GET:${pass}`,fn);
+        return this;
     }
-    post(pass:string,fn:ApiRegistryHandler<RequestData>){
+    post(pass:string,fn:ApiRegistryHandler<RequestData>):this{
         this.server.onAPI(`POST:${pass}`,fn);
+        return this;
     }
-    ws(pass:string,fn:ApiRegistryHandler<WsHandler>){
+    ws(pass:string,fn:ApiRegistryHandler<WsHandler>):this{
         this.server.onWebSocket(`${pass}`,fn);
+        return this;
     }
     async start(
         options?:StartServerOptions
@@ -25,7 +31,7 @@ class shortHandler{
         return this.server.startServer(options);
     }
     async close():Promise<void>{
-        return this.server.stopServer();
+        this.server.stopServer();
     }
 }
 
