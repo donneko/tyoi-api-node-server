@@ -2,7 +2,8 @@
   "name": "@donneko/tyoi-server",
   "version": "0.0.5",
   "scripts": {
-    "test": "npm run use-test && npx vitest run",
+    "test": "npm run use-test && npm run vi-test",
+    "vi-test": "npx vitest run",
     "ts-test": "tsc --noEmit",
     "pg-init": "npm pack && tsx ./scripts/initPlayground.ts",
     "use-test": "npm run pg-init && tsx ./scripts/testPlayground.ts",
