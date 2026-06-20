@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+### Changed
+- CLI 内部構造の整理
+- テンプレートコピー共通化
+
+### Removed
+- 古いテンプレート
+- dev/
+- 旧 CLI core
+
+### Added
+- Vitest
+- メソッドチェーン対応
+
+### Fixed
+- CLI パス
+- コピー先
+- テスト周り
+
 ## [0.0.5] - 2026-06-07
 ### Added
 - `tyoi config` を追加 今のフォルダーに設定ファイルを追加する 
