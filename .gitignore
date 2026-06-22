@@ -7,3 +7,4 @@ __MACOSX
 .vscode
 test/playground/
 *.tgz
+cache

@@ -4,7 +4,7 @@
         JavaScript / 出力設定
     ========================= */
 
-    "target": "ES2024",
+    "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
 
