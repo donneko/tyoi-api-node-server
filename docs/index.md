@@ -3,23 +3,23 @@
 layout: home
 
 hero:
-  name: "My Awesome Project"
-  text: "A VitePress Site"
-  tagline: My great project tagline
+  name: "Tyoi-server"
+  text: "A Explanation Site"
+  tagline: Small local API and static file server
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: cli コマンドについて
+      link: /cli
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 使用例
+      link: /usage
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: local API
+    details: ローカル環境で簡単にAPIサーバーを構築することができます
+  - title: static file
+    details: フォルダーを指定するだけです。面倒な設定や複雑なコードは必要ありません
+  - title: command
+    details: コマンドで簡単にテンプレートを生成できます。
 ---
 
