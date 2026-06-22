@@ -2,19 +2,27 @@
   "name": "@donneko/tyoi-server",
   "version": "0.0.6",
   "scripts": {
-    "test": "npm run use-test && npm run vi-test",
-    "vi-test": "npx vitest run",
-    "ts-test": "tsc --noEmit",
-    "pg-init": "npm pack && tsx ./scripts/initPlayground.ts",
-    "use-test": "npm run pg-init && tsx ./scripts/testPlayground.ts",
-    "start": "node ./dist/main.js",
-    "compile": "rm -rf dist && tsc",
-    "build": "npm run ts-test && npm run compile",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm run build",
+    "test": "npm run test:use && npm run test:vitest",
+    "test:vitest": "npx vitest run",
+    "test:type": "tsc --noEmit",
+    "test:use--init": "npm pack && tsx ./scripts/initPlayground.ts",
+    "test:use": "npm run use--init && tsx ./scripts/testPlayground.ts",
+
+    "check:format--write": "prettier . --write",
+    "check:format--check": "prettier . --check",
+    "check:lint": "eslint .",
+    "check:lint--fix": "eslint . --fix",
+
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+
+    "start": "node ./dist/main.js",
+    "compile": "rm -rf dist && tsc",
+    "build": "npm run test:type && npm run compile",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build"
+
   },
   "engines": {
     "node": ">=20.14"
@@ -69,12 +77,18 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/minimist": "^1.2.5",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.7.0",
     "@types/qrcode-terminal": "^0.12.2",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.4",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1",
     "vitepress": "^1.6.4",
     "vitest": "^4.1.9"
   }
