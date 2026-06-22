@@ -8,4 +8,3 @@ __MACOSX
 test/playground/
 *.tgz
 cache
-.vscode
