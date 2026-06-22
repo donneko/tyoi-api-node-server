@@ -112,11 +112,11 @@ tyoi --version
 
 ## Docs
 
-詳しい使い方は `doc/` に分けています。
+詳しい使い方は `docs/` に分けています。
 
-- [Usage](./doc/usage.md): `tyoi()` の基本、API、WebSocket、middleware、イベント、`Server` 直接利用
-- [Config](./doc/config.md): `tyoi.config.js` と設定項目
-- [CLI](./doc/cli.md): CLI コマンドとオプション
+- [Usage](./docs/usage.md): `tyoi()` の基本、API、WebSocket、middleware、イベント、`Server` 直接利用
+- [Config](./docs/config.md): `tyoi.config.js` と設定項目
+- [CLI](./docs/cli.md): CLI コマンドとオプション
 
 ## Development
 
