@@ -14,7 +14,9 @@
     "prepublishOnly": "npm run build",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "check:format--write": "prettier . --write",
+    "check:format--check": "prettier . --check"
   },
   "engines": {
     "node": ">=20.14"
