@@ -17,6 +17,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
 
+    "dev": "npx tsx ./src/main.ts",
     "start": "node ./dist/main.js",
     "compile": "rm -rf dist && tsc",
     "build": "npm run test:type && npm run compile",
