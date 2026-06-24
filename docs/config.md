@@ -41,9 +41,9 @@ CLI の設定ファイルから起動する場合、`publicDirname` はプロジ
 利用できるファイル名:
 
 - `tyoi.config.js`
-- `tyoi.config.ts`
 - `tyoi.<name>.config.js`
-- `tyoi.<name>.config.ts`
+
+> .ts ファイルはサポートさません。
 
 設定ファイルはプロジェクトルート、または `config/` ディレクトリに置けます。
 
