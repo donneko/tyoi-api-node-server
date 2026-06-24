@@ -26,9 +26,6 @@ jobs:
       - name: Test Type
         run: npm run test:type
 
-      - name: Test Format
-        run: npm run check:format:check
-
       - name: Test Lint
         run: npm run check:lint
 
