@@ -2,30 +2,21 @@ import qrcode from "qrcode-terminal";
 
 import { getLanIp } from "../util/get-lan-ip.js";
 import { type ServicesRegister } from "../util/services-register.js";
-import { type ServerServicesRegister } from "../app/server.js"
-
+import { type ServerServicesRegister } from "../app/server.js";
 
 type SummaryData = {
-    host:string;
-    port:number;
-    publicPath:string;
-    publicFullPath:string;
-    apiPrefix:string;
-    isShowQrCode:boolean;
-    servicesRegister:ServicesRegister<ServerServicesRegister>;
-}
+    host: string;
+    port: number;
+    publicPath: string;
+    publicFullPath: string;
+    apiPrefix: string;
+    isShowQrCode: boolean;
+    servicesRegister: ServicesRegister<ServerServicesRegister>;
+};
 
-export function serverStartSummary(summaryData:SummaryData):void{
-
-    const {
-        host,
-        port,
-        publicPath,
-        publicFullPath,
-        apiPrefix,
-        isShowQrCode,
-        servicesRegister
-    } = summaryData;
+export function serverStartSummary(summaryData: SummaryData): void {
+    const { host, port, publicPath, publicFullPath, apiPrefix, isShowQrCode, servicesRegister } =
+        summaryData;
 
     const serverLogger = servicesRegister.get("serverLogger");
     const systemMetaManager = servicesRegister.get("systemMetaManager");
@@ -35,33 +26,53 @@ export function serverStartSummary(summaryData:SummaryData):void{
     const ip = getLanIp();
     const networkUrl = `http://${ip}:${port}`;
 
-
     // ログ系
-    serverLogger.logger("window",{
-        title:systemMetaManager.getMeta(121).message,
-        content:[
-            serverLogger.logger("createSuccess",systemMetaManager.getMeta(113).message),
-            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(114).message}${port}`),
-            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(115).message}${port}`),
-            ...(isLAN ? [serverLogger.logger("createInfo",`${systemMetaManager.getMeta(116).message}${networkUrl}`)] : []),
-            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(117).message}${publicFullPath}`),
-            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(118).message}${publicPath}`),
-            serverLogger.logger("createInfo",`${systemMetaManager.getMeta(119).message}${apiPrefix}`),
-        ]
-    })
+    serverLogger.logger("window", {
+        title: systemMetaManager.getMeta(121).message,
+        content: [
+            serverLogger.logger("createSuccess", systemMetaManager.getMeta(113).message),
+            serverLogger.logger("createInfo", `${systemMetaManager.getMeta(114).message}${port}`),
+            serverLogger.logger("createInfo", `${systemMetaManager.getMeta(115).message}${port}`),
+            ...(isLAN
+                ? [
+                      serverLogger.logger(
+                          "createInfo",
+                          `${systemMetaManager.getMeta(116).message}${networkUrl}`
+                      ),
+                  ]
+                : []),
+            serverLogger.logger(
+                "createInfo",
+                `${systemMetaManager.getMeta(117).message}${publicFullPath}`
+            ),
+            serverLogger.logger(
+                "createInfo",
+                `${systemMetaManager.getMeta(118).message}${publicPath}`
+            ),
+            serverLogger.logger(
+                "createInfo",
+                `${systemMetaManager.getMeta(119).message}${apiPrefix}`
+            ),
+        ],
+    });
 
     // QRcode生成
-    if(isShowQrCode && isLAN){
-        serverLogger.logger("window",{
-            title:systemMetaManager.getMeta(122).message,
-            content:[
-                serverLogger.logger("createInfo",systemMetaManager.getMeta(120).message),
-                serverLogger.logger("createInfo",(() => {
-                    let qrString = "";
-                    qrcode.generate(networkUrl, {small: true},(qr)=>{qrString = qr});
-                    return qrString;
-                })())
-            ]
+    if (isShowQrCode && isLAN) {
+        serverLogger.logger("window", {
+            title: systemMetaManager.getMeta(122).message,
+            content: [
+                serverLogger.logger("createInfo", systemMetaManager.getMeta(120).message),
+                serverLogger.logger(
+                    "createInfo",
+                    (() => {
+                        let qrString = "";
+                        qrcode.generate(networkUrl, { small: true }, (qr) => {
+                            qrString = qr;
+                        });
+                        return qrString;
+                    })()
+                ),
+            ],
         });
     }
 }

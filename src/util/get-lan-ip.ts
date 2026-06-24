@@ -9,12 +9,9 @@ export function getLanIp() {
         if (!netList) continue;
 
         for (const net of netList) {
-        if (
-            net.family === "IPv4" &&
-            !net.internal
-        ) {
-            return net.address;
-        }
+            if (net.family === "IPv4" && !net.internal) {
+                return net.address;
+            }
         }
     }
 

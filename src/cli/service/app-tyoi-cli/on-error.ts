@@ -1,6 +1,6 @@
 import { Logger } from "@donneko/tyoi-logger";
 
-export function getOnError(){
+export function getOnError() {
     const logger = new Logger();
 
     logger.bar();

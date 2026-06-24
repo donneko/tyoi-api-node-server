@@ -1,11 +1,6 @@
-export type EventBusHandler<Type, Result = unknown> =
-    (arg: Type) => Result | Promise<Result>;
-export class EventBus<EventBusMap extends Record<string,unknown>>{
-
-    #EVENT_DATA_STORE = new Map<
-    keyof EventBusMap,
-    Function[]
-    >();
+export type EventBusHandler<Type, Result = unknown> = (arg: Type) => Result | Promise<Result>;
+export class EventBus<EventBusMap extends Record<string, unknown>> {
+    #EVENT_DATA_STORE = new Map<keyof EventBusMap, unknown[]>();
 
     /**
      * ハンドラを登録する関数
@@ -16,15 +11,15 @@ export class EventBus<EventBusMap extends Record<string,unknown>>{
      * const unsubscribe = eventBus.on("foo", handler);
      * unsubscribe(); // handler を解除
      */
-    on<Key extends keyof EventBusMap>(type:Key,fn:EventBusHandler<EventBusMap[Key]>){
-        if(!this.#EVENT_DATA_STORE.has(type)){
-            this.#EVENT_DATA_STORE.set(type,[]);
+    on<Key extends keyof EventBusMap>(type: Key, fn: EventBusHandler<EventBusMap[Key]>) {
+        if (!this.#EVENT_DATA_STORE.has(type)) {
+            this.#EVENT_DATA_STORE.set(type, []);
         }
         const list = this.#EVENT_DATA_STORE.get(type)!;
 
-        list.push(fn);
+        list.push(fn as unknown);
 
-        return () => this.off(type,fn);
+        return () => this.off(type, fn);
     }
 
     /**
@@ -34,12 +29,12 @@ export class EventBus<EventBusMap extends Record<string,unknown>>{
      * @example
      * eventBus.once("foo", handler);
      */
-    once<Key extends keyof EventBusMap>(type:Key,fn:EventBusHandler<EventBusMap[Key]>){
-        const func:EventBusHandler<EventBusMap[Key]> = (arg) =>{
-            this.off(type,func);
+    once<Key extends keyof EventBusMap>(type: Key, fn: EventBusHandler<EventBusMap[Key]>) {
+        const func: EventBusHandler<EventBusMap[Key]> = (arg) => {
+            this.off(type, func);
             return fn(arg);
         };
-        return this.on(type,func);
+        return this.on(type, func);
     }
 
     /**
@@ -50,9 +45,7 @@ export class EventBus<EventBusMap extends Record<string,unknown>>{
      * console.log(eventBus.has("foo"));
      */
     has(type: string): type is Extract<keyof EventBusMap, string> {
-        return this.#EVENT_DATA_STORE.has(
-            type as Extract<keyof EventBusMap, string>
-        );
+        return this.#EVENT_DATA_STORE.has(type as Extract<keyof EventBusMap, string>);
     }
 
     /**
@@ -61,16 +54,16 @@ export class EventBus<EventBusMap extends Record<string,unknown>>{
      * @example
      * eventBus.off("foo",handler);
      */
-    off<Key extends keyof EventBusMap>(type:Key,fn:EventBusHandler<EventBusMap[Key]>){
+    off<Key extends keyof EventBusMap>(type: Key, fn: EventBusHandler<EventBusMap[Key]>) {
         const list = this.#EVENT_DATA_STORE.get(type);
         if (!list) return;
 
         const index = list.indexOf(fn);
         if (index === -1) return;
 
-        list.splice(index,1);
+        list.splice(index, 1);
 
-        if(list.length === 0){
+        if (list.length === 0) {
             this.#EVENT_DATA_STORE.delete(type);
         }
     }
@@ -82,24 +75,19 @@ export class EventBus<EventBusMap extends Record<string,unknown>>{
      * @example
      * eventBus.emit("foo",arg);
      */
-    async emit<Key extends keyof EventBusMap>(type:Key,arg:EventBusMap[Key]):Promise<unknown>{
+    async emit<Key extends keyof EventBusMap>(type: Key, arg: EventBusMap[Key]): Promise<unknown> {
         const list = this.#EVENT_DATA_STORE.get(type);
         const task = [];
 
-        if(!list)return;
+        if (!list) return;
         try {
-            for(const fn of [...list]){
-                task.push(
-                    (
-                        fn as EventBusHandler<EventBusMap[Key]>
-                    )(arg)
-                );
+            for (const fn of [...list]) {
+                task.push((fn as EventBusHandler<EventBusMap[Key]>)(arg));
             }
             await Promise.all(task);
         } catch (error) {
             console.error(`[EventBus emit error] ${String(type)}`, error);
             throw error;
         }
-
     }
 }

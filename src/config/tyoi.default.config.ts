@@ -2,12 +2,12 @@ import { defineDefaultConfig } from "../app/config-server.js";
 
 export default defineDefaultConfig({
     port: 3000,
-    autoPort:false,
+    autoPort: false,
 
-    publicDirname:"../public/main",
+    publicDirname: "../public/main",
     apiPrefix: "/api",
 
-    middlewares:[],
+    middlewares: [],
 
     exposeLan: false,
     showQrCode: false,

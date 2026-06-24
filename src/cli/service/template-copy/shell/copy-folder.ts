@@ -1,29 +1,21 @@
-import fs from "node:fs"
+import fs from "node:fs";
 import path from "node:path";
 
 function copy(
-    templatePath:string,
-    projectPath:string,
-    {
-        error = [],
-        ok    = []
-    }:{error?:string[],ok?:string[]} = {}
-){
-
-    const items = fs.readdirSync(templatePath,{withFileTypes:true});
+    templatePath: string,
+    projectPath: string,
+    { error = [], ok = [] }: { error?: string[]; ok?: string[] } = {}
+) {
+    const items = fs.readdirSync(templatePath, { withFileTypes: true });
     for (const item of items) {
-        const templateItem = path.join(templatePath,item.name);
-        const projectItem = path.join(projectPath,item.name);
+        const templateItem = path.join(templatePath, item.name);
+        const projectItem = path.join(projectPath, item.name);
         try {
-            if(item.isDirectory()){
+            if (item.isDirectory()) {
                 fs.mkdirSync(projectItem);
-                copy(
-                    templateItem,
-                    projectItem,
-                    {error,ok}
-                )
-            }else{
-                fs.copyFileSync(templateItem,projectItem);
+                copy(templateItem, projectItem, { error, ok });
+            } else {
+                fs.copyFileSync(templateItem, projectItem);
             }
             ok.push(projectItem);
         } catch (e) {
@@ -31,17 +23,12 @@ function copy(
             throw e;
         }
     }
-    return {error,ok};
+    return { error, ok };
 }
 
 export async function copyFolder(
-    templatePath:string,
-    projectPath:string
-):Promise<{error:string[],ok:string[]}>{
-
-
-    return copy(
-        templatePath,
-        projectPath
-    );
+    templatePath: string,
+    projectPath: string
+): Promise<{ error: string[]; ok: string[] }> {
+    return copy(templatePath, projectPath);
 }

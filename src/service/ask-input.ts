@@ -1,24 +1,22 @@
-import readline from 'node:readline/promises';
+import readline from "node:readline/promises";
 import rend from "readline";
-import { stdin as input, stdout as output } from 'node:process';
+import { stdin as input, stdout as output } from "node:process";
 
-export async function askInput(
-    message:string
-):Promise<string | null>{
-
+export async function askInput(message: string): Promise<string | null> {
     const rl = readline.createInterface({ input, output });
-    let answer;
+
     try {
-        answer = await rl.question(message);
+        const answer = await rl.question(message);
 
-        rend.moveCursor(process.stdout, 0,-1);
-        rend.clearLine(process.stdout,0);
+        rend.moveCursor(process.stdout, 0, -1);
+        rend.clearLine(process.stdout, 0);
 
+        if (answer.length === 0) {
+            return null;
+        }
+
+        return answer;
     } finally {
         rl.close();
-
-        return (!answer || answer.length === 0)?
-            null:
-            answer
     }
 }

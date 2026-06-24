@@ -1,4 +1,4 @@
-import type minimist from "minimist"
+import type minimist from "minimist";
 import type { CommandHandler } from "@donneko/tyoi-cli";
 
 type Data<META> = {
@@ -9,16 +9,16 @@ type Data<META> = {
 };
 
 export type MetaData = {
-    pack:{
-        version:string,
-        name:string
-    },
-    cli:{
-        cwd:string,
-        dirname:string
-    },
-    option:minimist.ParsedArgs
-}
+    pack: {
+        version: string;
+        name: string;
+    };
+    cli: {
+        cwd: string;
+        dirname: string;
+    };
+    option: minimist.ParsedArgs;
+};
 
 export type CmdMetaData = Data<MetaData>;
 

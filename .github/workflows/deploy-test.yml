@@ -2,7 +2,7 @@ name: Test on Dev
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, main]
 
   workflow_dispatch:
 
@@ -23,5 +23,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Test Package
+      - name: Test Type
+        run: npm run test:type
+
+      - name: Test Format
+        run: npm run check:format:check
+
+      - name: Test Lint
+        run: npm run check:lint
+
+      - name: Test Vitest
         run: npm run test:vitest
+
+      - name: Test Pack
+        run: npm pack --dry-run --json --silent

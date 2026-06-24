@@ -2,7 +2,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "noEmit": true,
-        "rootDir": "./test/scripts",
+        "rootDir": "./test/scripts"
     },
     "include": ["test/scripts/**/*.ts"]
 }

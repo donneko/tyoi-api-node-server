@@ -2,9 +2,9 @@ import { defineConfig } from "../app/config-server.js";
 
 export default defineConfig({
     port: 3000,
-    autoPort:true,
+    autoPort: true,
 
-    publicDirname:"../public/main",
+    publicDirname: "../public/main",
     apiPrefix: "/api",
 
     exposeLan: false,
