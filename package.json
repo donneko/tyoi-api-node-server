@@ -7,11 +7,12 @@
     "test:type": "tsc --noEmit",
     "test:use--init": "npm pack && tsx ./scripts/initPlayground.ts",
     "test:use": "npm run test:use--init && tsx ./scripts/testPlayground.ts",
+    "test:ci": "npm run test:type && npm run test:check:format:check && npm run test:vitest",
 
-    "check:format--write": "prettier . --write",
-    "check:format--check": "prettier . --check",
+    "check:format:write": "prettier . --write",
+    "check:format:check": "prettier . --check",
     "check:lint": "eslint .",
-    "check:lint--fix": "eslint . --fix",
+    "check:lint:fix": "eslint . --fix",
 
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
