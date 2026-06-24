@@ -6,7 +6,7 @@ import { createCopyResult } from "../shell/create-copy-result.js";
 import fs from "node:fs";
 import path from "node:path";
 
-import { logger } from "../../../../util/logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 
 type AppTemplateCopyDestination = "target" | "target-project";
 
@@ -61,6 +61,7 @@ export async function appTemplateCopy(data: AppTemplateCopyData): Promise<AppTem
     const { target, base, option, pack, app } = data;
 
     const { template, projectName } = option;
+    const logger = new Logger();
 
     const templatePath = await getTemplatePath(template, base, app.templatePass);
 

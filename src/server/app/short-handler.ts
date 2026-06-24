@@ -1,6 +1,6 @@
 import { Server, type ServerOptions, type RequestData, type StartServerOptions } from "./server.js";
-import { ApiRegistryHandler } from "../util/api-registry.js";
-import type { WsHandler } from "../service/web-socket-router.js";
+import { ApiRegistryHandler } from "../../util/api-registry.js";
+import type { WsHandler } from "../../service/web-socket-router.js";
 import http from "node:http";
 
 class shortHandler {

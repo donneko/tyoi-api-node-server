@@ -1,7 +1,7 @@
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { undoPlayground } from "./undoPlayground.js";
-import { logger } from "./logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 
 const PLAYGROUND_PASS = "../test/playground";
 
@@ -47,6 +47,8 @@ function main() {
     const playgroundPath = getPlaygroundPath();
 
     const results = testCLI(playgroundPath);
+
+    const logger = new Logger();
 
     const summary = logger.createInfo(
         (() => {

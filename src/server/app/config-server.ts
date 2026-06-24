@@ -1,5 +1,5 @@
-import { serverDefaultConfigSchema, serverUserConfigSchema } from "../types/config.type.js";
-import type { ServerUserConfig, ServerDefaultConfig } from "../types/config.type.js";
+import { serverDefaultConfigSchema, serverUserConfigSchema } from "../../types/config.type.js";
+import type { ServerUserConfig, ServerDefaultConfig } from "../../types/config.type.js";
 
 export function defineConfig(config: ServerUserConfig) {
     return serverUserConfigSchema.parse(config);

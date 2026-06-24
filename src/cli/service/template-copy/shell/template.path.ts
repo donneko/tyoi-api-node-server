@@ -1,7 +1,7 @@
 import path from "node:path";
 import { askSelect } from "../../../../service/ask-select.js";
 import { readDirectory } from "../../../../util/read-directory.js";
-import { logger } from "../../../../util/logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 import { isValidTemplate } from "../core/is-valid-template.js";
 
 export async function getTemplatePath(
@@ -11,6 +11,7 @@ export async function getTemplatePath(
 ): Promise<string> {
     const readPath = path.join(base, templatePath);
     const templateFiles = await readDirectory(readPath, false);
+    const logger = new Logger();
 
     let template = templateName;
 

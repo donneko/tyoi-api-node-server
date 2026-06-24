@@ -1,7 +1,7 @@
 import { isUserRequest } from "../util/is-user-request.js";
 import { isPortInUse } from "../util/is-portIn-use.js";
 import { type ServicesRegister } from "../util/services-register.js";
-import { type ServerServicesRegister } from "../app/server.js";
+import { type ServerServicesRegister } from "../server/app/server.js";
 
 type FindPortData = {
     startPort: number;

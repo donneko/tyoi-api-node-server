@@ -1,6 +1,6 @@
 import path from "node:path";
 import { askInput } from "../../../../service/ask-input.js";
-import { logger } from "../../../../util/logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 import { isValidProjectName } from "../core/is-valid-project-name.js";
 
 export async function getProjectName(
@@ -8,6 +8,7 @@ export async function getProjectName(
     target: string
 ): Promise<string> {
     let projectName = inputName;
+    const logger = new Logger();
 
     if (!projectName) {
         const defaultName = path.basename(target);

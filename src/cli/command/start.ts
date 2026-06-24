@@ -1,6 +1,6 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { Server } from "../../app/server.js";
+import { Server } from "../../server/app/server.js";
 import type { CmdMetaData } from "../types/tyoi-cli.js";
 import { askSelect } from "../../service/ask-select.js";
 import { scanConfigFiles } from "../../service/scan-config-files.js";
