@@ -2,7 +2,7 @@ import path from "path";
 import { readDirectory } from "../util/read-directory.js";
 
 export async function scanConfigFiles(passedPath: string): Promise<string[]> {
-    const regex = /^(tyoi)\.([A-Za-z0-9.]+(\.config)|config)\.(ts|js)$/;
+    const regex = /^(tyoi)\.([A-Za-z0-9.]+(\.config)|config)\.(js)$/;
 
     const current = await readDirectory(passedPath);
     const filteredCurrent = current.filter((file) => regex.test(file));
