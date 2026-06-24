@@ -6,7 +6,7 @@
     "test:vitest": "npx vitest run",
     "test:type": "tsc --noEmit",
     "test:use--init": "npm pack && tsx ./scripts/initPlayground.ts",
-    "test:use": "npm run use--init && tsx ./scripts/testPlayground.ts",
+    "test:use": "npm run test:use--init && tsx ./scripts/testPlayground.ts",
 
     "check:format--write": "prettier . --write",
     "check:format--check": "prettier . --check",
@@ -17,6 +17,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
 
+    "dev": "npx tsx ./src/main.ts",
     "start": "node ./dist/main.js",
     "compile": "rm -rf dist && tsc",
     "build": "npm run test:type && npm run compile",
@@ -33,7 +34,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "doc",
+    "docs",
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
