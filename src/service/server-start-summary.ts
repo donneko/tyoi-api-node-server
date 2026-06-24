@@ -2,7 +2,7 @@ import qrcode from "qrcode-terminal";
 
 import { getLanIp } from "../util/get-lan-ip.js";
 import { type ServicesRegister } from "../util/services-register.js";
-import { type ServerServicesRegister } from "../app/server.js";
+import { type ServerServicesRegister } from "../server/app/server.js";
 
 type SummaryData = {
     host: string;

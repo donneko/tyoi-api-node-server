@@ -1,4 +1,4 @@
-import { Server } from "../../app/server.js";
+import { Server } from "../../server/app/server.js";
 import type { CmdMetaData } from "../types/tyoi-cli.js";
 
 type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";

@@ -1,9 +1,11 @@
-import { logger, type LoggerCreateData } from "../../../../util/logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 
 export function createCopyResult({ error, ok }: { error: string[]; ok: string[] }): {
     title: string;
-    content: LoggerCreateData[];
+    content: ReturnType<Logger["createError"]>[];
 } {
+    const logger = new Logger();
+
     return {
         title: "コピー結果",
         content: [

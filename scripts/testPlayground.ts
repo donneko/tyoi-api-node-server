@@ -1,7 +1,7 @@
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { undoPlayground } from "./undoPlayground.js";
-import { logger } from "./logger.js";
+import { Logger } from "@donneko/tyoi-logger";
 
 const PLAYGROUND_PASS = "../test/playground";
 
@@ -32,11 +32,15 @@ function testCLI(playgroundPath: string): { args: string[]; ok: boolean }[] {
 
     run(["help"]);
     run(["info"]);
-    run(["init"]);
+    run(["init", " my-app", "--template", "basic-ts"]);
     undo();
-    run(["create"]);
+    run(["init", " my-app", "--template", "basic-js"]);
     undo();
-    run(["config"]);
+    run(["create", " my-app", "--template", "basic-ts"]);
+    undo();
+    run(["create", " my-app", "--template", "basic-js"]);
+    undo();
+    run(["config", "--template", "basic"]);
     run(["run"], 3000);
     run(["dev"], 3000);
 
@@ -47,6 +51,8 @@ function main() {
     const playgroundPath = getPlaygroundPath();
 
     const results = testCLI(playgroundPath);
+
+    const logger = new Logger();
 
     const summary = logger.createInfo(
         (() => {

@@ -1,4 +1,4 @@
-import { defineDefaultConfig } from "../app/config-server.js";
+import { defineDefaultConfig } from "../server/app/config-server.js";
 
 export default defineDefaultConfig({
     port: 3000,

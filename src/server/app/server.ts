@@ -1,27 +1,26 @@
 import express from "express";
 import http from "node:http";
 
-import { pathNormalization } from "../service/path-normalization.js";
-import { ApiRegistry, ApiRegistryHandler } from "../util/api-registry.js";
-import { logger } from "../util/logger.js";
-import { findAvailablePort } from "../service/find-available-port.js";
+import { pathNormalization } from "../../service/path-normalization.js";
+import { ApiRegistry, ApiRegistryHandler } from "../../util/api-registry.js";
+import { findAvailablePort } from "../../service/find-available-port.js";
 import type {
     BrowserOpenConfig,
     ServerDefaultConfig,
     ServerUserConfig,
-} from "../types/config.type.js";
-import { serverStartSummary } from "../service/server-start-summary.js";
-import { openBrowser } from "../service/open-browser.js";
-import { EventBus, EventBusHandler } from "../util/event-bus.js";
-import { ServerLogger } from "../service/server-logger.js";
-import type { OutEventBusMap } from "../types/out.event-bus.type.js";
-import type { InnerEventBusMap } from "../types/inner.event-bus.type.js";
-import { ServicesRegister } from "../util/services-register.js";
-import { HttpMetaManager } from "../service/http-meta/http-meta-manager.js";
-import { SystemMetaManager } from "../service/system-meta/system-meta-manager.js";
-import { configManager } from "../service/config-manager.js";
-import { RegisterManager } from "../service/register-manager.js";
-import { WebSocketRouter, type WsHandler } from "../service/web-socket-router.js";
+} from "../../types/config.type.js";
+import { serverStartSummary } from "../../service/server-start-summary.js";
+import { openBrowser } from "../../service/open-browser.js";
+import { EventBus, EventBusHandler } from "../../util/event-bus.js";
+import { ServerLogger } from "../../service/server-logger.js";
+import type { OutEventBusMap } from "../../types/out.event-bus.type.js";
+import type { InnerEventBusMap } from "../../types/inner.event-bus.type.js";
+import { ServicesRegister } from "../../util/services-register.js";
+import { HttpMetaManager } from "../../service/http-meta/http-meta-manager.js";
+import { SystemMetaManager } from "../../service/system-meta/system-meta-manager.js";
+import { configManager } from "../../service/config-manager.js";
+import { RegisterManager } from "../../service/register-manager.js";
+import { WebSocketRouter, type WsHandler } from "../../service/web-socket-router.js";
 
 export type RequestData = {
     query: unknown;
@@ -235,7 +234,7 @@ export class Server<
         if (this.#isShuttingDown) return;
         this.#isShuttingDown = true;
 
-        logger.bar();
+        this.#serverLogger.logger("bar");
         this.#serverLogger.logger(
             "process",
             this.#serverServicesRegister.get("systemMetaManager").getMeta(100).message
