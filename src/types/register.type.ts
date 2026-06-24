@@ -1,3 +1,3 @@
 export type ServerRegister = {
-    publicDirectoryPath?:string;
+    publicDirectoryPath?: string;
 };

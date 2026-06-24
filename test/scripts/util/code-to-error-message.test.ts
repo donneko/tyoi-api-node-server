@@ -1,61 +1,60 @@
-import { expect,describe ,test } from "vitest";
-import { CodeToMetaManager } from "../../../src/util/code-to-error-message.js"
+import { expect, describe, test } from "vitest";
+import { CodeToMetaManager } from "../../../src/util/code-to-error-message.js";
 
-describe("CodeToMetaManager",()=>{
-
+describe("CodeToMetaManager", () => {
     const TEST_DATA = [
         {
             code: 1,
             message: "aaa-1",
             description: "1-1-1",
-            label:"aaa"
+            label: "aaa",
         },
         {
             code: 2,
             message: "aaa-2",
             description: "2-2-2",
-            label:"aaa"
+            label: "aaa",
         },
         {
-            code:1,
+            code: 1,
             message: "bbb-1",
             description: "1-1-1",
-            label:"bbb"
-        }
+            label: "bbb",
+        },
     ] as const;
 
     const codeToMetaManager = new CodeToMetaManager(TEST_DATA);
 
-    test("getMeta データが正常に取得できる",()=>{
-        const data = codeToMetaManager.getMeta("aaa",1);
+    test("getMeta データが正常に取得できる", () => {
+        const data = codeToMetaManager.getMeta("aaa", 1);
 
         expect(data).toEqual({
             code: 1,
             message: "aaa-1",
             description: "1-1-1",
-            label:"aaa"
+            label: "aaa",
         });
     });
 
-    test("getMeta データが正常に取得できる",()=>{
-        const data = codeToMetaManager.getMeta("aaa",2);
+    test("getMeta データが正常に取得できる", () => {
+        const data = codeToMetaManager.getMeta("aaa", 2);
 
         expect(data).toEqual({
             code: 2,
             message: "aaa-2",
             description: "2-2-2",
-            label:"aaa"
+            label: "aaa",
         });
     });
 
-    test("getMeta データが正常に取得できる",()=>{
-        const data = codeToMetaManager.getMeta("bbb",1);
+    test("getMeta データが正常に取得できる", () => {
+        const data = codeToMetaManager.getMeta("bbb", 1);
 
         expect(data).toEqual({
             code: 1,
             message: "bbb-1",
             description: "1-1-1",
-            label:"bbb"
+            label: "bbb",
         });
     });
 });

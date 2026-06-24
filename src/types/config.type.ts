@@ -1,10 +1,7 @@
 import express from "express";
 import z from "zod";
 
-export type BrowserOpenConfig =
-    | boolean
-    | "local"
-    | "network";
+export type BrowserOpenConfig = boolean | "local" | "network";
 
 export const serverUserConfigSchema = z.object({
     baseDirname: z.string().optional(),
@@ -16,7 +13,7 @@ export const serverUserConfigSchema = z.object({
     showQrCode: z.boolean().optional(),
     openBrowser: z.union([z.boolean(), z.enum(["local", "network"])]).optional(),
     autoPort: z.boolean().optional(),
-    signalShutdownHandling: z.boolean().optional()
+    signalShutdownHandling: z.boolean().optional(),
 });
 
 export type ServerUserConfig = z.infer<typeof serverUserConfigSchema>;
@@ -31,7 +28,7 @@ export const serverDefaultConfigSchema = z.object({
     showQrCode: z.boolean(),
     openBrowser: z.union([z.boolean(), z.enum(["local", "network"])]),
     autoPort: z.boolean(),
-    signalShutdownHandling: z.boolean()
+    signalShutdownHandling: z.boolean(),
 });
 
 export type ServerDefaultConfig = z.infer<typeof serverDefaultConfigSchema>;

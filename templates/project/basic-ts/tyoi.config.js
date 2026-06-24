@@ -3,9 +3,9 @@ import morgan from "morgan";
 
 export default defineConfig({
     port: 3000,
-    autoPort:true,
+    autoPort: true,
 
-    publicDirname:"./public/main",
+    publicDirname: "./public/main",
     apiPrefix: "/api",
 
     exposeLan: false,
@@ -13,7 +13,5 @@ export default defineConfig({
 
     openBrowser: true,
 
-    middlewares:[
-        morgan("dev")
-    ]
+    middlewares: [morgan("dev")],
 });

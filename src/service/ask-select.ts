@@ -1,18 +1,18 @@
 import readline from "readline";
 
 type SelectArgs = {
-    message:string;
-    selects:string[];
-}
+    message: string;
+    selects: string[];
+};
 
-class FirstRender{
-    private args:SelectArgs;
-    private index:number
-    constructor(args:SelectArgs,index:number){
+class FirstRender {
+    private args: SelectArgs;
+    private index: number;
+    constructor(args: SelectArgs, index: number) {
         this.args = args;
         this.index = index;
     }
-    render(){
+    render() {
         process.stdout.write(`${this.args.message}\n`);
 
         this.args.selects.forEach((choice, i) => {
@@ -20,14 +20,14 @@ class FirstRender{
             process.stdout.write(`${cursor} ${choice}\n`);
         });
     }
-    clear(){
+    clear() {
         const len = this.args.selects.length + 1;
         readline.moveCursor(process.stdout, 0, -len);
         readline.clearScreenDown(process.stdout);
     }
 }
 
-function reRowRender(len:number,index:number,setText:string){
+function reRowRender(len: number, index: number, setText: string) {
     // index の行へ移動
     readline.moveCursor(process.stdout, 0, -(len - index));
     readline.clearLine(process.stdout, 0);
@@ -37,29 +37,26 @@ function reRowRender(len:number,index:number,setText:string){
     readline.moveCursor(process.stdout, 0, len - index - 1);
 }
 
-function selectRender(args:SelectArgs,index:number,oldIndex:number) {
+function selectRender(args: SelectArgs, index: number, oldIndex: number) {
     // カーソルは一番した前提。
     const len = args.selects.length;
 
-    reRowRender(len,oldIndex,`  ${args.selects[oldIndex]}`);
-    reRowRender(len,index,`❯ ${args.selects[index]}`);
+    reRowRender(len, oldIndex, `  ${args.selects[oldIndex]}`);
+    reRowRender(len, index, `❯ ${args.selects[index]}`);
 }
 
-
-export async function askSelect(args:SelectArgs):Promise<number> {
-
+export async function askSelect(args: SelectArgs): Promise<number> {
     return new Promise((resolve) => {
-
         let index = 0;
         let oldIndex = 0;
 
         const choices = args.selects;
 
-        const firstRender = new FirstRender(args,index);
+        const firstRender = new FirstRender(args, index);
 
         const render = () => {
-            selectRender(args,index,oldIndex);
-        }
+            selectRender(args, index, oldIndex);
+        };
         const cleanup = () => {
             if (process.stdin.isTTY) {
                 process.stdin.setRawMode(false);
@@ -68,7 +65,7 @@ export async function askSelect(args:SelectArgs):Promise<number> {
             process.stdin.off("data", keySelect);
             process.stdin.pause();
         };
-        const keySelect = (key:string ) => {
+        const keySelect = (key: string) => {
             switch (key) {
                 case "\u001b[A": {
                     const nextIndex = Math.max(0, index - 1);
@@ -96,17 +93,16 @@ export async function askSelect(args:SelectArgs):Promise<number> {
                     cleanup();
                     resolve(-1);
                     break;
-                }
             }
-        if (process.stdin.isTTY){
+        };
+        if (process.stdin.isTTY) {
             process.stdin.setRawMode(true);
             process.stdin.resume();
             process.stdin.setEncoding("utf8");
             firstRender.render();
-            process.stdin.on("data",keySelect);
-        }else{
-            resolve(-1)
-
-        };
-    })
+            process.stdin.on("data", keySelect);
+        } else {
+            resolve(-1);
+        }
+    });
 }

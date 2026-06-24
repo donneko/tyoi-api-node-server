@@ -6,9 +6,7 @@ const server = new Server({
     baseDirname: import.meta.dirname,
     publicDirname: "../public/main",
     port: 3000,
-    middlewares:[
-        morgan("dev")
-    ]
+    middlewares: [morgan("dev")],
 });
 
 // サーバー起動

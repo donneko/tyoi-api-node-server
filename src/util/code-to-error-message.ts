@@ -4,15 +4,15 @@ type CodeTableRecord = {
     [key: string]: unknown;
 };
 
-type CodeByLabel<
-    T extends CodeTableRecord,
-    L extends T["label"]
-> = Extract<T, { label: L }>["code"];
+type CodeByLabel<T extends CodeTableRecord, L extends T["label"]> = Extract<
+    T,
+    { label: L }
+>["code"];
 
 type MetaByLabelAndCode<
     T extends CodeTableRecord,
     L extends T["label"],
-    C extends CodeByLabel<T, L>
+    C extends CodeByLabel<T, L>,
 > = Extract<T, { label: L; code: C }>;
 
 export class CodeToMetaManager<CodeTable extends CodeTableRecord> {
@@ -26,16 +26,13 @@ export class CodeToMetaManager<CodeTable extends CodeTableRecord> {
         this.CODE_TABLE = [...this.CODE_TABLE, record];
     }
 
-    getMeta<
-        L extends CodeTable["label"],
-        C extends CodeByLabel<CodeTable, L>
-    >(
+    getMeta<L extends CodeTable["label"], C extends CodeByLabel<CodeTable, L>>(
         label: L,
-        code: C,
+        code: C
     ): MetaByLabelAndCode<CodeTable, L, C> {
         const record = this.CODE_TABLE.find(
-        (item): item is MetaByLabelAndCode<CodeTable, L, C> =>
-            item.label === label && item.code === code
+            (item): item is MetaByLabelAndCode<CodeTable, L, C> =>
+                item.label === label && item.code === code
         );
 
         if (!record) {
