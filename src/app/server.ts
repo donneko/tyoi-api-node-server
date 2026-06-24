@@ -273,7 +273,7 @@ export class Server<
             if (this.#isStarting) return;
             this.#isStarting = true;
 
-            this.#innerEventBus.emit("server/start:process", {});
+            // this.#innerEventBus.emit("server/start:process", {});
 
             if (options) {
                 this.#serverConfig.updateConfig(removeUndefinedConfig(options));
@@ -326,7 +326,7 @@ export class Server<
                 });
             }
 
-            this.#innerEventBus.emit("server/start:success", {});
+            // this.#innerEventBus.emit("server/start:success", {});
             this.#isStarting = false;
             return httpServer;
         } catch (error) {
@@ -369,7 +369,7 @@ export class Server<
                 "process",
                 this.#serverServicesRegister.get("systemMetaManager").getMeta(104).message
             );
-            this.#innerEventBus.emit("server/stop:process", {});
+            // this.#innerEventBus.emit("server/stop:process", {});
 
             const timeout = setTimeout(() => {
                 if (settled) return;
@@ -379,7 +379,7 @@ export class Server<
                     "warn",
                     this.#serverServicesRegister.get("systemMetaManager").getMeta(105).message
                 );
-                this.#innerEventBus.emit("server/stop:timeout", {});
+                // this.#innerEventBus.emit("server/stop:timeout", {});
 
                 finish();
                 resolve();
@@ -393,7 +393,7 @@ export class Server<
                         "error",
                         this.#serverServicesRegister.get("systemMetaManager").getMeta(106).message
                     );
-                    this.#innerEventBus.emit("server/stop:error", {});
+                    // this.#innerEventBus.emit("server/stop:error", {});
 
                     finish();
                     reject(error);
@@ -403,7 +403,7 @@ export class Server<
                     "success",
                     this.#serverServicesRegister.get("systemMetaManager").getMeta(107).message
                 );
-                this.#innerEventBus.emit("server/stop:success", {});
+                // this.#innerEventBus.emit("server/stop:success", {});
 
                 finish();
                 resolve();
