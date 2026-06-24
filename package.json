@@ -7,7 +7,7 @@
     "test:type": "tsc --noEmit",
     "test:use--init": "npm pack && tsx ./scripts/initPlayground.ts",
     "test:use": "npm run test:use--init && tsx ./scripts/testPlayground.ts",
-    "test:ci": "npm run test:type && npm run test:check:format:check && npm run test:vitest",
+    "test:ci": "npm run test:type && npm run check:format:check && npm run test:vitest",
 
     "check:format:write": "prettier . --write",
     "check:format:check": "prettier . --check",
