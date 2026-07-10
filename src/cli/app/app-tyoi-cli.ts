@@ -8,7 +8,7 @@ export async function appTyoiCli() {
     const argv = process.argv.slice(2);
 
     const cmdHandler = new CommandHandler<MetaData>();
-    cmdHandler.meta = getMetaData(argv);
+    cmdHandler.meta = await getMetaData(argv);
     cmdHandler.onError = getOnError;
 
     addCommand(cmdHandler);
