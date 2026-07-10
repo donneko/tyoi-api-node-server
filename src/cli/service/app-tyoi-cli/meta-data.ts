@@ -1,13 +1,11 @@
 import { getOption } from "./option.js";
 import path from "node:path";
 import type { MetaData } from "../../types/tyoi-cli.js";
+import getPackData from "./pack-data/main.js";
 
-export function getMetaData(argv: string[]): MetaData {
+export async function getMetaData(argv: string[]): Promise<MetaData> {
     return {
-        pack: {
-            version: "0.0.6",
-            name: "",
-        },
+        pack: await getPackData(),
         cli: {
             cwd: process.cwd(),
             dirname: path.join(import.meta.dirname, "../../../"),
