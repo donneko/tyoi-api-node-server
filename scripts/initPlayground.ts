@@ -23,6 +23,7 @@ async function getPackagePath(): Promise<string> {
         selects: packPath,
     });
 
+    if (!process.stdin.isTTY) return packPath[0] as string;
     if (!packPath[index]) throw Error("パッケージが見つかりませんでした");
     return packPath[index];
 }

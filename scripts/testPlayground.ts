@@ -32,15 +32,15 @@ function testCLI(playgroundPath: string): { args: string[]; ok: boolean }[] {
 
     run(["help"]);
     run(["info"]);
-    run(["init", " my-app", "--template", "basic-ts"]);
+    run(["init", "my-app", "--template", "basic-ts"]);
     undo();
-    run(["init", " my-app", "--template", "basic-js"]);
+    run(["init", "my-app", "--template", "basic-js"]);
     undo();
-    run(["create", " my-app", "--template", "basic-ts"]);
+    run(["create", "my-app", "--template", "basic-ts"]);
     undo();
-    run(["create", " my-app", "--template", "basic-js"]);
+    run(["create", "my-app", "--template", "basic-js"]);
     undo();
-    run(["config", "--template", "basic"]);
+    run(["config", "my-app", "--template", "basic"]);
     run(["run"], 3000);
     run(["dev"], 3000);
 
