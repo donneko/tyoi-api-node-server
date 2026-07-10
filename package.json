@@ -9,6 +9,9 @@
     "test:use": "npm run test:use--init && tsx ./scripts/testPlayground.ts",
     "test:ci": "npm run test:type && npm run check:format:check && npm run test:vitest",
 
+    "test:nonTYY": "npm run test </dev/null",
+
+
     "check:format:write": "prettier . --write",
     "check:format:check": "prettier . --check",
     "check:lint": "eslint .",
