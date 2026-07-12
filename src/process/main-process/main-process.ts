@@ -28,7 +28,11 @@ export function serverRuntime(path: string, option: Record<string, unknown>): Pr
         child.once("error", reject);
         child.once("exit", (code, signal) => {
             if (!hasStarted) {
-                reject(new Error(`Server process exited before startup (code=${code}, signal=${signal})`));
+                reject(
+                    new Error(
+                        `Server process exited before startup (code=${code}, signal=${signal})`
+                    )
+                );
             }
         });
         child.on("message", (message: unknown) => {
