@@ -9,18 +9,15 @@
     "test:use": "npm run test:use--init && tsx ./scripts/testPlayground.ts",
     "test:ci": "npm run test:type && npm run check:format:check && npm run test:vitest",
     "test:nonTTY": "npm run test </dev/null",
-
     "check:format:write": "npx prettier . --write",
     "check:format:check": "npx prettier . --check",
     "check:lint": "npx eslint .",
     "check:lint:fix": "npx eslint . --fix",
-
-    "docs":"npm run docs:typedoc:build && npm run docs:vitepress:build",
+    "docs": "npm run docs:typedoc:build && npm run docs:vitepress:build",
     "docs:dev": "npx vitepress dev docs",
     "docs:typedoc:build": "npx typedoc",
     "docs:vitepress:build": "npx vitepress build docs",
     "docs:preview": "npx vitepress preview docs",
-
     "dev": "npx tsx ./src/main.ts",
     "start": "node ./dist/main.js",
     "compile": "rm -rf dist && tsc",
@@ -93,6 +90,8 @@
     "prettier": "^3.8.4",
     "tsx": "^4.21.0",
     "typedoc": "^0.28.20",
+    "typedoc-plugin-markdown": "^4.12.0",
+    "typedoc-vitepress-theme": "^1.1.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1",
     "vitepress": "^1.6.4",
