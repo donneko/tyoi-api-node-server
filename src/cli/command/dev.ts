@@ -5,8 +5,8 @@ import path from "node:path";
 export default async function runDevServer(data: CmdMetaData) {
     const mainDirname = data.meta.cli.dirname;
 
-    // サーバー作成
-    const useConfigPath = path.resolve(import.meta.url, "../../config/tyoi.dev.config.js");
+    // 設定パスの作成
+    const useConfigPath = path.join(import.meta.dirname, "../../config/tyoi.dev.config.js");
 
     const configOption = {
         ...data.meta.option,
