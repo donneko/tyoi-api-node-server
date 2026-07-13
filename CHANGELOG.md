@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [0.0.7] - 2026-07-13
+### Added
+- `tyoi run` / `tyoi dev` のサーバー起動をメインプロセスとサーバープロセスに分離
+- サーバープロセス用の IPC メッセージ、起動、終了処理を追加
+- `ShortHandler.listen()` を追加
+- TypeDoc と VitePress による API ドキュメント生成を追加
+- GitHub Actions にドキュメント公開ワークフローを追加
+- ESLint と Prettier の設定を追加
+- 非 TTY 環境のテストコマンドを追加
+
+### Changed
+- ドキュメント配置を `doc/` から `docs/` に変更
+- `package.json` の scripts を `test:*` / `check:*` / `docs:*` に整理
+- npm tarball に含めるドキュメント範囲を `docs` 構成に合わせて変更
+- CLI メタデータで `package.json` からパッケージ情報を取得するように変更
+- `Server` / `tyoi()` / `ShortHandler` の JSDoc を拡充
+
+### Fixed
+- `ShortHandler` のサーバー取得 API をドキュメントに合わせて修正
+- `test:ci` とパッケージ関連 scripts の不整合を修正
+- TypeScript target と `scanConfigFiles` の実行互換性を修正
+- 非 TTY 実行時にテストが失敗する問題を修正
+
 ## [0.0.6] - 2026-06-20
 ### Changed
 - CLI 内部構造の整理
@@ -102,7 +125,8 @@
 - 使用中ポートの自動切り替え対応
 - Express middleware　対応
 
-[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.6...HEAD
+[Unreleased]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.7...HEAD
+[0.0.7]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/donneko/tyoi-api-node-server/compare/v0.0.3...v0.0.4
