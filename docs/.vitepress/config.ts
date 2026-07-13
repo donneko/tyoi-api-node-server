@@ -19,6 +19,7 @@ export default defineConfig({
           { text: 'cli コマンドについて', link: '/cli' },
           { text: 'config ファイル設定', link: '/config' },
           { text: '使用例', link: '/usage' },
+          { text: 'API ドキュメント', link: '/api/index.html' },
         ]
       }
     ],
