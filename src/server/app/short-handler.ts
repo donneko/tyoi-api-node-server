@@ -29,7 +29,7 @@ class shortHandler {
         return this.server.startServer(options);
     }
     async close(): Promise<void> {
-        this.server.stopServer();
+        return this.server.stopServer();
     }
 }
 
