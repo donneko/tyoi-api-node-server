@@ -1,18 +1,15 @@
 import { Server, type ServerOptions } from "../../server/app/server.js";
 import type { MainMessage, ServerMessage } from "../../types/process.type.js";
+import { isProcessMessage } from "../is-process-message.js";
 import { processSend } from "../process-send.js";
-
-function isMainMessage(message: unknown): message is MainMessage {
-    if (!message || typeof message !== "object" || !("type" in message)) return false;
-
-    return message.type === "boot" || message.type === "shutdown" || message.type === "reload";
-}
 
 export function serverBoot() {
     let server: Server | undefined;
 
+    const MAIN_MESSAGE_TYPES = ["boot", "shutdown", "reload"];
+
     process.on("message", async (message: unknown) => {
-        if (!isMainMessage(message)) return;
+        if (!isProcessMessage<MainMessage>(message, MAIN_MESSAGE_TYPES)) return;
 
         if (message.type === "shutdown") {
             await server?.stopServer();
