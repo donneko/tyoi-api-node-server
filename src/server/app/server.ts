@@ -28,7 +28,7 @@ export type RequestData = {
     body: unknown;
     headers: unknown;
 };
-type RequestEventMap<L extends string> = {
+export type RequestEventMap<L extends string> = {
     [N in L]: RequestData;
 };
 /** `startServer()` 呼び出し時に上書きできる起動設定です。 */
