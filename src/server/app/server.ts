@@ -22,14 +22,16 @@ import { configManager } from "../../service/config-manager.js";
 import { RegisterManager } from "../../service/register-manager.js";
 import { WebSocketRouter, type WsHandler } from "../../service/web-socket-router.js";
 
+/** HTTP API ハンドラに渡されるリクエスト情報です。 */
 export type RequestData = {
     query: unknown;
     body: unknown;
     headers: unknown;
 };
-type RequestEventMap<L extends string> = {
+export type RequestEventMap<L extends string> = {
     [N in L]: RequestData;
 };
+/** `startServer()` 呼び出し時に上書きできる起動設定です。 */
 export type StartServerOptions = {
     port?: number;
     exposeLan?: boolean;
@@ -37,6 +39,7 @@ export type StartServerOptions = {
     autoPort?: boolean;
     openBrowser?: BrowserOpenConfig;
 };
+/** `Server` をコードから作成するための設定です。 */
 export type ServerOptions = ServerUserConfig & {
     baseDirname: string;
 };
@@ -57,6 +60,12 @@ export type ServerServicesRegister = {
     serverRegister: RegisterManager;
 };
 
+/**
+ * HTTP API、WebSocket、静的ファイル配信を提供するサーバーです。
+ *
+ * @typeParam RequestNameList 登録できる HTTP API キー（例: `"GET:/health"`）。
+ * @typeParam WebSocketNameList 登録できる WebSocket パス。
+ */
 export class Server<
     RequestNameList extends string = string,
     WebSocketNameList extends string = string,
@@ -81,31 +90,27 @@ export class Server<
     #webSocketRouter = new WebSocketRouter<WebSocketNameList>();
 
     /**
-     * expressを使用した簡単なサーバーを作れるようにします。
-     * @param baseDirname ベースのファイルURL
-     * @param publicDirname public内で公開するディレクトリ名
-     * @param port 公開ポート
-     * @param middlewares 追加するミドルウェア
+     * サーバーを作成し、ルーティングと静的ファイル配信を初期化します。
+     *
+     * `baseDirname` は必須です。起動は `startServer()` で明示的に行います。
+     *
+     * @param options サーバー設定。
      * @example
-     *  import { Server } from "./app/server.js";
-     *  import morgan from "morgan";
+     *  import { Server } from "@donneko/tyoi-server";
      *
      *  type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
      *
      *  const server = new Server<RequestNameList>({
-     *      baseDirname:import.meta.dirname,
+     *      baseDirname: import.meta.dirname,
      *      publicDirname:"../public/main",
      *      apiPrefix:"/api",
      *      port:3000,
-     *      middlewares:[
-     *          morgan("dev")
-     *      ]
      *  });
      *
-     *  server.startServer();
-     *  server.onAPI("GET:/test",(data)=>{
+     *  server.onAPI("GET:/test", (data) => {
      *      return data;
-     *  })
+     *  });
+     *  await server.startServer();
      */
     constructor(options?: ServerOptions) {
         if (options) {
@@ -250,15 +255,21 @@ export class Server<
 
     #isStarting: boolean = false;
     /**
-     * サーバーの起動する。
-     * @param options サーバー起動時の便利なオプションを設定できます
-     * @returns http.serverを返します
+     * HTTP サーバーを起動します。
+     *
+     * `options` はコンストラクターで渡した設定を、この起動に限らず
+     * 上書きします。すでに起動済み、または起動処理中の場合は `undefined` を返します。
+     *
+     * @param options 起動時に上書きする設定。
+     * @returns 起動した HTTP サーバー。すでに起動済みの場合は `undefined`。
+     * @throws ポートの確保や HTTP サーバーの起動に失敗した場合。
      * @example
+     * ```ts
      * await server.startServer({
-            exposeLan:true,
-            showQrCode: false,
-            port:3000
-        });
+     *   port: 3000,
+     *   showQrCode: false,
+     * });
+     * ```
      */
     async startServer(options?: StartServerOptions): Promise<http.Server | undefined> {
         try {
@@ -347,6 +358,15 @@ export class Server<
         }
     }
     #isStopServer: boolean = false;
+    /**
+     * HTTP サーバーを停止し、既存の接続を終了します。
+     *
+     * 接続が 10 秒以内に閉じない場合は、残った接続を強制的に閉じます。
+     * 起動していない場合、または停止処理中の場合は何もしません。
+     *
+     * @returns 停止完了時に解決する Promise。
+     * @throws HTTP サーバーの停止に失敗した場合。
+     */
     async stopServer(): Promise<void> {
         const server = this.#httpServer;
         if (!server) return;
@@ -411,52 +431,52 @@ export class Server<
         });
     }
 
-    // Event登録
+    /** イベントハンドラを登録します。 */
     onEvent<Key extends keyof OutEventBusMap>(type: Key, fn: EventBusHandler<OutEventBusMap[Key]>) {
         return this.#outEventBus.on(type, fn);
     }
-    // Event一度のみ起動
+    /** 一度だけ実行するイベントハンドラを登録します。 */
     onceEvent<Key extends keyof OutEventBusMap>(
         type: Key,
         fn: EventBusHandler<OutEventBusMap[Key]>
     ) {
         return this.#outEventBus.once(type, fn);
     }
-    // Event消去
+    /** イベントハンドラを解除します。 */
     offEvent<Key extends keyof OutEventBusMap>(
         type: Key,
         fn: EventBusHandler<OutEventBusMap[Key]>
     ) {
         this.#outEventBus.off(type, fn);
     }
-    // Eventが存在するか？
+    /** 指定したイベントにハンドラが登録されているかを返します。 */
     hasEvent<Key extends keyof OutEventBusMap>(type: Key) {
         return this.#outEventBus.has(type);
     }
 
-    // API登録
+    /** HTTP API ハンドラを登録します。 */
     onAPI<Key extends keyof RequestEventMap<RequestNameList>>(
         type: Key,
         fn: ApiRegistryHandler<RequestEventMap<RequestNameList>[Key]>
     ) {
         return this.#serverAPIs.on(type, fn);
     }
-    // API一度のみ起動
+    /** 一度だけ実行する HTTP API ハンドラを登録します。 */
     onceAPI<Key extends keyof RequestEventMap<RequestNameList>>(
         type: Key,
         fn: ApiRegistryHandler<RequestEventMap<RequestNameList>[Key]>
     ) {
         return this.#serverAPIs.once(type, fn);
     }
-    // API消去
+    /** HTTP API ハンドラを解除します。 */
     offAPI<Key extends keyof RequestEventMap<RequestNameList>>(type: Key) {
         this.#serverAPIs.off(type);
     }
-    // APIが存在するか？
+    /** 指定した HTTP API ハンドラが登録されているかを返します。 */
     hasAPI<Key extends keyof RequestEventMap<RequestNameList>>(type: Key) {
         return this.#serverAPIs.has(type);
     }
-    // API手動実行
+    /** HTTP API ハンドラをリクエストなしで実行します。 */
     emitAPI<Key extends keyof RequestEventMap<RequestNameList>>(
         type: Key,
         data: RequestEventMap<RequestNameList>[Key]
@@ -464,36 +484,36 @@ export class Server<
         return this.#serverAPIs.emit(type, data);
     }
 
-    // WebSocket登録
+    /** WebSocket ハンドラを登録します。 */
     onWebSocket<Key extends WebSocketNameList>(type: Key, fn: ApiRegistryHandler<WsHandler>) {
         return this.#webSocketRouter.on(type, fn);
     }
-    // WebSocket一度のみ起動
+    /** 一度だけ実行する WebSocket ハンドラを登録します。 */
     onceWebSocket<Key extends WebSocketNameList>(type: Key, fn: ApiRegistryHandler<WsHandler>) {
         return this.#webSocketRouter.once(type, fn);
     }
-    // WebSocket消去
+    /** WebSocket ハンドラを解除します。 */
     offWebSocket<Key extends WebSocketNameList>(type: Key) {
         this.#webSocketRouter.off(type);
     }
-    // WebSocketが存在するか？
+    /** 指定した WebSocket ハンドラが登録されているかを返します。 */
     hasWebSocket(type: string) {
         return this.#webSocketRouter.has(type);
     }
 
-    // サーバー起動中か？
+    /** サーバーが起動中かを返します。 */
     isRunning(): boolean {
         return this.#httpServer !== null;
     }
-    // サーバーポート取得
+    /** 現在設定されているポート番号を返します。 */
     getPort(): number {
         return this.#serverConfig.getConfig("port");
     }
-    // サーバー設定取得
+    /** 解決済みのサーバー設定を取得します。 */
     getConfig<K extends keyof ServerDefaultConfig>(key: K): ServerDefaultConfig[K] {
         return this.#serverConfig.getConfig(key);
     }
-    // HTTPサーバー取得
+    /** 基盤となる Node.js の HTTP サーバーを取得します。 */
     getHttpServer(): http.Server | null {
         return this.#httpServer;
     }
