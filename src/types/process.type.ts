@@ -10,7 +10,7 @@ export type MainMessage =
           };
       }
     | {
-          type: "reload";
+          type: "start";
       };
 
 export type ServerMessage =

@@ -25,11 +25,14 @@ class shortHandler {
         this.server.onWebSocket(`${pass}`, fn);
         return this;
     }
+    async listen(options?: StartServerOptions): Promise<http.Server | undefined> {
+        return this.start(options);
+    }
     async start(options?: StartServerOptions): Promise<http.Server | undefined> {
         return this.server.startServer(options);
     }
     async close(): Promise<void> {
-        this.server.stopServer();
+        return this.server.stopServer();
     }
 }
 
