@@ -4,7 +4,7 @@ import type { ServerUserConfig, ServerDefaultConfig } from "../../types/config.t
 /**
  * CLI で読み込むサーバー設定を検証して返します。
  *
- * `tyoi.config.js` / `tyoi.config.ts` の default export に指定します。
+ * `tyoi.config.js` の default export に指定します。
  * `baseDirname` は CLI 起動時に自動設定されるため、通常は指定不要です。
  *
  * @param config サーバー設定。未指定の項目には既定値が使われます。

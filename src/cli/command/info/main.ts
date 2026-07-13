@@ -50,7 +50,7 @@ export default async function serverCreate(data: CmdMetaData) {
     const mainDirname = data.meta.cli.dirname;
     const processCwd = data.meta.cli.cwd;
 
-    const config = await getConfig(processCwd, mainDirname, data.meta.option.optionArgs);
+    const config = await getConfig(processCwd, mainDirname, data.meta.option);
 
     addLog(config);
 }
