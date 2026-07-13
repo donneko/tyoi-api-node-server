@@ -1,19 +1,18 @@
-import { Server } from "../../server/app/server.js";
 import type { CmdMetaData } from "../types/tyoi-cli.js";
-
-type RequestNameList = "GET:/test" | "GET:/test/a" | "GET:/a";
+import { serverRuntime } from "../../process/main-process/main-process.js";
+import path from "node:path";
 
 export default async function runDevServer(data: CmdMetaData) {
     const mainDirname = data.meta.cli.dirname;
 
     // サーバー作成
-    const devConfig = await import("../../config/tyoi.dev.config.js");
-    const server = new Server<RequestNameList>({
-        ...devConfig.default,
+    const useConfigPath = path.resolve(import.meta.url, "../../config/tyoi.dev.config.js");
+
+    const configOption = {
         ...data.meta.option,
         ...{ baseDirname: mainDirname },
-    });
+    };
 
     // サーバー起動
-    await server.startServer();
+    await serverRuntime(useConfigPath, configOption);
 }
