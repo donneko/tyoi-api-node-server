@@ -10,7 +10,7 @@ import { isServer } from "./is-server.js";
 export function serverBoot() {
     let server: Server | undefined;
 
-    const MAIN_MESSAGE_TYPES = ["boot", "shutdown", "reload"];
+    const MAIN_MESSAGE_TYPES = ["boot", "shutdown", "start"];
 
     process.on("message", async (message: unknown) => {
         if (!isProcessMessage<MainMessage>(message, MAIN_MESSAGE_TYPES)) return;

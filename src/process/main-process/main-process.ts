@@ -43,5 +43,8 @@ export function serverRuntime(path: string, option: Record<string, unknown>): Pr
             type: "boot",
             data: { path, option },
         });
+        processSend<MainMessage>(child, {
+            type: "start",
+        });
     });
 }
