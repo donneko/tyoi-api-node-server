@@ -3,21 +3,14 @@ import type { MainMessage } from "../../types/process.type.js";
 import type { ServerMessage } from "../../types/process.type.js";
 import { processSend } from "../process-send.js";
 import { isProcessMessage } from "../is-process-message.js";
+import { mainProcessSetup } from "./main-process-setup.js";
 
 export function serverRuntime(path: string, option: Record<string, unknown>): Promise<void> {
     const SERVER_MESSAGE_TYPES = ["ready", "error", "stopped"];
 
     const child = fork(new URL("../server-process/server-process.js", import.meta.url));
-    let isShuttingDown = false;
 
-    const shutdown = () => {
-        if (isShuttingDown || !child.connected) return;
-        isShuttingDown = true;
-        processSend<MainMessage>(child, { type: "shutdown" });
-    };
-
-    process.once("SIGINT", shutdown);
-    process.once("SIGTERM", shutdown);
+    mainProcessSetup(child);
 
     return new Promise<void>((resolve, reject) => {
         let hasStarted = false;
