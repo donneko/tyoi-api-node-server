@@ -6,9 +6,13 @@ export function mainProcessSetup(child: ChildProcess) {
     let isShuttingDown = false;
 
     const shutdown = () => {
-        if (isShuttingDown || !child.connected) return;
+        if (isShuttingDown) return;
         isShuttingDown = true;
-        processSend<MainMessage>(child, { type: "shutdown" });
+        try {
+            processSend<MainMessage>(child, { type: "shutdown" });
+        } catch {
+            return;
+        }
     };
 
     process.once("SIGINT", shutdown);
