@@ -6,7 +6,7 @@ import http from "node:http";
 /**
  * `tyoi()` が返す簡易サーバー API。
  *
- * API と WebSocket を登録し、必要に応じて `tyoiServer` から
+ * API と WebSocket を登録し、必要に応じて `server` から
  * 基盤となる `Server` の全機能へアクセスできます。
  */
 export class ShortHandler {
