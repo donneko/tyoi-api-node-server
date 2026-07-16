@@ -9,7 +9,10 @@ function copy(
     const items = fs.readdirSync(templatePath, { withFileTypes: true });
     for (const item of items) {
         const templateItem = path.join(templatePath, item.name);
-        const projectItem = path.join(projectPath, item.name);
+        // npm は tarball から `.gitignore` を除外するため、テンプレート内では
+        // `_gitignore` として保持し、生成時に本来の名前へ戻す。
+        const itemName = item.name === "_gitignore" ? ".gitignore" : item.name;
+        const projectItem = path.join(projectPath, itemName);
         try {
             if (item.isDirectory()) {
                 fs.mkdirSync(projectItem);

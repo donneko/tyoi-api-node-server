@@ -3,18 +3,23 @@
     "version": "0.0.1",
     "private": true,
     "type": "module",
+    "engines": {
+        "node": ">=20.14"
+    },
     "scripts": {
-        "dev":"tsx src/server.ts",
+        "dev": "tsx watch src/server.ts",
         "build": "tsc",
-        "start": "node dist/server.js"
+        "start": "node dist/server.js",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@donneko/tyoi-server": "^__TYOI_SERVER_VERSION__",
         "morgan": "^1.10.1"
     },
     "devDependencies": {
+        "@types/morgan": "^1.9.10",
         "@types/node": "^22.0.0",
-        "tsx": "^4.19.0",
-        "typescript": "^5.8.0"
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.0"
     }
 }

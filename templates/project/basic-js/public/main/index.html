@@ -3,11 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>tyoi-server | デフォルトページ</title>
+        <title>Tyoi Starter</title>
         <link rel="stylesheet" href="./src/style/init.css" />
         <link rel="stylesheet" href="./src/style/index.css" />
 
         <link rel="icon" href="./src/icon/favicon.webp" />
+        <script type="module" src="./src/script/index.js"></script>
     </head>
     <body>
         <header class="header">
@@ -16,7 +17,7 @@
         <main class="main">
             <section class="main-section main-hero">
                 <div class="main-hero-title">
-                    <p class="main-hero-title-text">tyoi-server</p>
+                    <p class="main-hero-title-text">Tyoi Starter</p>
                     <p class="main-hero-title-description">
                         Small local API and static file server framework.
                     </p>
@@ -29,22 +30,26 @@
             <section class="main-section main-info">
                 <div class="main-section-header">
                     <span class="main-section-header-icon">●</span>
-                    <h2 class="main-section-header-title">Server Test Page</h2>
+                    <h2 class="main-section-header-title">API playground</h2>
                 </div>
                 <div class="main-section-main">
-                    <p>tyoi-api-server　が正常に起動し、このページを配信しています。</p>
+                    <button id="hello-button" type="button">GET /api/hello</button>
+                    <pre id="api-result">ボタンを押すと API の応答が表示されます。</pre>
                 </div>
             </section>
 
             <section class="main-section main-note">
                 <div class="main-section-header">
                     <span class="main-section-header-icon">!</span>
-                    <h2 class="main-section-header-title">Note</h2>
+                    <h2 class="main-section-header-title">WebSocket</h2>
                 </div>
                 <div class="main-section-main">
-                    <p>
-                        このページは動作確認用です。<br />使用するときはこのディレクトリー内にデータを配置してください。
-                    </p>
+                    <p id="ws-status">Connecting...</p>
+                    <form id="ws-form">
+                        <input id="ws-message" value="Hello WebSocket" aria-label="Message" />
+                        <button type="submit">Send</button>
+                    </form>
+                    <pre id="ws-result"></pre>
                 </div>
             </section>
         </main>
