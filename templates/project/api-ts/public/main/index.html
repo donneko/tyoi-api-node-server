@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Tyoi API Starter</title>
+        <style>
+            :root {
+                color-scheme: dark;
+                font-family: system-ui, sans-serif;
+                background: #09111e;
+                color: #eef5ff;
+            }
+            body {
+                max-width: 820px;
+                margin: 64px auto;
+                padding: 0 24px;
+            }
+            section {
+                margin: 24px 0;
+                padding: 20px;
+                border: 1px solid #29384e;
+                border-radius: 14px;
+                background: #101c2d;
+            }
+            code,
+            pre {
+                font-family: ui-monospace, monospace;
+            }
+            pre {
+                overflow: auto;
+                color: #8ce8ca;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Tyoi API Starter</h1>
+        <p>APIは起動しています。次のURLを試してください。</p>
+        <section>
+            <h2>Health</h2>
+            <code>GET /api/health</code>
+        </section>
+        <section>
+            <h2>Tasks</h2>
+            <code>GET /api/tasks</code><br /><code>POST /api/tasks</code>
+            <pre>{ "title": "First task" }</pre>
+        </section>
+    </body>
+</html>

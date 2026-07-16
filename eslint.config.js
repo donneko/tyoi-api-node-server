@@ -27,5 +27,13 @@ export default tseslint.config(
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": "warn",
         },
+    },
+    {
+        files: ["templates/project/**/public/**/*.js"],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
+        },
     }
 );

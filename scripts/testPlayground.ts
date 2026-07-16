@@ -40,6 +40,12 @@ function testCLI(playgroundPath: string): { args: string[]; ok: boolean }[] {
     undo();
     run(["create", "my-app", "--template", "basic-js"]);
     undo();
+    run(["create", "my-app", "--template", "static-ts"]);
+    undo();
+    run(["create", "my-app", "--template", "api-ts"]);
+    undo();
+    run(["create", "my-app", "--template", "realtime-ts"]);
+    undo();
     run(["config", "my-app", "--template", "basic"]);
     run(["run"], 3000);
     run(["dev"], 3000);

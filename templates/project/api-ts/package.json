@@ -1,0 +1,21 @@
+{
+    "name": "__PROJECT_NAME__",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "engines": { "node": ">=20.14" },
+    "scripts": {
+        "dev": "tsx watch src/server.ts",
+        "typecheck": "tsc --noEmit",
+        "build": "tsc",
+        "start": "node dist/server.js"
+    },
+    "dependencies": {
+        "@donneko/tyoi-server": "^__TYOI_SERVER_VERSION__"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.0"
+    }
+}

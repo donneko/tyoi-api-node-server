@@ -1,0 +1,120 @@
+:root {
+    color-scheme: dark;
+    font-family: Inter, system-ui, sans-serif;
+    background: #070b14;
+    color: #eef2ff;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+.chat {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    width: min(760px, 100%);
+    height: min(760px, calc(100vh - 40px));
+    overflow: hidden;
+    border: 1px solid #293248;
+    border-radius: 22px;
+    background: #0d1320;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px;
+    border-bottom: 1px solid #293248;
+}
+h1,
+.eyebrow {
+    margin: 0;
+}
+.eyebrow {
+    margin-bottom: 4px;
+    color: #8d87ff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+.status {
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: #2b3242;
+    font-size: 0.8rem;
+}
+.status[data-state="open"] {
+    background: #123a31;
+    color: #71e5bd;
+}
+.status[data-state="closed"] {
+    background: #421f29;
+    color: #ff9bae;
+}
+ol {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 22px;
+    list-style: none;
+}
+li {
+    align-self: flex-start;
+    max-width: 80%;
+    padding: 10px 13px;
+    border-radius: 4px 14px 14px;
+    background: #27324a;
+    overflow-wrap: anywhere;
+}
+li[data-type="system"] {
+    align-self: center;
+    background: transparent;
+    color: #8792a8;
+    font-size: 0.8rem;
+}
+li[data-type="error"] {
+    background: #421f29;
+    color: #ff9bae;
+}
+form {
+    display: flex;
+    gap: 10px;
+    padding: 18px;
+    border-top: 1px solid #293248;
+}
+input,
+button {
+    border: 1px solid #35415b;
+    border-radius: 12px;
+    color: inherit;
+    font: inherit;
+}
+input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    background: #111a2a;
+}
+button {
+    padding: 0 18px;
+    background: #756eff;
+    cursor: pointer;
+}
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
