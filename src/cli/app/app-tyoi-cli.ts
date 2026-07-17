@@ -1,5 +1,5 @@
 import { CommandHandler } from "@donneko/tyoi-cli";
-import type { MetaData } from "../types/tyoi-cli.js";
+import type { MetaData } from "../../types/tyoi-cli.type.js";
 import { getOnError } from "../service/app-tyoi-cli/on-error.js";
 import { getMetaData } from "../service/app-tyoi-cli/meta-data.js";
 import { addCommand } from "../service/app-tyoi-cli/add-command.js";

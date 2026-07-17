@@ -1,7 +1,6 @@
 import { Logger } from "@donneko/tyoi-logger";
 
-import { type InnerEventBusMap } from "../types/inner.event-bus.type.js";
-import { type OutEventBusMap } from "../types/out.event-bus.type.js";
+import type { OutEventBusMap, InnerEventBusMap } from "../types/event-bus.type.js";
 import { type EventBus } from "../util/event-bus.js";
 
 const logger = new Logger();

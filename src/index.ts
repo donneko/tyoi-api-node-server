@@ -18,8 +18,8 @@ export type {
 } from "./server/app/server.js";
 export type { ApiRegistryHandler } from "./util/api-registry.js";
 export type { EventBusHandler } from "./util/event-bus.js";
-export type { OutEventBusMap } from "./types/out.event-bus.type.js";
+export type { OutEventBusMap } from "./types/event-bus.type.js";
 export type { WsHandler } from "./service/web-socket-router.js";
-export type { LoggerCreateData } from "./types/out.event-bus.type.js";
+export type { LoggerCreateData } from "./types/event-bus.type.js";
 export type { BrowserOpenConfig, ServerUserConfig } from "./types/config.type.js";
 export { serverUserConfigSchema } from "./types/config.type.js";

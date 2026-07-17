@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { CmdMetaData } from "../../types/tyoi-cli.js";
+import type { CmdMetaData } from "../../../types/tyoi-cli.type.js";
 import { getConfigFile } from "./service/getConfigFile.js";
 import { pathToFileURL } from "node:url";
 import { Logger } from "@donneko/tyoi-logger";
