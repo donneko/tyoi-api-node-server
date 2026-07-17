@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import { spawnSync } from "node:child_process";
-import { askSelect } from "./ask-select.js";
+import { Ask } from "@donneko/tyoi-logger";
 
 const PLAYGROUND_PASS = "../test/playground";
 const PACK_PASS = "../";
@@ -18,7 +18,7 @@ async function getPackagePath(): Promise<string> {
     const packPath = items.filter((i) => PACK_REGEX.test(i));
     if (!packPath) throw Error("パッケージがありませんでした");
 
-    const index = await askSelect({
+    const index = await new Ask().select({
         message: "使用するパッケージを選択してください",
         selects: packPath,
     });

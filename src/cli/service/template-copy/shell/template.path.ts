@@ -1,7 +1,6 @@
 import path from "node:path";
-import { askSelect } from "../../../../service/ask-select.js";
 import { readDirectory } from "../../../../util/read-directory.js";
-import { Logger } from "@donneko/tyoi-logger";
+import { Ask, Logger } from "@donneko/tyoi-logger";
 import { isValidTemplate } from "../core/is-valid-template.js";
 
 export async function getTemplatePath(
@@ -11,6 +10,7 @@ export async function getTemplatePath(
 ): Promise<string> {
     const readPath = path.join(base, templatePath);
     const templateFiles = await readDirectory(readPath, false);
+    const ask = new Ask();
     const logger = new Logger();
 
     let template = templateName;
@@ -23,7 +23,7 @@ export async function getTemplatePath(
         throw new Error(`コピー元のテンプレートが見つかりません: ${template}`);
     }
 
-    const index = await askSelect({
+    const index = await ask.select({
         message: "テンプレートを選択してください",
         selects: templateFiles,
     });

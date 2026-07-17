@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Tyoi static site starter" />
+        <title>Static Tyoi Starter</title>
+        <link rel="stylesheet" href="/assets/style.css" />
+        <script type="module" src="/assets/app.js"></script>
+    </head>
+    <body>
+        <header class="site-header">
+            <a href="/">Tyoi Starter</a>
+            <nav aria-label="メインナビゲーション">
+                <a href="#features">Features</a>
+                <a href="#start">Start</a>
+            </nav>
+        </header>
+        <main>
+            <section class="hero">
+                <p class="eyebrow">STATIC SITE TEMPLATE</p>
+                <h1>小さく始めて、すぐ公開できる。</h1>
+                <p>フレームワーク不要のHTML、CSS、JavaScriptスターターです。</p>
+                <a class="button" href="#start">編集を始める</a>
+            </section>
+            <section id="features" class="cards" aria-label="特徴">
+                <article>
+                    <h2>Fast</h2>
+                    <p>ビルドなしですぐ確認できます。</p>
+                </article>
+                <article>
+                    <h2>Responsive</h2>
+                    <p>モバイルからデスクトップまで対応します。</p>
+                </article>
+                <article>
+                    <h2>Typed</h2>
+                    <p>JavaScriptもTypeScriptで検査できます。</p>
+                </article>
+            </section>
+            <section id="start" class="panel">
+                <h2>Ready to edit</h2>
+                <p id="clock" aria-live="polite"></p>
+                <p><code>public/main/index.html</code> を編集してください。</p>
+            </section>
+        </main>
+        <footer>Powered by Tyoi</footer>
+    </body>
+</html>

@@ -1,4 +1,4 @@
-import type { CmdHandler } from "../../types/tyoi-cli.js";
+import type { CmdHandler } from "../../../types/tyoi-cli.type.js";
 
 import dev from "../../command/dev.js";
 import create from "../../command/create/main.js";

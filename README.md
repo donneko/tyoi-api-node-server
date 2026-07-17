@@ -77,11 +77,22 @@ await app.start();
 
 - `basic-ts`: TypeScript 用テンプレート
 - `basic-js`: JavaScript 用テンプレート
+- `static-ts`: レスポンシブな静的サイト用テンプレート
+- `api-ts`: 入力検証とインメモリデータを含む JSON API 用テンプレート
+- `realtime-ts`: WebSocket チャットを含むリアルタイムアプリ用テンプレート
 
 テンプレートを指定しない場合は、CLI 上で選択できます。
 
 ```bash
 npm exec --package @donneko/tyoi-server tyoi -- create my-app
+```
+
+用途別テンプレートを直接指定する場合:
+
+```bash
+tyoi create my-site --template static-ts
+tyoi create my-api --template api-ts
+tyoi create my-chat --template realtime-ts
 ```
 
 ## Common CLI
@@ -117,6 +128,8 @@ tyoi --version
 - [Usage](./docs/usage.md): `tyoi()` の基本、API、WebSocket、middleware、イベント、`Server` 直接利用
 - [Config](./docs/config.md): `tyoi.config.js` と設定項目
 - [CLI](./docs/cli.md): CLI コマンドとオプション
+
+機能ごとの最小コードは [Feature Examples](./examples/features/README.md) で確認できます。
 
 ## Development
 

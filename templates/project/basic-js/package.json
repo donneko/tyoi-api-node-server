@@ -3,9 +3,13 @@
     "version": "0.0.1",
     "private": true,
     "type": "module",
+    "engines": {
+        "node": ">=20.14"
+    },
     "scripts": {
-        "dev":"npm run start",
-        "start": "node src/server.js"
+        "dev": "node --watch src/server.js",
+        "start": "node src/server.js",
+        "check": "node --check src/server.js"
     },
     "dependencies": {
         "@donneko/tyoi-server": "^__TYOI_SERVER_VERSION__",

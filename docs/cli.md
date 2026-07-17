@@ -30,6 +30,9 @@ npm run dev
 ```bash
 tyoi create my-app --template basic-ts
 tyoi create my-app --template basic-js
+tyoi create my-site --template static-ts
+tyoi create my-api --template api-ts
+tyoi create my-chat --template realtime-ts
 ```
 
 `my-app` は作成するフォルダ名と `package.json` の `name` に使われます。
@@ -47,6 +50,9 @@ tyoi create my-app
 ```bash
 tyoi init my-app --template basic-ts
 tyoi init my-app --template basic-js
+tyoi init my-site --template static-ts
+tyoi init my-api --template api-ts
+tyoi init my-chat --template realtime-ts
 ```
 
 `my-app` は `package.json` の `name` に使われます。フォルダは新しく作られません。
@@ -61,6 +67,9 @@ tyoi init my-app
 
 - `basic-ts`
 - `basic-js`
+- `static-ts`: HTML / CSS / JavaScript の静的サイト
+- `api-ts`: 入力検証付きの JSON API
+- `realtime-ts`: WebSocket を使うリアルタイムアプリ
 
 ## config
 
@@ -129,6 +138,9 @@ tyoi help
 ```bash
 tyoi create my-app --template basic-ts
 tyoi init my-app --template basic-js
+tyoi create my-site --template static-ts
+tyoi create my-api --template api-ts
+tyoi create my-chat --template realtime-ts
 tyoi config --template basic
 ```
 

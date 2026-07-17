@@ -5,9 +5,10 @@
     "test": "npm run test:use && npm run test:vitest",
     "test:vitest": "npx vitest run",
     "test:type": "npx tsc --noEmit",
+    "test:templates": "npx tsc -p tsconfig.templates.json && npx tsc --ignoreConfig --noEmit --allowJs --checkJs templates/project/static-ts/public/main/assets/app.js && node --check templates/project/static-ts/public/main/assets/app.js && node --check templates/project/realtime-ts/public/main/assets/app.js",
     "test:use--init": "npm pack && tsx ./scripts/initPlayground.ts",
     "test:use": "npm run test:use--init && tsx ./scripts/testPlayground.ts",
-    "test:ci": "npm run test:type && npm run check:format:check && npm run test:vitest",
+    "test:ci": "npm run test:type && npm run test:templates && npm run check:format:check && npm run test:vitest",
     "test:nonTTY": "npm run test </dev/null",
     "check:format:write": "npx prettier . --write",
     "check:format:check": "npx prettier . --check",
@@ -36,6 +37,7 @@
     "dist",
     "docs/*.md",
     "docs/src",
+    "examples/features",
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
@@ -45,7 +47,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/donneko/tyoi-api-node-server.git"
+    "url": "git+https://github.com/donneko/tyoi-server.git"
   },
   "keywords": [
     "server",
@@ -63,18 +65,15 @@
   "license": "MIT",
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
-    "@donneko/tyoi-cli": "^0.0.1",
-    "@donneko/tyoi-logger": "^0.0.1",
+    "@donneko/tyoi-cli": "^0.0.2",
+    "@donneko/tyoi-logger": "^0.0.2",
     "@types/express": "^5.0.6",
     "@types/ws": "^8.18.1",
     "express": "^5.2.1",
     "minimist": "^1.2.8",
     "morgan": "^1.10.1",
     "open": "^11.0.0",
-    "picocolors": "^1.1.1",
     "qrcode-terminal": "^0.12.0",
-    "string-width": "^8.2.1",
-    "strip-ansi": "^7.2.0",
     "ws": "^8.21.0",
     "zod": "^4.4.3"
   },

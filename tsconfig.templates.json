@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "rootDir": ".",
+        "declaration": false,
+        "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
+        "paths": {
+            "@donneko/tyoi-server": ["src/index.ts"]
+        }
+    },
+    "include": [
+        "templates/project/api-ts/src/**/*.ts",
+        "templates/project/realtime-ts/src/**/*.ts",
+        "examples/features/**/*.ts"
+    ],
+    "exclude": []
+}
