@@ -1,6 +1,5 @@
 import path from "node:path";
-import { askInput } from "../../../../service/ask-input.js";
-import { Logger } from "@donneko/tyoi-logger";
+import { Ask, Logger } from "@donneko/tyoi-logger";
 import { isValidProjectName } from "../core/is-valid-project-name.js";
 
 export async function getProjectName(
@@ -8,12 +7,13 @@ export async function getProjectName(
     target: string
 ): Promise<string> {
     let projectName = inputName;
+    const ask = new Ask();
     const logger = new Logger();
 
     if (!projectName) {
         const defaultName = path.basename(target);
         const InputProjectName =
-            (await askInput(`Project名を入力してください。デフォルト(${defaultName}) : `)) ??
+            (await ask.input(`Project名を入力してください。デフォルト(${defaultName}) : `)) ??
             defaultName;
 
         projectName = InputProjectName;

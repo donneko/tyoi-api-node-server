@@ -1,4 +1,4 @@
-import { askSelect } from "../../../../service/ask-select.js";
+import { Ask } from "@donneko/tyoi-logger";
 import { scanConfigFiles } from "../../../../service/scan-config-files.js";
 
 export async function getConfigFile(processCwd: string): Promise<string | null | undefined> {
@@ -7,7 +7,7 @@ export async function getConfigFile(processCwd: string): Promise<string | null |
     if (files.length === 0) return null;
 
     if (files.length > 1) {
-        const index = await askSelect({
+        const index = await new Ask().select({
             message: "使用する設定ファイルを選択してください。",
             selects: files,
         });
