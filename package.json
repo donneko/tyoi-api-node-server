@@ -66,7 +66,7 @@
   "description": "Small local API and static file server framework built with Express and TypeScript.",
   "dependencies": {
     "@donneko/tyoi-cli": "^0.0.2",
-    "@donneko/tyoi-logger": "^0.0.2",
+    "@donneko/tyoi-logger": "^0.1.0",
     "@types/express": "^5.0.6",
     "@types/ws": "^8.18.1",
     "express": "^5.2.1",
