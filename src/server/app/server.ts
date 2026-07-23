@@ -1,7 +1,6 @@
 import express from "express";
 import http from "node:http";
 
-import { pathNormalization } from "../../service/path-normalization.js";
 import { ApiRegistry } from "../../util/api-registry.js";
 import type { ServerDefaultConfig, ServerUserConfig } from "../types/server-config.type.js";
 import { EventBus } from "../../util/event-bus.js";
@@ -20,6 +19,8 @@ import type {
 } from "../types/server-dependencies.type.js";
 import type { ServerStartUseConfig } from "../types/server.type.js";
 import { isServerStop, stopServer } from "../logic/stop-server/index.js";
+import { setupExpress } from "../logic/setup-express/index.js";
+import { setupServer } from "../logic/setup-server/index.js";
 
 function removeUndefinedConfig(config: ServerUserConfig): Partial<ServerDefaultConfig> {
     return Object.fromEntries(
@@ -84,112 +85,8 @@ export class Server<
             this.#serverConfig.updateConfig(removeUndefinedConfig(options));
         }
 
-        this.#init();
-        this.#initServer();
-    }
-
-    // サーバー作成前の設定
-    #init() {
-        const baseDirname = this.#serverConfig.getConfig("baseDirname");
-        const publicDirname = this.#serverConfig.getConfig("publicDirname");
-        const signalShutdownHandling = this.#serverConfig.getConfig("signalShutdownHandling");
-
-        if (!baseDirname) throw new Error("baseDirname is required");
-
-        this.#serverConfig.updateConfig({ baseDirname });
-
-        const publicDirectoryPath = pathNormalization(baseDirname, publicDirname);
-        this.#serverRegister.updateConfig({ publicDirectoryPath });
-
-        if (signalShutdownHandling) {
-            process.on("SIGINT", async () => {
-                await this.#shutdownServer();
-            });
-            process.on("SIGTERM", async () => {
-                await this.#shutdownServer();
-            });
-        }
-    }
-
-    // サーバー作成
-    #initServer() {
-        const middlewares = this.#serverConfig.getConfig("middlewares");
-        const apiPrefix = this.#serverConfig.getConfig("apiPrefix");
-        const publicDirectoryPath = this.#serverRegister.getConfig("publicDirectoryPath") ?? "";
-
-        // ミドルウェアと追加する。
-        for (const middleware of middlewares) {
-            this.#appServer.use(middleware);
-        }
-        // JSONを受け取れるようにする
-        this.#appServer.use(express.json());
-
-        // API
-        this.#appServer.use(apiPrefix, (req, res) => {
-            this.#apiProcess(req, res);
-        });
-
-        // 静的ファイル配信
-        this.#appServer.use(express.static(publicDirectoryPath));
-
-        this.#appServer.use((req, res) => {
-            const sendData = this.#serverServicesRegister.get("httpMetaManager").getMeta(404);
-            res.status(sendData.code).send(
-                `<h1>${sendData.message}</h1><br><p>${sendData.description}</p>`
-            );
-        });
-    }
-
-    // サーバーAPI処理
-    async #apiProcess(req: express.Request, res: express.Response) {
-        try {
-            const key = `${req.method}:${req.path}`;
-
-            if (!this.#serverAPIs.has(key)) {
-                res.status(404).json({
-                    ok: false,
-                    code: "API_NOT_FOUND",
-                    message: "API not found",
-                });
-                return;
-            }
-
-            const result = await this.#serverAPIs.emit(key, {
-                query: req.query,
-                body: req.body,
-                headers: req.headers,
-            });
-
-            res.json({
-                ok: true,
-                data: result,
-            });
-        } catch {
-            res.status(500).json({
-                ok: false,
-                code: "API_INTERNAL_ERROR",
-                message: "Internal server error",
-            });
-        }
-    }
-
-    #isShuttingDown: boolean = false;
-    async #shutdownServer() {
-        if (this.#isShuttingDown) return;
-        this.#isShuttingDown = true;
-
-        this.#serverLogger.logger("bar");
-        this.#serverLogger.logger(
-            "process",
-            this.#serverServicesRegister.get("systemMetaManager").getMeta(100).message
-        );
-
-        await this.stop();
-
-        this.#serverLogger.logger(
-            "success",
-            this.#serverServicesRegister.get("systemMetaManager").getMeta(101).message
-        );
+        setupServer();
+        setupExpress();
     }
 
     private isStarting: boolean = false;
@@ -254,6 +151,21 @@ export class Server<
         });
     }
 
+    /** サーバーが起動中かを返します。 */
+    isRunning(): boolean {
+        return Boolean(this.httpServer);
+    }
+    /** 現在設定されているポート番号を返します。 */
+    getPort(): number {
+        return this.serverConfig.getConfig("port");
+    }
+    /** 基盤となる Node.js の HTTP サーバーを取得します。 */
+    getHttpServer(): http.Server | null {
+        return this.httpServer;
+    }
+    /** 解決済みのサーバー設定を取得します。 */
+    getConfig = this.serverConfig.getConfig;
+
     /** イベントハンドラを登録します。 */
     onEvent = this.#outEventBus.on;
     /** 一度だけ実行するイベントハンドラを登録します。 */
@@ -282,20 +194,4 @@ export class Server<
     offWebSocket = this.#webSocketRouter.off;
     /** 指定した WebSocket ハンドラが登録されているかを返します。 */
     hasWebSocket = this.#webSocketRouter.has;
-
-    /** サーバーが起動中かを返します。 */
-    isRunning(): boolean {
-        return Boolean(this.httpServer);
-    }
-    /** 現在設定されているポート番号を返します。 */
-    getPort(): number {
-        return this.serverConfig.getConfig("port");
-    }
-    /** 解決済みのサーバー設定を取得します。 */
-    getConfig = this.serverConfig.getConfig;
-
-    /** 基盤となる Node.js の HTTP サーバーを取得します。 */
-    getHttpServer(): http.Server | null {
-        return this.httpServer;
-    }
 }

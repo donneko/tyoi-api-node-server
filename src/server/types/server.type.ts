@@ -1,4 +1,5 @@
 import type { ServerUserConfig } from "./server-config.type.js";
+import type express from "express";
 
 /** HTTP API ハンドラに渡されるリクエスト情報です。 */
 export type RequestData = {
@@ -56,4 +57,16 @@ export type ServerOpenBrowserArgs = {
     host: string;
     port: number;
     target: ServerOpenBrowserTarget;
+};
+
+export type ServerCreateExpressConfigReturn = {
+    middlewares: express.RequestHandler[];
+    apiPrefix: string;
+    publicDirectoryPath: string;
+};
+
+export type ServerCreateServerConfigReturn = {
+    baseDirname: string;
+    publicDirname: string;
+    signalShutdownHandling: boolean;
 };

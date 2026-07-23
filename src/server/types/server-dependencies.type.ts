@@ -1,7 +1,7 @@
 import type { OutEventBusMap, InnerEventBusMap } from "./server-event-bus.type.js";
 import type { EventBus } from "../../util/event-bus.js";
 import type { configManager } from "../../service/config-manager.js";
-import http from "node:http";
+import type express from "express";
 
 export type ServerServicesRegister = {
     innerEventBus: EventBus<InnerEventBusMap>;
@@ -67,4 +67,49 @@ export type ServerStopServerDependencies = {
 export type ServerCreateFinishDependencies = {
     serverLogger;
     systemMetaManager;
+};
+export type ServerSetupExpressDependencies = {
+    serverConfig: configManager;
+    serverLogger;
+    systemMetaManager;
+} & ServerCreateExpressConfigDependencies &
+    ServerSetupMiddlewareDependencies &
+    ServerSetupApiDependencies;
+
+export type ServerCreateExpressConfigDependencies = {
+    serverConfig: configManager;
+    serverRegister;
+};
+
+export type ServerSetupMiddlewareDependencies = {
+    expressServer: express.Express;
+};
+
+export type ServerSetupApiDependencies = {
+    expressServer: express.Express;
+} & ServerApiProcessDependencies;
+
+export type ServerApiProcessDependencies = {
+    serverAPIs;
+};
+
+export type ServerSetupStaticFileDependencies = {
+    expressServer: express.Express;
+    systemMetaManager;
+};
+
+export type ServerSetupServerDependencies = ServerCreatePublicPathDependencies &
+    ServerCreateConfigDependencies &
+    ServerSetupSignalStopDependencies;
+
+export type ServerSetupPublicPathDependencies = {
+    serverRegister;
+};
+
+export type ServerCreateConfigDependencies = {
+    serverConfig;
+};
+
+export type ServerSetupSignalStopDependencies = {
+    stop: () => Promise<void>;
 };
