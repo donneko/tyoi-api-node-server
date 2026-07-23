@@ -1,8 +1,6 @@
 import express from "express";
 import z from "zod";
 
-export type BrowserOpenConfig = boolean | "local" | "network";
-
 export const serverUserConfigSchema = z.object({
     baseDirname: z.string().optional(),
     publicDirname: z.string().optional(),

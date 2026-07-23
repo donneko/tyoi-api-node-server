@@ -1,5 +1,5 @@
-import { serverDefaultConfigSchema, serverUserConfigSchema } from "../../types/config.type.js";
-import type { ServerUserConfig, ServerDefaultConfig } from "../../types/config.type.js";
+import { serverDefaultConfigSchema, serverUserConfigSchema } from "../types/server-config.type.js";
+import type { ServerUserConfig, ServerDefaultConfig } from "../types/server-config.type.js";
 
 /**
  * CLI で読み込むサーバー設定を検証して返します。

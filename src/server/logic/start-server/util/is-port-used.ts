@@ -1,6 +1,6 @@
 import net from "node:net";
 
-export async function isPortInUse(port: number, host: string): Promise<boolean> {
+export async function isPortUsed(port: number, host: string): Promise<boolean> {
     return new Promise((resolve) => {
         const server = net.createServer();
 
