@@ -224,10 +224,11 @@ export class Server<
 
         this.isStarting = true;
 
-        const httpServer = await startServer(options, dependencies);
+        const httpServer = await startServer(options, dependencies).finally(
+            () => (this.isStarting = false)
+        );
 
         this.httpServer = httpServer;
-        this.isStarting = false;
 
         return httpServer;
     }
@@ -284,16 +285,15 @@ export class Server<
 
     /** サーバーが起動中かを返します。 */
     isRunning(): boolean {
-        return this.httpServer !== null;
+        return Boolean(this.httpServer);
     }
     /** 現在設定されているポート番号を返します。 */
     getPort(): number {
         return this.serverConfig.getConfig("port");
     }
     /** 解決済みのサーバー設定を取得します。 */
-    getConfig<K extends keyof ServerDefaultConfig>(key: K): ServerDefaultConfig[K] {
-        return this.serverConfig.getConfig(key);
-    }
+    getConfig = this.serverConfig.getConfig;
+
     /** 基盤となる Node.js の HTTP サーバーを取得します。 */
     getHttpServer(): http.Server | null {
         return this.httpServer;
