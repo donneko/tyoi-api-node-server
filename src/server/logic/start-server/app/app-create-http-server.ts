@@ -7,7 +7,7 @@ export async function createHttpServer(
     dependencies: ServerCreateHttpServerDependencies
 ): Promise<http.Server> {
     return new Promise<http.Server>((resolve, reject) => {
-        const server = http.createServer(dependencies.appServer);
+        const server = http.createServer(dependencies.expressServer);
 
         dependencies.webSocketRouter.start(server);
 

@@ -1,32 +1,14 @@
-import express from "express";
-import http from "node:http";
-
-import { ApiRegistry } from "../../util/api-registry.js";
-import type { ServerDefaultConfig, ServerUserConfig } from "../types/server-config.type.js";
-import { EventBus } from "../../util/event-bus.js";
-import { ServerLogger } from "../../service/server-logger.js";
-import type { OutEventBusMap, InnerEventBusMap } from "../types/server-event-bus.type.js";
-import { ServicesRegister } from "../../util/services-register.js";
-import { HttpMetaManager } from "../../service/http-meta/http-meta-manager.js";
-import { SystemMetaManager } from "../../service/system-meta/system-meta-manager.js";
-import { configManager } from "../../service/config-manager.js";
-import { RegisterManager } from "../../service/register-manager.js";
-import { WebSocketRouter } from "../../service/web-socket-router.js";
-import { startServer, isServerStart } from "../logic/start-server/index.js";
+import type http from "node:http";
 import type {
     ServerStartServerDependencies,
     ServerStopDependencies,
 } from "../types/server-dependencies.type.js";
-import type { ServerStartUseConfig } from "../types/server.type.js";
+import type { ServerStartUseConfig, ServerOptions } from "../types/server.type.js";
+import { createServerDependencies } from "../dependencies/server-dependencies.js";
 import { isServerStop, stopServer } from "../logic/stop-server/index.js";
 import { setupExpress } from "../logic/setup-express/index.js";
 import { setupServer } from "../logic/setup-server/index.js";
-
-function removeUndefinedConfig(config: ServerUserConfig): Partial<ServerDefaultConfig> {
-    return Object.fromEntries(
-        Object.entries(config).filter(([, value]) => value !== undefined)
-    ) as Partial<ServerDefaultConfig>;
-}
+import { startServer, isServerStart } from "../logic/start-server/index.js";
 
 /**
  * HTTP API、WebSocket、静的ファイル配信を提供するサーバーです。
@@ -38,24 +20,11 @@ export class Server<
     RequestNameList extends string = string,
     WebSocketNameList extends string = string,
 > {
-    private expressServer = express();
-    #serverAPIs = new ApiRegistry<RequestEventMap<RequestNameList>>();
-    #outEventBus = new EventBus<OutEventBusMap>();
-    #innerEventBus = new EventBus<InnerEventBusMap>();
-    #serverLogger = new ServerLogger(this.#innerEventBus, this.#outEventBus);
+    private serverDependencies = createServerDependencies<RequestNameList, WebSocketNameList>(
+        this.stop
+    );
+
     private httpServer: http.Server | null = null;
-    private serverConfig: configManager = new configManager();
-    #serverRegister: RegisterManager = new RegisterManager();
-    #serverServicesRegister = new ServicesRegister<ServerServicesRegister>({
-        innerEventBus: this.#innerEventBus,
-        outEventBus: this.#outEventBus,
-        serverLogger: this.#serverLogger,
-        httpMetaManager: new HttpMetaManager(),
-        systemMetaManager: new SystemMetaManager(),
-        serverConfig: this.#serverConfig,
-        serverRegister: this.#serverRegister,
-    });
-    #webSocketRouter = new WebSocketRouter<WebSocketNameList>();
 
     /**
      * サーバーを作成し、ルーティングと静的ファイル配信を初期化します。
@@ -82,11 +51,11 @@ export class Server<
      */
     constructor(options?: ServerOptions) {
         if (options) {
-            this.#serverConfig.updateConfig(removeUndefinedConfig(options));
+            this.serverDependencies.serverConfig.updateConfig(options);
         }
 
-        setupServer();
-        setupExpress();
+        setupServer(this.serverDependencies);
+        setupExpress(this.serverDependencies);
     }
 
     private isStarting: boolean = false;
@@ -108,20 +77,22 @@ export class Server<
      * ```
      */
     async start(
-        options: ServerStartUseConfig, // !! 一時的にオプション解除。必ずオプションに！！
-        dependencies: ServerStartServerDependencies // TODO あとで、ここをオプションにする
+        options?: ServerStartUseConfig,
+        dependencies: Partial<ServerStartServerDependencies> = {}
     ): Promise<http.Server | undefined> {
+        const deps = {
+            ...dependencies,
+            ...this.serverDependencies,
+        };
+
         if (!isServerStart(this.httpServer, this.isStarting)) {
-            dependencies.serverLogger.logger(
-                "warn",
-                dependencies.systemMetaManager.getMeta(102).message
-            );
+            deps.serverLogger.logger("warn", deps.systemMetaManager.getMeta(102).message);
             return;
         }
 
         this.isStarting = true;
 
-        const httpServer = await startServer(options, dependencies).finally(
+        const httpServer = await startServer(options, deps).finally(
             () => (this.isStarting = false)
         );
 
@@ -140,12 +111,17 @@ export class Server<
      * @returns 停止完了時に解決する Promise。
      * @throws HTTP サーバーの停止に失敗した場合。
      */
-    async stop(dependencies: ServerStopDependencies): Promise<void> {
+    async stop(dependencies: Partial<ServerStopDependencies> = {}): Promise<void> {
+        const deps = {
+            ...dependencies,
+            ...this.serverDependencies,
+        };
+
         if (!isServerStop(this.httpServer, this.isStopping)) return;
 
         this.isStopping = true;
 
-        await stopServer(this.httpServer, dependencies).finally(() => {
+        await stopServer(this.httpServer, deps).finally(() => {
             this.httpServer = null;
             this.isStopping = false;
         });
@@ -157,41 +133,41 @@ export class Server<
     }
     /** 現在設定されているポート番号を返します。 */
     getPort(): number {
-        return this.serverConfig.getConfig("port");
+        return this.serverDependencies.serverConfig.getConfig("port");
     }
     /** 基盤となる Node.js の HTTP サーバーを取得します。 */
     getHttpServer(): http.Server | null {
         return this.httpServer;
     }
     /** 解決済みのサーバー設定を取得します。 */
-    getConfig = this.serverConfig.getConfig;
+    getConfig = this.serverDependencies.serverConfig.getConfig;
 
     /** イベントハンドラを登録します。 */
-    onEvent = this.#outEventBus.on;
+    onEvent = this.serverDependencies.outEventBus.on;
     /** 一度だけ実行するイベントハンドラを登録します。 */
-    onceEvent = this.#outEventBus.once;
+    onceEvent = this.serverDependencies.outEventBus.once;
     /** イベントハンドラを解除します。 */
-    offEvent = this.#outEventBus.off;
+    offEvent = this.serverDependencies.outEventBus.off;
     /** 指定したイベントにハンドラが登録されているかを返します。 */
-    hasEvent = this.#outEventBus.has;
+    hasEvent = this.serverDependencies.outEventBus.has;
 
     /** HTTP API ハンドラを登録します。 */
-    onAPI = this.#serverAPIs.on;
+    onAPI = this.serverDependencies.serverAPIs.on;
     /** 一度だけ実行する HTTP API ハンドラを登録します。 */
-    onceAPI = this.#serverAPIs.once;
+    onceAPI = this.serverDependencies.serverAPIs.once;
     /** HTTP API ハンドラを解除します。 */
-    offAPI = this.#serverAPIs.off;
+    offAPI = this.serverDependencies.serverAPIs.off;
     /** 指定した HTTP API ハンドラが登録されているかを返します。 */
-    hasAPI = this.#serverAPIs.has;
+    hasAPI = this.serverDependencies.serverAPIs.has;
     /** HTTP API ハンドラをリクエストなしで実行します。 */
-    emitAPI = this.#serverAPIs.emit;
+    emitAPI = this.serverDependencies.serverAPIs.emit;
 
     /** WebSocket ハンドラを登録します。 */
-    onWebSocket = this.#webSocketRouter.on;
+    onWebSocket = this.serverDependencies.webSocketRouter.on;
     /** 一度だけ実行する WebSocket ハンドラを登録します。 */
-    onceWebSocket = this.#webSocketRouter.once;
+    onceWebSocket = this.serverDependencies.webSocketRouter.once;
     /** WebSocket ハンドラを解除します。 */
-    offWebSocket = this.#webSocketRouter.off;
+    offWebSocket = this.serverDependencies.webSocketRouter.off;
     /** 指定した WebSocket ハンドラが登録されているかを返します。 */
-    hasWebSocket = this.#webSocketRouter.has;
+    hasWebSocket = this.serverDependencies.webSocketRouter.has;
 }

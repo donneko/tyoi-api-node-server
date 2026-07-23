@@ -1,38 +1,44 @@
-import type { OutEventBusMap, InnerEventBusMap } from "./server-event-bus.type.js";
+import type { OutEventBusMap, InnerEventBusMap } from "./server-event.type.js";
 import type { EventBus } from "../../util/event-bus.js";
 import type { configManager } from "../../service/config-manager.js";
+import type { ApiRegistry } from "../../util/api-registry.js";
+import type { ServerLogger } from "../../service/server-logger.js";
+import type { SystemMetaManager } from "../../service/system-meta/system-meta-manager.js";
+import type { RegisterManager } from "../../service/register-manager.js";
+import type { WebSocketRouter } from "../../service/web-socket-router.js";
+import type { RequestEventMap } from "../types/server.type.js";
 import type express from "express";
 
-export type ServerServicesRegister = {
+export type ServerDependencies = {
     innerEventBus: EventBus<InnerEventBusMap>;
     outEventBus: EventBus<OutEventBusMap>;
     serverLogger: ServerLogger;
-    httpMetaManager: HttpMetaManager;
-    systemMetaManager: SystemMetaManager;
-    serverConfig: configManager;
-    serverRegister: RegisterManager;
-};
+} & ServerStartDependencies &
+    ServerStopDependencies &
+    ServerSetupExpressDependencies &
+    ServerSetupServerDependencies;
 
 export type ServerStartDependencies = ServerStartServerDependencies;
 
 export type ServerStartServerDependencies = ServerCreateServerConfigDependencies &
     ServerCreateHttpServerDependencies &
     ServerUpdatePortDependencies &
-    ServerStartCatchErrorDependencies;
+    ServerStartCatchErrorDependencies &
+    ServerPostStartupDependencies;
 
 export type ServerCreateServerConfigDependencies = {
     serverConfig: configManager;
-    serverRegister;
+    serverRegister: RegisterManager;
 } & ServerAvailablePortDependencies;
 
 export type ServerAvailablePortDependencies = {
-    serverLogger;
-    systemMetaManager;
+    serverLogger: ServerLogger;
+    systemMetaManager: SystemMetaManager;
 };
 
 export type ServerCreateHttpServerDependencies = {
-    webSocketRouter;
-    appServer;
+    webSocketRouter: WebSocketRouter<WebSocketNameList>;
+    expressServer: express.Express;
 };
 
 export type ServerUpdatePortDependencies = {
@@ -43,42 +49,43 @@ export type ServerPostStartupDependencies = ServerOpenBrowserDependencies &
     ServerStartSummaryDependencies;
 
 export type ServerStartSummaryDependencies = {
-    systemMetaManager;
-    serverLogger;
+    systemMetaManager: SystemMetaManager;
+    serverLogger: ServerLogger;
 };
 
 export type ServerOpenBrowserDependencies = {
-    serverLogger;
-    systemMetaManager;
+    serverLogger: ServerLogger;
+    systemMetaManager: SystemMetaManager;
 };
 
 export type ServerStartCatchErrorDependencies = {
-    serverLogger;
-    systemMetaManager;
-    innerEventBus;
+    serverLogger: ServerLogger;
+    systemMetaManager: SystemMetaManager;
+    innerEventBus: EventBus<InnerEventBusMap>;
 };
 export type ServerStopDependencies = ServerStopServerDependencies;
 
 export type ServerStopServerDependencies = {
-    serverLogger;
-    systemMetaManager;
+    serverLogger: ServerLogger;
+    systemMetaManager: SystemMetaManager;
 } & ServerCreateFinishDependencies;
 
 export type ServerCreateFinishDependencies = {
-    serverLogger;
-    systemMetaManager;
+    serverLogger: ServerLogger;
+    systemMetaManager: SystemMetaManager;
 };
 export type ServerSetupExpressDependencies = {
     serverConfig: configManager;
-    serverLogger;
-    systemMetaManager;
+    serverLogger: ServerLogger;
+    systemMetaManager: SystemMetaManager;
 } & ServerCreateExpressConfigDependencies &
     ServerSetupMiddlewareDependencies &
-    ServerSetupApiDependencies;
+    ServerSetupApiDependencies &
+    ServerSetupStaticFileDependencies;
 
 export type ServerCreateExpressConfigDependencies = {
     serverConfig: configManager;
-    serverRegister;
+    serverRegister: RegisterManager;
 };
 
 export type ServerSetupMiddlewareDependencies = {
@@ -89,27 +96,27 @@ export type ServerSetupApiDependencies = {
     expressServer: express.Express;
 } & ServerApiProcessDependencies;
 
-export type ServerApiProcessDependencies = {
-    serverAPIs;
+export type ServerApiProcessDependencies<RequestNameList> = {
+    serverAPIs: ApiRegistry<RequestEventMap<RequestNameList>>;
 };
 
 export type ServerSetupStaticFileDependencies = {
     expressServer: express.Express;
-    systemMetaManager;
+    systemMetaManager: SystemMetaManager;
 };
 
-export type ServerSetupServerDependencies = ServerCreatePublicPathDependencies &
+export type ServerSetupServerDependencies = ServerSetupPublicPathDependencies &
     ServerCreateConfigDependencies &
     ServerSetupSignalStopDependencies;
 
 export type ServerSetupPublicPathDependencies = {
-    serverRegister;
+    serverRegister: RegisterManager;
 };
 
 export type ServerCreateConfigDependencies = {
-    serverConfig;
+    serverConfig: configManager;
 };
 
 export type ServerSetupSignalStopDependencies = {
-    stop: () => Promise<void>;
+    stop: (dependencies: ServerStopServerDependencies) => Promise<void>;
 };
