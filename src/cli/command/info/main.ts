@@ -40,10 +40,7 @@ function addLog(config: unknown) {
         logs.push(`${key} : ${value}`);
     }
 
-    logger.window({
-        title: "config info",
-        content: [...logs.map((l) => logger.createSystem(l))],
-    });
+    logger.window("config info", [...logs.map((l) => logger.createSystem(l))]);
 }
 
 export default async function serverCreate(data: CmdMetaData) {

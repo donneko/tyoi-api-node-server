@@ -8,7 +8,7 @@ export function setupStaticFile(
     dependencies.expressServer.use(express.static(publicDirectoryPath));
 
     dependencies.expressServer.use((req, res) => {
-        const sendData = dependencies.systemMetaManager.getMeta(404);
+        const sendData = dependencies.httpMetaManager.getMeta(404);
         res.status(sendData.code).send(
             `<h1>${sendData.message}</h1><br><p>${sendData.description}</p>`
         );

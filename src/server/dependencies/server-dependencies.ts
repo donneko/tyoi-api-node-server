@@ -10,6 +10,7 @@ import express from "express";
 import type { OutEventBusMap, InnerEventBusMap } from "../types/server-event.type.js";
 import type { RequestEventMap } from "../types/server.type.js";
 import type { ServerStopServerDependencies } from "../types/server-dependencies.type.js";
+import { HttpMetaManager } from "../../service/http-meta/http-meta-manager.js";
 
 export function createServerDependencies<
     RequestNameList extends string = string,
@@ -23,6 +24,7 @@ export function createServerDependencies<
         serverRegister: new RegisterManager(),
         serverLogger: new ServerLogger(innerEventBus, outEventBus),
         systemMetaManager: new SystemMetaManager(),
+        httpMetaManager: new HttpMetaManager(),
         webSocketRouter: new WebSocketRouter<WebSocketNameList>(),
         innerEventBus,
         outEventBus,

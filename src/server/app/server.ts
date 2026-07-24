@@ -9,6 +9,7 @@ import { isServerStop, stopServer } from "../logic/stop-server/index.js";
 import { setupExpress } from "../logic/setup-express/index.js";
 import { setupServer } from "../logic/setup-server/index.js";
 import { startServer, isServerStart } from "../logic/start-server/index.js";
+import { removeUndefined } from "../service/remove-undefined.js";
 
 /**
  * HTTP API、WebSocket、静的ファイル配信を提供するサーバーです。
@@ -51,7 +52,7 @@ export class Server<
      */
     constructor(options?: ServerOptions) {
         if (options) {
-            this.serverDependencies.serverConfig.updateConfig(options);
+            this.serverDependencies.serverConfig.updateConfig(removeUndefined(options));
         }
 
         setupServer(this.serverDependencies);

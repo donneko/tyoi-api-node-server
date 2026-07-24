@@ -9,7 +9,8 @@ export async function stopServer(
     return new Promise<void>((resolve, reject) => {
         const serverLogger = dependencies.serverLogger;
         const systemMetaManager = dependencies.systemMetaManager;
-        const getMessage = (code: number) => systemMetaManager.getMeta(code).message;
+        const getMessage = (code: Parameters<typeof systemMetaManager.getMeta>[0]) =>
+            systemMetaManager.getMeta(code).message;
 
         // !! オブジェクトを展開しないで！！ settled の参照が切れる。
         const finishObj = createFinish(httpServer, resolve, dependencies);

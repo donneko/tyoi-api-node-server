@@ -1,4 +1,4 @@
-import { Server, type ServerOptions, type RequestData, type StartServerOptions } from "./server.js";
+import { Server } from "./server.js";
 import { ApiRegistryHandler } from "../../util/api-registry.js";
 import type { WsHandler } from "../../service/web-socket-router.js";
 import http from "node:http";
@@ -41,11 +41,11 @@ export class ShortHandler {
     }
     /** サーバーを起動します。 */
     async start(options?: StartServerOptions): Promise<http.Server | undefined> {
-        return this.tyoiServer.startServer(options);
+        return this.tyoiServer.start(options);
     }
     /** サーバーを停止し、接続の終了を待機します。 */
     async close(): Promise<void> {
-        return this.tyoiServer.stopServer();
+        return this.tyoiServer.stop();
     }
 }
 

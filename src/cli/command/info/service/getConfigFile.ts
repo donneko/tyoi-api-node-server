@@ -1,18 +1,12 @@
 import { Ask } from "@donneko/tyoi-logger";
 import { scanConfigFiles } from "../../../../service/scan-config-files.js";
 
-export async function getConfigFile(processCwd: string): Promise<string | null | undefined> {
+export async function getConfigFile(processCwd: string): Promise<string | undefined> {
     const files = await scanConfigFiles(processCwd);
 
-    if (files.length === 0) return null;
+    if (files.length === 0) return;
 
     if (files.length > 1) {
-        const index = await new Ask().select({
-            message: "使用する設定ファイルを選択してください。",
-            selects: files,
-        });
-        return index === -1 ? null : files[index];
+        return await new Ask().select("使用する設定ファイルを選択してください。", files);
     }
-
-    return files[0];
 }

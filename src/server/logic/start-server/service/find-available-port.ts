@@ -11,10 +11,8 @@ export async function findAvailablePort(
 
     const serverLogger = dependencies.serverLogger;
     const systemMetaManager = dependencies.systemMetaManager;
-    const getMessage = (code: number, port: number) => {
+    const getMessage = (code: Parameters<typeof systemMetaManager.getMeta>[0], port: number) =>
         systemMetaManager.getMeta(code).message.replace("__PORT__", port.toString());
-    };
-
     let port = startPort;
 
     // ポートが使用されていたら、別のポートへ

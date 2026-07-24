@@ -73,7 +73,7 @@ export async function appTemplateCopy(data: AppTemplateCopyData): Promise<AppTem
     createProjectDirectory(projectPath, destination);
 
     const copyResult = await copyFolder(templatePath, projectPath);
-    logger.window(createCopyResult(copyResult));
+    logger.window(...createCopyResult(copyResult));
 
     if (app.replacePackageJson ?? true) {
         replacePackageJson(projectPath, fixProjectName, pack.version);

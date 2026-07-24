@@ -5,20 +5,14 @@ import type { CmdMetaData } from "../../types/tyoi-cli.type.js";
 import { scanConfigFiles } from "../../service/scan-config-files.js";
 import { serverRuntime } from "../../process/main-process/main-process.js";
 
-async function getConfigFile(processCwd: string): Promise<string | null | undefined> {
+async function getConfigFile(processCwd: string): Promise<string | undefined> {
     const files = await scanConfigFiles(processCwd);
 
-    if (files.length === 0) return null;
+    if (files.length === 0) return;
 
     if (files.length > 1) {
-        const index = await new Ask().select({
-            message: "使用する設定ファイルを選択してください。",
-            selects: files,
-        });
-        return index === -1 ? null : files[index];
+        return await new Ask().select("使用する設定ファイルを選択してください。", files);
     }
-
-    return files[0];
 }
 
 export default async function runStartServer(data: CmdMetaData) {

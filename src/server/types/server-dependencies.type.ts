@@ -8,6 +8,7 @@ import type { RegisterManager } from "../../service/register-manager.js";
 import type { WebSocketRouter } from "../../service/web-socket-router.js";
 import type { RequestEventMap } from "../types/server.type.js";
 import type express from "express";
+import type { HttpMetaManager } from "../../service/http-meta/http-meta-manager.js";
 
 export type ServerDependencies = {
     innerEventBus: EventBus<InnerEventBusMap>;
@@ -36,7 +37,7 @@ export type ServerAvailablePortDependencies = {
     systemMetaManager: SystemMetaManager;
 };
 
-export type ServerCreateHttpServerDependencies = {
+export type ServerCreateHttpServerDependencies<WebSocketNameList extends string = string> = {
     webSocketRouter: WebSocketRouter<WebSocketNameList>;
     expressServer: express.Express;
 };
@@ -96,13 +97,13 @@ export type ServerSetupApiDependencies = {
     expressServer: express.Express;
 } & ServerApiProcessDependencies;
 
-export type ServerApiProcessDependencies<RequestNameList> = {
+export type ServerApiProcessDependencies<RequestNameList extends string = string> = {
     serverAPIs: ApiRegistry<RequestEventMap<RequestNameList>>;
 };
 
 export type ServerSetupStaticFileDependencies = {
     expressServer: express.Express;
-    systemMetaManager: SystemMetaManager;
+    httpMetaManager: HttpMetaManager;
 };
 
 export type ServerSetupServerDependencies = ServerSetupPublicPathDependencies &

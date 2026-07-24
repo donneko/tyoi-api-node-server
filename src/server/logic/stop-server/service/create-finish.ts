@@ -8,7 +8,8 @@ export function createFinish(
 ) {
     const serverLogger = dependencies.serverLogger;
     const systemMetaManager = dependencies.systemMetaManager;
-    const getMessage = (code: number) => systemMetaManager.getMeta(code).message;
+    const getMessage = (code: Parameters<typeof systemMetaManager.getMeta>[0]) =>
+        systemMetaManager.getMeta(code).message;
 
     const finish = () => {
         if (finishObj.settled) return;

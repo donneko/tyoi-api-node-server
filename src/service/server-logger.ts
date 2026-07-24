@@ -19,7 +19,7 @@ export class ServerLogger {
         type: K,
         ...args: Parameters<Logger[K]>
     ): ReturnType<Logger[K]> {
-        const fn = logger[type] as (...args: Parameters<Logger[K]>) => ReturnType<Logger[K]>;
+        const fn = logger[type] as unknown as (...args: Parameters<Logger[K]>) => ReturnType<Logger[K]>;
 
         const data = fn.call(logger, ...args);
         this.#innerEventBus.emit("server/*:log", data);
