@@ -1,5 +1,5 @@
-import { Server } from "../../server/index.js";
-import type { MainMessage, ServerMessage } from "../../types/process.type.js";
+import type { Server } from "../../server/index.js";
+import type { MainMessage, ServerMessage } from "../types/process.type.js";
 import { isProcessMessage } from "../is-process-message.js";
 import { processSend } from "../process-send.js";
 import serverBootLogic from "./logic/boot.js";

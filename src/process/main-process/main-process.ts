@@ -1,6 +1,6 @@
 import { fork } from "node:child_process";
-import type { MainMessage } from "../../types/process.type.js";
-import type { ServerMessage } from "../../types/process.type.js";
+import type { MainMessage } from "../types/process.type.js";
+import type { ServerMessage } from "../types/process.type.js";
 import { processSend } from "../process-send.js";
 import { isProcessMessage } from "../is-process-message.js";
 import { mainProcessSetup } from "./main-process-setup.js";

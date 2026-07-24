@@ -1,5 +1,5 @@
 import type { ChildProcess } from "node:child_process";
-import type { MainMessage } from "../../types/process.type.js";
+import type { MainMessage } from "../types/process.type.js";
 import { processSend } from "../process-send.js";
 
 export function mainProcessSetup(child: ChildProcess) {
