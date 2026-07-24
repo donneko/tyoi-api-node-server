@@ -1,5 +1,5 @@
 import { Ask } from "@donneko/tyoi-logger";
-import { scanConfigFiles } from "../../../../service/scan-config-files.js";
+import { scanConfigFiles } from "../../../service/scan-config-files.js";
 
 export async function getConfigFile(processCwd: string): Promise<string | undefined> {
     const files = await scanConfigFiles(processCwd);

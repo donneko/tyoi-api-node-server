@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { tyoiCli } from "./cli/main.js";
+import { tyoiCli } from "./cli/index.js";
 
 async function boot() {
     await tyoiCli();

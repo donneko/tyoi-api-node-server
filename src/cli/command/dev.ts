@@ -1,4 +1,4 @@
-import type { CmdMetaData } from "../../types/tyoi-cli.type.js";
+import type { CmdMetaData } from "../types/tyoi-cli.type.js";
 import { serverRuntime } from "../../process/main-process/main-process.js";
 import path from "node:path";
 

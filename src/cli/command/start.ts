@@ -1,8 +1,8 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { Ask } from "@donneko/tyoi-logger";
-import type { CmdMetaData } from "../../types/tyoi-cli.type.js";
-import { scanConfigFiles } from "../../service/scan-config-files.js";
+import type { CmdMetaData } from "../types/tyoi-cli.type.js";
+import { scanConfigFiles } from "../service/scan-config-files.js";
 import { serverRuntime } from "../../process/main-process/main-process.js";
 
 async function getConfigFile(processCwd: string): Promise<string | undefined> {

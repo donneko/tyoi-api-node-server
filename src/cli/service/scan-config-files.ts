@@ -1,5 +1,5 @@
 import path from "path";
-import { readDirectory } from "../server/server-core/util/read-directory.js";
+import { readDirectory } from "./read-directory.js";
 
 export async function scanConfigFiles(passedPath: string): Promise<string[]> {
     const regex = /^(tyoi)\.([A-Za-z0-9.]+(\.config)|config)\.(js)$/;

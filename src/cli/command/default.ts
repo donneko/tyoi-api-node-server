@@ -1,5 +1,5 @@
 import { Logger } from "@donneko/tyoi-logger";
-import type { CmdMetaData } from "../../types/tyoi-cli.type.js";
+import type { CmdMetaData } from "../types/tyoi-cli.type.js";
 
 import help from "./help.js";
 import run from "./start.js";
