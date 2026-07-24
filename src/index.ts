@@ -6,14 +6,4 @@
  *
  * @packageDocumentation
  */
-export { Server } from "./server/app/server.js";
-export { tyoi } from "./server/app/short-handler.js";
-export { ShortHandler } from "./server/app/short-handler.js";
-export { defineConfig } from "./server/app/config-server.js";
-export type { ApiRegistryHandler } from "./util/api-registry.js";
-export type { EventBusHandler } from "./util/event-bus.js";
-export type { OutEventBusMap } from "./server/types/server-event.type.js";
-export type { WsHandler } from "./service/web-socket-router.js";
-export type { LoggerCreateData } from "./server/types/server-event.type.js";
-export type { ServerUserConfig } from "./server/types/server-config.type.js";
-export { serverUserConfigSchema } from "./server/types/server-config.type.js";
+export * from "./server/index.js";

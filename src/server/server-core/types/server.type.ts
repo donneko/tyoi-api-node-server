@@ -1,5 +1,7 @@
 import type { ServerUserConfig } from "./server-config.type.js";
 import type express from "express";
+import type { IncomingMessage } from "node:http";
+import type { WebSocket } from "ws";
 
 /** HTTP API ハンドラに渡されるリクエスト情報です。 */
 export type RequestData = {
@@ -7,6 +9,15 @@ export type RequestData = {
     body: unknown;
     headers: unknown;
 };
+
+export type WsHandler = {
+    ws: WebSocket;
+    req: IncomingMessage;
+};
+export type ServerRegister = {
+    publicDirectoryPath?: string;
+};
+
 export type RequestEventMap<L extends string> = {
     [N in L]: RequestData;
 };

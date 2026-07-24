@@ -1,7 +1,7 @@
 import { Logger } from "@donneko/tyoi-logger";
 
-import type { OutEventBusMap, InnerEventBusMap } from "../server/types/server-event.type.js";
-import { type EventBus } from "../util/event-bus.js";
+import type { OutEventBusMap, InnerEventBusMap } from "../types/server-event.type.js";
+import type { EventBus } from "../util/event-bus.js";
 
 const logger = new Logger();
 type LoggerMethodName = {
@@ -19,7 +19,9 @@ export class ServerLogger {
         type: K,
         ...args: Parameters<Logger[K]>
     ): ReturnType<Logger[K]> {
-        const fn = logger[type] as unknown as (...args: Parameters<Logger[K]>) => ReturnType<Logger[K]>;
+        const fn = logger[type] as unknown as (
+            ...args: Parameters<Logger[K]>
+        ) => ReturnType<Logger[K]>;
 
         const data = fn.call(logger, ...args);
         this.#innerEventBus.emit("server/*:log", data);

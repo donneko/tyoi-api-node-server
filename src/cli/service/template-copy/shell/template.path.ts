@@ -1,5 +1,5 @@
 import path from "node:path";
-import { readDirectory } from "../../../../util/read-directory.js";
+import { readDirectory } from "../../../../server/server-core/util/read-directory.js";
 import { Ask, Logger } from "@donneko/tyoi-logger";
 import { isValidTemplate } from "../core/is-valid-template.js";
 

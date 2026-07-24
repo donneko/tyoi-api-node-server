@@ -1,8 +1,12 @@
-import { Server } from "./server.js";
-import { ApiRegistryHandler } from "../../util/api-registry.js";
-import type { WsHandler } from "../../service/web-socket-router.js";
+import { Server } from "../server-core/index.js";
 import http from "node:http";
-
+import type {
+    ServerStartUseConfig,
+    ServerOptions,
+    ApiRegistryHandler,
+    WsHandler,
+    RequestData,
+} from "../server-core/index.js";
 /**
  * `tyoi()` が返す簡易サーバー API。
  *
@@ -36,11 +40,11 @@ export class ShortHandler {
         return this;
     }
     /** `start()` の別名です。 */
-    async listen(options?: StartServerOptions): Promise<http.Server | undefined> {
+    async listen(options?: ServerStartUseConfig): Promise<http.Server | undefined> {
         return this.start(options);
     }
     /** サーバーを起動します。 */
-    async start(options?: StartServerOptions): Promise<http.Server | undefined> {
+    async start(options?: ServerStartUseConfig): Promise<http.Server | undefined> {
         return this.tyoiServer.start(options);
     }
     /** サーバーを停止し、接続の終了を待機します。 */

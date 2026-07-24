@@ -1,14 +1,8 @@
 import { ApiRegistry, type ApiRegistryHandler } from "../util/api-registry.js";
-import type { Server } from "node:http";
 import { WebSocketServer } from "ws";
-import type { WebSocket } from "ws";
+import type { Server } from "node:http";
 import type { Duplex } from "node:stream";
-import type { IncomingMessage } from "node:http";
-
-export type WsHandler = {
-    ws: WebSocket;
-    req: IncomingMessage;
-};
+import type { WsHandler } from "../types/server.type.js";
 
 export class WebSocketRouter<typeMAP extends string> {
     private webSocketRegistry = new ApiRegistry<Record<typeMAP, WsHandler>>();

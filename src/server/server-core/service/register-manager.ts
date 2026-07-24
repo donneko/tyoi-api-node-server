@@ -1,5 +1,6 @@
 import { ConfigController } from "../util/config-controller.js";
-import type { ServerRegister } from "../types/register.type.js";
+import type { ServerRegister } from "../types/server.type.js";
+
 type RegisterControllerType = ConfigController<ServerRegister>;
 export class RegisterManager {
     private configController = new ConfigController<ServerRegister>({});

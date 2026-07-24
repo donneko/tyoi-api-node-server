@@ -1,4 +1,4 @@
-import { Server } from "../../../server/app/server.js";
+import { Server } from "../../../server/index.js";
 import type { MainMessage } from "../../../types/process.type.js";
 
 type BootMessage = Extract<MainMessage, { type: "boot" }>;

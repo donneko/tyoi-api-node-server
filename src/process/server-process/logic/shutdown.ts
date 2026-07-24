@@ -1,4 +1,4 @@
-import type { Server } from "../../../server/app/server.js";
+import { Server } from "../../../server/index.js";
 import type { ServerMessage } from "../../../types/process.type.js";
 import { processSend } from "../../process-send.js";
 
